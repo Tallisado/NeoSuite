@@ -1,0 +1,32 @@
+commander: nightly
+
+# deploy_biz1: { 
+  # toolbox: rubyfile,
+  # file: "some_file.rb",
+  # failover: die,
+  # simulated_result: 1,
+  # paramlist: a=1, y='string'
+# }
+
+test_ui_file: { 
+  toolbox: webrobot, 
+  failover: die,
+  cmd: 'test',
+  pattern: file,
+  file: test_webdriver.rb,
+  tries: 1
+}
+
+transpose: {
+  test_config1a: { 
+    toolbox: ruby, 
+    failover: transpose,
+    transpose: test_config1b,
+    tries: 1
+  },
+  test_config1b: { 
+    toolbox: ruby, 
+    failover: die,
+    tries: 1
+  }
+}

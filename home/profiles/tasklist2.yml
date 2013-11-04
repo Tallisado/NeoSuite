@@ -1,0 +1,93 @@
+commander: nightly
+
+deploy_biz1: { 
+  toolbox: rubytask,
+  file: "some_file.rb",
+  failover: die,
+  simulated_result: 1,
+  paramlist: a=1, y='string'
+}
+
+# deploy_biz2: { 
+  # toolbox: ruby, 
+  # file: "some_file2.rb",
+  # failover: moveto,
+  # moveto: pre,
+  # tries: 1,
+  # simulated_result: 1
+# }
+
+# deploy_biz3: { 
+  # toolbox: ruby, 
+  # failover: moveto,
+  # moveto: post,
+  # tries: 1
+# }
+
+# deploy_biz4: { 
+  # toolbox: ruby, 
+  # failover: moveto,
+  # moveto: restart,
+  # tries: 1
+# }
+
+# deploy_biz5: { 
+  # toolbox: ruby, 
+  # failover: jump,
+  # jump: deploy_biz4,
+  # tries: 1
+# }
+
+# test_config1: { 
+  # toolbox: ruby, 
+  # failover: transpose,
+  # transpose: test_config1a,
+  # tries: 1
+# }
+
+# test_config2: { 
+  # toolbox: ruby, 
+  # failover: die,
+  # tries: 1
+# }
+
+test_ui_file: { 
+  toolbox: webrobottask, 
+  failover: die,
+  env: local:nofixtures:headed
+  #namespace: local:nofixtures:headed,"URL",
+  cmd: local:nofixtures:headed
+  pattern: file,
+  file: test_webdriver.rb,
+  tries: 1
+}
+
+# test_ui_keyword: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # pattern: keyword,
+  # keyword: test_keyword,
+  # tries: 1
+# }
+
+# test_ui_directory: { 
+  # toolbox: webrobot, 
+  # pattern: directory,
+  # directory: test_directory,
+  # failover: die,
+  # tries: 1
+# }
+
+transpose: {
+  test_config1a: { 
+    toolbox: ruby, 
+    failover: transpose,
+    transpose: test_config1b,
+    tries: 1
+  },
+  test_config1b: { 
+    toolbox: ruby, 
+    failover: die,
+    tries: 1
+  }
+}

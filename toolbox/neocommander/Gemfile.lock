@@ -1,0 +1,10 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    flowchart (1.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  flowchart
