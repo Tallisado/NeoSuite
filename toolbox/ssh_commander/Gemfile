@@ -1,0 +1,10 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+# SANDBOX FOR COMMANDER!
+
+#gem 'net-ssh'
+gem 'net-ssh-telnet'
+gem 'highline'
+#gem 'echoe'
+#gem 'mocha'

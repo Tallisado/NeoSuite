@@ -1,21 +1,35 @@
 require 'rspec/core/rake_task'
 
-desc 'Default: run tests against the selenium driver on the local machine (components should be currently running)'
-namespace :spec do
-  RSpec::Core::RakeTask.new(:sauce) do |t|
+desc 'run tests against the cloud'
+RSpec::Core::RakeTask.new(:spec) do |t|
+
+	ENV['WR_INTERFACE'] = ENV['WR_INTERFACE'].nil? ? "sauce" : ENV['WR_INTERFACE']		
 	
-		ENV['WR_INTERFACE'] = ENV['WR_INTERFACE'].nil? ? "sauce" : ENV['WR_INTERFACE']		
+	if ! ENV['WR_DEBUG'].nil?
+		Rake::Task["env:display"].reenable
+		Rake::Task["env:display"].invoke
+	end
 		
-		if ! ENV['WR_DEBUG'].nil?
-			Rake::Task["env:display"].reenable
-			Rake::Task["env:display"].invoke
-		end
-			
-		# opt
-		t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
-		t.rspec_opts = ['-f html', '-o results.html', '--color']
-		t.verbose = true
-  end
+	# opt
+	t.pattern = ENV["FILE"].nil? ? ["./spec/**/*.rb","./spec/*.rb"] : ENV["FILE"]
+	t.rspec_opts = ['-f html', '-o results.html', '--color']
+	t.verbose = true
+end
+
+desc 'run tests against the cloud'
+RSpec::Core::RakeTask.new(:sauce) do |t|
+
+	ENV['WR_INTERFACE'] = ENV['WR_INTERFACE'].nil? ? "sauce" : ENV['WR_INTERFACE']		
+	
+	if ! ENV['WR_DEBUG'].nil?
+		Rake::Task["env:display"].reenable
+		Rake::Task["env:display"].invoke
+	end
+		
+	# opt
+	t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
+	t.rspec_opts = ['-f html', '-o results.html', '--color']
+	t.verbose = true
 end
 
 desc 'Setup and teardown features, run tests against the selenium driver'
@@ -66,11 +80,13 @@ namespace :local do
 			# Start the Xvfb server
 			Rake::Task["xvfb:start"].reenable
 			Rake::Task["xvfb:start"].invoke			
-			# opt
-			t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
-			t.rspec_opts = ['-f documentation', '--color']
-			t.verbose = true
+			# opt			
 			
+			#t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
+			#t.pattern = ENV["FILE"].nil? ? ["#{task_path}/**/*_webrobot.rb","#{task_path}/*_webrobot.rb"] : ENV["FILE"]
+			t.pattern = ENV["FILE"].nil? ? [File.join(File.dirname(__FILE__), "../../home/tasks/*_webrobot.rb")] : ENV["FILE"]
+			t.rspec_opts = ['-f documentation', '--color']
+			t.verbose = true			
 			ENV
 	end
 
@@ -191,9 +207,8 @@ namespace :xvfb do
 
   desc "Xvfb setup"
   task :start do
-    # This is what links the server to the test
-    #ENV["DISPLAY"] = ":99"
     # System call to start the server on display :99
+		ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
     %x{Xvfb #{ENV['WR_DISPLAY']} 2>/dev/null >/dev/null &}
   end
 end
@@ -203,22 +218,21 @@ namespace :vnc do
   desc "vnc break down"
   task :kill do
     # System call kill vnc4server on display :99
+		ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
     %x{vncserver -kill #{ENV['WR_DISPLAY']}}
   end
 	
 	desc "vnc setup"
   task :start do
     # This is what links the server to the test
-    #ENV["DISPLAY"] = ":5"
-    # System call to start the server on display :99
+    ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
     %x{vncserver #{ENV['WR_DISPLAY']} 2>/dev/null >/dev/null &}
   end
 	
   desc "vnc setup"
   task :start do
     # This is what links the server to the test
-    #ENV["DISPLAY"] = ":5"
-    # System call to start the server on display :99
+    ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
     %x{vncserver #{ENV['WR_DISPLAY']} &}
   end
 
@@ -228,6 +242,9 @@ namespace :vnc do
     %x{firefox 2>/dev/null >/dev/null &}
   end
 
+	task :killall do
+		%x{killall Xtightvnc}
+	end
 end
 
 namespace :env do

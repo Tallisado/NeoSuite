@@ -6,12 +6,13 @@ require 'yaml'
 require 'rake'
 
 # -- first global
+@profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
 @suite_root							= File.expand_path "#{File.dirname(__FILE__)}"		
 @suite_home							= "#{@suite_root}/home"
 @suite_workspace				= "#{@suite_home}/workspace/" + Time.now.strftime("%Y_%m_%d_%H.%M.%S")
 @suite_logs_dir					= "#{@suite_workspace}/logs/"
 @suite_report_dir				= "#{@suite_workspace}/reports/"
-@toolbox_tools					= ["neocommander", "webrobot", "sshcommander", "cmdcommander"]
+@toolbox_tools					= ["neo_commander", "webrobot", "ssh_commander"]
 @tool_path_lookup				= @toolbox_tools.each_with_object({}) { |v,h| h[v] = "#{@suite_root}/toolbox/#{v}" }
 @neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
 
@@ -63,12 +64,12 @@ task :default => [:run]
 @chain                 	= []
 @tasks_retried_counter 	= 0
 @current_task 				 	= 0
-@task_hash							= read_yaml_file(@suite_root+"/home/profiles/tasklist.yaml")
+@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 
 # -- global needed in classes
 @reports_dir           	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
 @logs_dir           		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["REPORTS"]
-@definition_yaml_hash		= read_yaml_file(toolpath("neocommander")+"/lib/definitions.yaml")
+@definition_yaml_hash		= read_yaml_file(toolpath("neo_commander")+"/lib/definitions.yml")
 
 # -- the following vars control the behavior of running tests
 #@task_types = {"ruby" => "RubyTask" , "WRTask"]
@@ -114,7 +115,8 @@ end
 desc "-- run all tasks..."
 task :run do
 	puts "--- EXECUTING NEO COMMANDER ---"
-	puts "--- [debug] : " + ((@neo_debug == false) ? "OFF" : "ON")
+	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
+	puts "--- [profile]   : " + @profile
 	puts "-------------------------------"
 
 	#puts "running all the tasks"
@@ -155,8 +157,26 @@ task :help do
 		puts "   }\n\n"
 		puts "   Task Control:"
 		puts "     [toolbox:] rubyfile|webrobot"
-		
-    puts "   Note 1:\n\n   Your test must end with 'test.rb' - otherwise Rake won't be able to find it, eg:\n"
+		puts ""
+		puts "   Task Creation:"
+		puts "   [rake create:<toolbox>] NAME=filename.rb"
+		puts "   -- rake create:webrobot NAME=my_new_file.rb"
+		puts "   -- rake create:sshcommander NAME=my_new_file.rb"
+		puts "   -- rake create:cmdline NAME=my_new_file.rb"
+end
+
+namespace :create do
+	task :webrobot do
+		puts "-- Creating webrobot template"
+		contents = "#DO NOT DELETE THE FOLLOWING LINE\n"
+		contents += 'require File.join(File.dirname(__FILE__), "./../lib/helper")'
+	end
+	task :sshcommander do
+		puts "-- Creating sshcommander template"
+	end	
+	task :cmdline do
+		puts "-- Creating cmdline template"
+	end
 end
 
 # -- total by exit status
@@ -521,7 +541,7 @@ class WRTask < BaseTask
 	def execute_cmd	
 		#rake_output = toolpath("webrobot") + "./results/#{@uuid}_stdout.tmp"
 		@keepstdout = false
-		ENV['FILE'] = "./toolbox/webrobot/tests/#{@pattern}"
+		ENV['FILE'] = File.join(File.dirname(__FILE__), "/home/tasks/"+@pattern)
 		ENV['WR_DEBUG'] = 'on'
 		
 		puts "BREAK IT OFF"
@@ -541,9 +561,6 @@ class WRTask < BaseTask
 			puts "Executing rake (STDOUT REDIR)"
 			redirect_webrobot_stdout{Rake.application[@raketask].invoke() }
 			@output = retrieve_webrobot_log
-			puts "ASDASDASD"
-			puts @output
-			puts "ASDASDASD"
 		end
 
 		@exit_status = case @output
@@ -595,14 +612,20 @@ class RubyTask < BaseTask
 	
 	# RubyTask EXE
 	def execute_cmd
-		@cmd = "#{@file} " + @execute_args_ruby unless @execute_args_ruby == ""
+		full_filepath = File.join(File.dirname(__FILE__), "/home/tasks/#{@file}")
+		@cmd = full_filepath + " " + @execute_args_ruby unless @execute_args_ruby == ""
 		puts "executing RubyTask command: " + @cmd
 		begin
 			@output      = `ruby #{@cmd} 2>&1`
+			puts "I GOT THE EXIT STATUS!!" + $?.exitstatus.to_s
 			@exit_status = case @output
 				when /PASSED/ then @task_data['test_exit_status_passed']
 				when /FAILED/ then @task_data['test_exit_status_failed']
-				else @task_data['test_exit_status_failed']
+				else 
+					case $?.exitstatus
+						when 0 then @task_data['test_exit_status_passed']
+						else @task_data['test_exit_status_failed']
+					end
 			end
 		rescue => e
 			 puts "-- ERROR: " + e.inspect

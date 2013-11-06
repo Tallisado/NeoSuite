@@ -38,3 +38,5 @@ transpose: {
     tries: 1
   }
 }
+
+# pattern: "**/*_webrobot.rb", 

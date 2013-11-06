@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    highline (1.6.20)
+    hoe (3.7.1)
+      rake (>= 0.8, < 11.0)
+    net-ssh (2.7.0)
+    net-ssh-telnet (0.0.2)
+      hoe (>= 1.7.0)
+      net-ssh (>= 2.0.1)
+    rake (10.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  highline
+  net-ssh-telnet
