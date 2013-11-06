@@ -1,21 +1,30 @@
 commander: nightly
 
-# deploy_biz1: { 
-  # toolbox: rubyfile,
-  # file: "some_file.rb",
+deploy_biz1: { 
+  toolbox: rubyfile,
+  file: "some_file.rb",
+  failover: die,
+  retry: no,
+  paramlist: [a=1,y=string of win,someshit=1234]
+}
+
+# test_ui_file: { 
+  # toolbox: webrobot, 
   # failover: die,
-  # simulated_result: 1,
-  # paramlist: a=1, y='string'
+  # raketask: 'spec:ipass',
+  # pattern: file,
+  # file: test_webdriver.rb,
+  # tries: 1
 # }
 
-test_ui_file: { 
-  toolbox: webrobot, 
-  failover: die,
-  cmd: 'test',
-  pattern: file,
-  file: test_webdriver.rb,
-  tries: 1
-}
+# test_ui_file2: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'spec:ifail',
+  # pattern: file,
+  # file: test_webdriver.rb,
+  # tries: 1
+# }
 
 transpose: {
   test_config1a: { 
