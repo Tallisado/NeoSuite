@@ -1,0 +1,148 @@
+2013-10-08 10:59:19,858 - sauce_connect:554 - INFO - / Starting \
+2013-10-08 10:59:19,862 - sauce_connect:555 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-10-08 10:59:19,871 - sauce_connect:567 - DEBUG - System is -4.0 hours off UTC
+2013-10-08 10:59:19,875 - sauce_connect:569 - DEBUG - options: {'user': 'talliskane', 'ports': ['41659'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': 'sauce_connect.ready', 'boost_mode': True, 'shared_tunnel': False, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-10-08 10:59:19,877 - sauce_connect:570 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r25', 'OwnerPorts': ['41659'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64', 'Build': '38', 'ScriptRelease': 38, 'ScriptName': 'sauce_connect'}
+2013-10-08 10:59:19,878 - sauce_connect:572 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['41659']
+2013-10-08 10:59:19,891 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:41659 in 6ms
+2013-10-08 10:59:20,385 - sauce_connect:234 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r25","OwnerPorts":["41659"],"Ports":["80"],"Platform":"Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64","Build":"38","ScriptRelease":38,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-10-08 10:59:23,573 - sauce_connect:246 - INFO - Tunnel remote VM is provisioned (a332942cbfb945978a3b3c5bbf577e86)
+2013-10-08 10:59:23,803 - sauce_connect:264 - INFO - Tunnel remote VM is booting ..
+2013-10-08 10:59:56,154 - sauce_connect:268 - INFO - Tunnel remote VM is running at maki11092.miso.saucelabs.com
+2013-10-08 10:59:56,186 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:41659 in 0ms
+2013-10-08 10:59:56,190 - sauce_connect:642 - INFO - Starting connection to tunnel host...
+2013-10-08 10:59:56,193 - sauce_connect:642 - INFO - Connecting to tunnel host maki11092.miso.saucelabs.com as talliskane
+2013-10-08 10:59:56,351 - sauce_connect:642 - INFO - Forwarding Selenium with ephemeral port 58989
+2013-10-08 10:59:56,371 - sauce_connect:642 - INFO - Selenium HTTP proxy listening on port 4445
+2013-10-08 10:59:56,854 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-10-08 10:59:56,953 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: 461fe4d9cf9749f5ac2ccf6554c38889
+2013-10-08 10:59:56,957 - sauce_connect:642 - INFO - Connected! You may start your tests.
+2013-10-08 10:59:57,269 - sauce_connect:0 - INFO - received SIGINT
+2013-10-08 11:01:10,003 - sauce_connect:554 - INFO - / Starting \
+2013-10-08 11:01:10,009 - sauce_connect:555 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-10-08 11:01:10,019 - sauce_connect:567 - DEBUG - System is -4.0 hours off UTC
+2013-10-08 11:01:10,022 - sauce_connect:569 - DEBUG - options: {'user': 'talliskane', 'ports': ['48003'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': 'sauce_connect.ready', 'boost_mode': True, 'shared_tunnel': False, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-10-08 11:01:10,023 - sauce_connect:570 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r25', 'OwnerPorts': ['48003'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64', 'Build': '38', 'ScriptRelease': 38, 'ScriptName': 'sauce_connect'}
+2013-10-08 11:01:10,026 - sauce_connect:572 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['48003']
+2013-10-08 11:01:10,038 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:48003 in 6ms
+2013-10-08 11:01:10,476 - sauce_connect:234 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r25","OwnerPorts":["48003"],"Ports":["80"],"Platform":"Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64","Build":"38","ScriptRelease":38,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-10-08 11:01:14,098 - sauce_connect:246 - INFO - Tunnel remote VM is provisioned (c956592f4cbe437bbd400e9f036062d8)
+2013-10-08 11:01:14,301 - sauce_connect:264 - INFO - Tunnel remote VM is booting ..
+2013-10-08 11:01:33,690 - sauce_connect:268 - INFO - Tunnel remote VM is running at maki8016.miso.saucelabs.com
+2013-10-08 11:01:33,714 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:48003 in 1ms
+2013-10-08 11:01:33,720 - sauce_connect:642 - INFO - Starting connection to tunnel host...
+2013-10-08 11:01:33,721 - sauce_connect:642 - INFO - Connecting to tunnel host maki8016.miso.saucelabs.com as talliskane
+2013-10-08 11:01:33,881 - sauce_connect:642 - INFO - Forwarding Selenium with ephemeral port 33354
+2013-10-08 11:01:33,894 - sauce_connect:642 - INFO - Selenium HTTP proxy listening on port 4445
+2013-10-08 11:01:34,382 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-10-08 11:01:34,480 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: e398a28cfbb94066b6bebaf6fdb69128
+2013-10-08 11:01:34,483 - sauce_connect:642 - INFO - Connected! You may start your tests.
+2013-10-08 11:01:40,778 - sauce_connect:0 - INFO - GET http://10.10.9.129/ -> 302 (34ms)
+2013-10-08 11:01:40,967 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/index.php -> 200 (10ms)
+2013-10-08 11:01:41,128 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=allpages -> 200 (29ms)
+2013-10-08 11:01:51,246 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/resources/Login-all.css -> 200 (10016ms)
+2013-10-08 11:02:19,259 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/all-classes.js -> 200 (38029ms)
+2013-10-08 11:02:19,963 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/logos/ADTRAN.png -> 200 (7ms)
+2013-10-08 11:02:19,964 - sauce_connect:0 - INFO - GET http://10.10.9.129/favicon.ico -> 404 (11ms)
+2013-10-08 11:02:19,966 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/resources/images/form/exclamation.gif -> 200 (10ms)
+2013-10-08 11:02:20,059 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/resources/images/form/text-bg.gif -> 200 (4ms)
+2013-10-08 11:02:20,165 - sauce_connect:0 - INFO - GET http://10.10.9.129/favicon.ico -> 404 (5ms)
+2013-10-08 11:02:22,160 - sauce_connect:0 - INFO - POST http://10.10.9.129/Rest/LoginValidate.php -> 200 (66ms)
+2013-10-08 11:02:22,163 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/resources/images/dd/drop-yes.gif -> 200 (207ms)
+2013-10-08 11:02:22,163 - sauce_connect:0 - INFO - GET http://10.10.9.129/Login/resources/images/tools/tool-sprites.gif -> 200 (208ms)
+2013-10-08 11:02:22,306 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/index.php -> 200 (8ms)
+2013-10-08 11:02:22,602 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=fmfmconfig -> 200 (65ms)
+2013-10-08 11:02:22,664 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=phoneconfig -> 200 (126ms)
+2013-10-08 11:02:22,690 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=validation -> 200 (150ms)
+2013-10-08 11:02:22,747 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=callbehavior -> 200 (193ms)
+2013-10-08 11:02:22,776 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=fmfmgroup -> 200 (175ms)
+2013-10-08 11:02:22,802 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=parkzone -> 200 (198ms)
+2013-10-08 11:02:22,826 - sauce_connect:0 - INFO - GET http://10.10.9.129/css/chooser.css -> 200 (228ms)
+2013-10-08 11:02:22,923 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=sprecode -> 200 (382ms)
+2013-10-08 11:02:23,388 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=allpages -> 200 (782ms)
+2013-10-08 11:02:23,450 - sauce_connect:0 - INFO - GET http://10.10.9.129/css/font-awesome.min.css -> 200 (845ms)
+2013-10-08 11:02:24,398 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=systemschedule -> 200 (1791ms)
+2013-10-08 11:02:25,444 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=international -> 200 (2833ms)
+2013-10-08 11:02:25,619 - sauce_connect:0 - INFO - GET http://10.10.9.129/language/language.php?pageId=ppmlandingpage -> 200 (3012ms)
+2013-10-08 11:02:26,196 - sauce_connect:0 - INFO - GET http://10.10.9.129/css/ppm.css -> 200 (3586ms)
+2013-10-08 11:02:37,457 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/PPM-all.css -> 200 (14849ms)
+2013-10-08 11:03:27,589 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/all-classes.js -> 200 (64972ms)
+2013-10-08 11:03:29,733 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/form/trigger.gif -> 200 (110ms)
+2013-10-08 11:03:29,809 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611645&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22UserPPM%22%2C%22params%22%3A%7B%22dummy%22%3A1%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (205ms)
+2013-10-08 11:03:29,901 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611646&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22Users%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (288ms)
+2013-10-08 11:03:29,953 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/grid/loading.gif -> 200 (49ms)
+2013-10-08 11:03:29,990 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611643&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22Users%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (374ms)
+2013-10-08 11:03:30,036 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/grid/sort_desc.gif -> 200 (6ms)
+2013-10-08 11:03:30,078 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244610727&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22UserPPM%22%2C%22params%22%3A%7B%22dummy%22%3A1%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (460ms)
+2013-10-08 11:03:30,112 - sauce_connect:0 - INFO - GET http://10.10.9.129/ext/locale/ext-lang-en.js?_dc=1381244611642 -> 200 (497ms)
+2013-10-08 11:03:30,124 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/callbehavior/fmfm_0.png -> 200 (506ms)
+2013-10-08 11:03:30,157 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244610765&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22AvailableCallBehavior%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (535ms)
+2013-10-08 11:03:30,210 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/grid/sort_asc.gif -> 200 (62ms)
+2013-10-08 11:03:30,253 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611645&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22UserPPM%22%2C%22params%22%3A%7B%22dummy%22%3A1%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (109ms)
+2013-10-08 11:03:30,319 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/form/search-trigger.gif -> 200 (703ms)
+2013-10-08 11:03:30,371 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/form/exclamation.gif -> 200 (750ms)
+2013-10-08 11:03:30,391 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/callbehavior/gotovoicemail_0.png -> 200 (6ms)
+2013-10-08 11:03:30,392 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/callbehavior/gotooperator_0.png -> 200 (8ms)
+2013-10-08 11:03:30,493 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611718&page=1&start=0&limit=25&filter=%5B%7B%7D%5D&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22CallBehavior%22%2C%22params%22%3A%7B%22dummy%22%3A1%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (681ms)
+2013-10-08 11:03:30,576 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244612726&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22UserPPM%22%2C%22params%22%3A%7B%22dummy%22%3A1%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (189ms)
+2013-10-08 11:03:30,851 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611690&page=1&start=0&limit=25&sort=%5B%7B%22property%22%3A%22fullname%22%2C%22direction%22%3A%22ASC%22%7D%5D&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22Contact%22%2C%22params%22%3A%7B%22selectAll%22%3A%22true%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (1109ms)
+2013-10-08 11:03:31,377 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/form/text-bg.gif -> 200 (1751ms)
+2013-10-08 11:03:31,581 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/tools/tool-sprites.gif -> 200 (1956ms)
+2013-10-08 11:03:31,605 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/6.png -> 200 (214ms)
+2013-10-08 11:03:31,608 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/5.png -> 200 (216ms)
+2013-10-08 11:03:31,709 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/unknown.png -> 200 (3ms)
+2013-10-08 11:03:31,812 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/16.png -> 200 (4ms)
+2013-10-08 11:03:31,913 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/17.png -> 200 (3ms)
+2013-10-08 11:03:32,016 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/18.png -> 200 (4ms)
+2013-10-08 11:03:32,019 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/15.png -> 200 (211ms)
+2013-10-08 11:03:32,028 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/11.png -> 200 (636ms)
+2013-10-08 11:03:32,032 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_1/unknown.png -> 404 (639ms)
+2013-10-08 11:03:32,045 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/12.png -> 200 (648ms)
+2013-10-08 11:03:32,118 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_21/19.png -> 404 (5ms)
+2013-10-08 11:03:32,148 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_23/21.png -> 404 (4ms)
+2013-10-08 11:03:32,151 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_22/20.png -> 404 (8ms)
+2013-10-08 11:03:32,236 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/4.png -> 200 (844ms)
+2013-10-08 11:03:32,335 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_3/2.png -> 404 (4ms)
+2013-10-08 11:03:32,381 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/util/splitter/mini-bottom.gif -> 200 (2755ms)
+2013-10-08 11:03:32,447 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/22.png -> 200 (212ms)
+2013-10-08 11:03:32,489 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244610761&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22Users%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D&id=1 -> 200 (2861ms)
+2013-10-08 11:03:32,490 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/3.png -> 200 (253ms)
+2013-10-08 11:03:32,551 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/systemspeeddial.jpg -> 200 (218ms)
+2013-10-08 11:03:32,805 - sauce_connect:0 - INFO - GET http://10.10.9.129/PPM/resources/images/grid/grid3-hd-btn.gif -> 200 (3177ms)
+2013-10-08 11:03:33,529 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611704&page=1&start=0&limit=25&sort=%5B%7B%22property%22%3A%22dateDisplay%22%2C%22direction%22%3A%22DESC%22%7D%5D&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22voiceMail%22%2C%22params%22%3A%7B%22dummy%22%3A1%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (3786ms)
+2013-10-08 11:03:33,604 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611709&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getTuiLanguages%22%2C%22obj%22%3A%22Language%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (3851ms)
+2013-10-08 11:03:33,625 - sauce_connect:0 - INFO - GET http://10.10.9.129/font/fontawesome-webfont.woff?v=3.0.1 -> 200 (3999ms)
+2013-10-08 11:03:33,706 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611706&page=1&start=0&limit=25&sort=%5B%7B%22property%22%3A%22date_time_string%22%2C%22direction%22%3A%22DESC%22%7D%5D&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22Call%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (3952ms)
+2013-10-08 11:03:33,780 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611707&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getGuiLanguages%22%2C%22obj%22%3A%22Language%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4026ms)
+2013-10-08 11:03:33,857 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611706&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getPagingGroup%22%2C%22obj%22%3A%22PagingGroup%22%2C%22params%22%3A%7B%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4101ms)
+2013-10-08 11:03:33,933 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611710&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22SystemSpeedDial%22%2C%22params%22%3A%7B%22selectAll%22%3A%22true%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4175ms)
+2013-10-08 11:03:34,017 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611711&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getactionsetlist%22%2C%22obj%22%3A%22FMFM%22%2C%22params%22%3A%7B%22selectAll%22%3A%22false%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4258ms)
+2013-10-08 11:03:34,115 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611715&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22get%22%2C%22obj%22%3A%22Users%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4356ms)
+2013-10-08 11:03:34,289 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_22/20.png -> 404 (5ms)
+2013-10-08 11:03:34,290 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_1/unknown.png -> 404 (3ms)
+2013-10-08 11:03:34,292 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_21/19.png -> 404 (6ms)
+2013-10-08 11:03:34,290 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_3/2.png -> 404 (4ms)
+2013-10-08 11:03:34,296 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/user_23/21.png -> 404 (7ms)
+2013-10-08 11:03:34,503 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/14.png -> 200 (3014ms)
+2013-10-08 11:03:34,523 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/8.png -> 200 (3122ms)
+2013-10-08 11:03:34,586 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611712&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getgrouplist%22%2C%22obj%22%3A%22FMFM%22%2C%22params%22%3A%7B%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4825ms)
+2013-10-08 11:03:34,671 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611713&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getgrouprelation%22%2C%22obj%22%3A%22FMFM%22%2C%22params%22%3A%7B%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (4909ms)
+2013-10-08 11:03:34,733 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/10.png -> 200 (3335ms)
+2013-10-08 11:03:34,742 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/9.png -> 200 (3341ms)
+2013-10-08 11:03:34,796 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611712&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getmodetransitionslist%22%2C%22obj%22%3A%22FMFM%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (5035ms)
+2013-10-08 11:03:34,878 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611718&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22AutoAttendant%22%2C%22params%22%3A%7B%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (5116ms)
+2013-10-08 11:03:34,953 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/1.png -> 200 (3552ms)
+2013-10-08 11:03:34,956 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611716&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22act%22%3A%22getlist%22%2C%22obj%22%3A%22Images%22%2C%22params%22%3A%7B%22dummy%22%3A%221%22%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (5191ms)
+2013-10-08 11:03:34,960 - sauce_connect:0 - INFO - GET http://10.10.9.129/Rest/GetResponse.php?_dc=1381244611714&page=1&start=0&limit=25&cmds=%7B%22cmds%22%3A%5B%7B%22params%22%3A%7B%7D%7D%5D%2C%22clid%22%3A%222%22%7D -> 200 (5194ms)
+2013-10-08 11:03:35,161 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/13.png -> 200 (3759ms)
+2013-10-08 11:03:35,177 - sauce_connect:0 - INFO - GET http://10.10.9.129/Images/Avatars/7.png -> 200 (3781ms)
+2013-10-08 11:03:41,421 - sauce_connect:0 - INFO - received SIGINT
+2013-10-08 11:31:15,388 - sauce_connect:554 - INFO - / Starting \
+2013-10-08 11:31:15,392 - sauce_connect:555 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-10-08 11:31:15,400 - sauce_connect:567 - DEBUG - System is -4.0 hours off UTC
+2013-10-08 11:31:15,403 - sauce_connect:569 - DEBUG - options: {'user': 'talliskane', 'ports': ['59930'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'ssh': False, 'se_port': '4445', 'readyfile': 'sauce_connect.ready', 'boost_mode': True, 'shared_tunnel': False, 'tunnel_identifier': '', 'ssh_port': 443, 'fast_fail_regexps': '', 'direct_domains': '', 'host': '127.0.0.1', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False}
+2013-10-08 11:31:15,404 - sauce_connect:570 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r25', 'OwnerPorts': ['59930'], 'Ports': ['80'], 'Platform': 'Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64', 'Build': '38', 'ScriptRelease': 38, 'ScriptName': 'sauce_connect'}
+2013-10-08 11:31:15,405 - sauce_connect:572 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['59930']
+2013-10-08 11:31:15,421 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:59930 in 9ms
+2013-10-08 11:31:15,842 - sauce_connect:234 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r25","OwnerPorts":["59930"],"Ports":["80"],"Platform":"Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64","Build":"38","ScriptRelease":38,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-10-08 11:31:17,078 - sauce_connect:0 - INFO - received SIGINT
