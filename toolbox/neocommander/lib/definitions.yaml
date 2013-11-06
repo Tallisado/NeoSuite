@@ -1,5 +1,5 @@
 RubyTask: toolbox, file, failover, ~simulated_result, ~retry
-WRTask: toolbox, pattern, failover, ~simulated_result, ~keyword, ~directory, ~file, ~retry
+WRTask: toolbox, raketask, failover, ~simulated_result, ~pattern, ~retry
 
 
 #cmdline_mandatory: file, cmdline_optional: simulated_result, tries

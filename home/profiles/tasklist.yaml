@@ -1,6 +1,6 @@
 commander: nightly
 
-deploy_biz1: { 
+test_rubyfile: { 
   toolbox: rubyfile,
   file: "some_file.rb",
   failover: die,
@@ -8,14 +8,13 @@ deploy_biz1: {
   paramlist: [a=1,y=string of win,someshit=1234]
 }
 
-# test_ui_file: { 
-  # toolbox: webrobot, 
-  # failover: die,
-  # raketask: 'spec:ipass',
-  # pattern: file,
-  # file: test_webdriver.rb,
-  # tries: 1
-# }
+test_webrobot: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "robot_test.rb",
+  tries: 1
+}
 
 # test_ui_file2: { 
   # toolbox: webrobot, 
