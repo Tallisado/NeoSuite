@@ -83,6 +83,8 @@ task :default => [:run]
    'test_exit_status_skipped' => "SKIPPED",
    'reports_dir'              => @reports_dir,
    'logs_dir'		              => @logs_dir,
+   'xml_report_class_name'    => "qa.tasks",
+   'xml_report_file_name'     => "report.xml",
 	 'definitions'							=> @definition_yaml_hash,
 	 'toolbox_tools'						=> @toolbox_tools,
 	 'toolbox_tools'						=> @toolbox_tools,
@@ -117,6 +119,8 @@ task :run do
 	puts "--- EXECUTING NEO COMMANDER ---"
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
+	puts "--- [logs]      : " + @logs_dir
+	puts "--- [reports]   : " + @reports_dir
 	puts "-------------------------------"
 
 	#puts "running all the tasks"
@@ -201,7 +205,8 @@ def clean_exit
 	 
 	 puts("\n==> DONE\n\n")
    puts(":: [SESSION]\n")
-   puts("      -- reports prepared: #{@suite_report_dir}\n")
+   puts("      -- reports prepared: #{@reports_dir}\n")
+   puts("      -- reports prepared: #{@logs_dir}\n")
    puts("      -- execution time  : #{@chain.execution_time.to_s} secs\n")
    puts("      -- tests executed  : #{@chain.executed_tasks.to_s}\n")
    puts("      -- tests passed    : #{tasks_passed.length.to_s}\n")
@@ -242,38 +247,39 @@ class Publisher
 
   def publish_reports	  
 		make_html
+		make_xml
   end
 	 
 	def make_xml
 		# -- create an xml file
 		document  = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
-		document += "<testsuites>\n"
-		document += "   <testsuite successes='#{@task_data['tasks_passed'].length}'"
+		document += "<report>\n"
+		document += "   <suite successes='#{@task_data['tasks_passed'].length}'"
 		document += "   skipped='#{@task_data['tasks_skipped'].length}' failures='#{@task_data['tasks_failed'].length}'"
-		document += "   time='#{@task_data['execution_time']}' name='FunctionalTestSuite' tests='#{@tests_total}' subtests='#{@task_data['testcases_total'].to_s}'>\n"
+		document += "   time='#{@task_data['execution_time']}' name='NeoSuite' tests='#{@tests_total}'>\n"
 		if @task_data['tasks_passed'].length > 0
 			 @task_data['tasks_passed'].each  { |t|
-					document += "   <testcase name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
+					document += "   <task name='#{t.taskname}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
 					document += "      <passed message='Test Passed'><![CDATA[\n\n#{t.output}\n\n]]>\n       </passed>\n"
-					document += "   </testcase>\n"
+					document += "   </task>\n"
 			 }
 		end
 		if @task_data['tasks_failed'].length > 0
 			 @task_data['tasks_failed'].each  { |t|
-					document += "   <testcase name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
+					document += "   <task name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
 					document += "      <error message='Test Failed'><![CDATA[\n\n#{t.output}\n\n]]>\n       </error>\n"
-					document += "   </testcase>\n"
+					document += "   </task>\n"
 			 }
 		end
 		if @task_data['tasks_skipped'].length > 0
 			 @task_data['tasks_skipped'].each  { |t|
-					document += "   <testcase name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
+					document += "   <task name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
 					document += "      <skipped message='Test Skipped'><![CDATA[\n\n#{t.output}\n\n]]>\n       </skipped>\n"
-					document += "   </testcase>\n"
+					document += "   </task>\n"
 			 }
 		end
-		document += "   </testsuite>\n"
-		document += "</testsuites>\n"
+		document += "   </suite>\n"
+		document += "</report>\n"
 		# -- write XML report
 		write_file(@task_data['reports_dir'] + "/" + @task_data['xml_report_file_name'], document)
 	end
@@ -617,7 +623,6 @@ class RubyTask < BaseTask
 		puts "executing RubyTask command: " + @cmd
 		begin
 			@output      = `ruby #{@cmd} 2>&1`
-			puts "I GOT THE EXIT STATUS!!" + $?.exitstatus.to_s
 			@exit_status = case @output
 				when /PASSED/ then @task_data['test_exit_status_passed']
 				when /FAILED/ then @task_data['test_exit_status_failed']
@@ -638,7 +643,7 @@ class RubyTask < BaseTask
 	end
 	
 	def log_output
-		#puts "Dumping output to: #{@task_data['logs_dir']}#{@taskname}.txt" 
+		puts "Dumping output to: #{@task_data['logs_dir']}#{@taskname}.txt" 
 		File.open("#{@task_data['logs_dir']}#{@taskname}.txt", "wb") do |file|
 			file.write(output)
 		end

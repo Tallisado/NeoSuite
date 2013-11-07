@@ -8,13 +8,21 @@ test_rubyfile: {
   paramlist: [a=1,y=string of win,someshit=1234]
 }
 
-test_webrobot: { 
-  toolbox: webrobot, 
-  failover: die,
-  raketask: 'local:headless',
-  pattern: "dryrun_webrobot.rb",
-  tries: 1
-}
+# test_webrobot: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "login_webrobot.rb",
+  # tries: 1
+# }
+
+# test_webrobot: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "dryrun_webrobot.rb",
+  # tries: 1
+# }
 
 # test_ui_file2: { 
   # toolbox: webrobot, 
