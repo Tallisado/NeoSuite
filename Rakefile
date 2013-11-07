@@ -203,16 +203,21 @@ def clean_exit
    
 	 
 	 
-	 puts("\n==> DONE\n\n")
-   puts("[TC] :: [SESSION]\n")
-   puts("[TC]   -- reports prepared: #{@reports_dir}\n")
-   puts("[TC]   -- reports prepared: #{@logs_dir}\n")
-   puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")
-   puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
-   puts("[TC]   -- tests passed    : #{tasks_passed.length.to_s}\n")
-   puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
-   puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")
-   
+	puts("\n==> DONE\n\n")
+  puts("[TC] :: [SESSION]\n")
+  puts("[TC]   -- reports prepared: #{@reports_dir}\n")
+  puts("[TC]   -- reports prepared: #{@logs_dir}\n")
+  puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")
+  puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
+  puts("[TC]   -- tests passed    : #{tasks_passed.length.to_s}\n")
+  puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
+  puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")
+  if tasks_failed == 0
+		puts "[TCRESULT]=SUCCESSFUL!YAY \n"
+	else
+		puts "[TCRESULT]=UNSUCCESSUL!BOO \n"
+	end
+	
    if @task_data['test_retry']
       puts("      -- tests re-tried  : #{@tests_retried_counter.to_s}\n")
    end

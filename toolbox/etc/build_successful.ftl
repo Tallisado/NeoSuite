@@ -3,9 +3,15 @@
 <#import "common.ftl" as common>
 <#import "responsibility.ftl" as resp>
 
-<#global subject>[<@common.subjMarker/>, SUCCESSFUL] Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/></#global>
+<#list build.buildLog.messages[1..] as message>
+    <#if message.text?trim?starts_with('[TCRESULT]')>
+        <#assign result=message.text?substring(11)>
+	</#if>  
+</#list>
 
-<#global body>Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/> successful ${var.buildShortStatusDescription}.
+<#global subject>[<@common.subjMarker/>, ${result}] Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/></#global>
+
+<#global body>Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/> ${result} ${var.buildShortStatusDescription}.
 <@resp.buildTypeInvestigation buildType true/>
 Agent: ${agentName}
 Build results: ${link.buildResultsLink}
@@ -16,14 +22,21 @@ ${var.buildCompilationErrors}${var.buildFailedTestsErrors}${var.buildChanges}
 <#global bodyHtml>
 <div>
   <div>
-    Build <b>${project.fullName?html} :: ${buildType.name?html}</b> <a href='${link.buildResultsLink}'><@common.short_build_info build/></a> successful
+    Build:: <b>${project.fullName?html} :: ${buildType.name?html}</b> <a href='${link.buildResultsLink}'><@common.short_build_info build/></a> successful
     ${var.buildShortStatusDescription}
  
+ <#list build.buildLog.messages[1..] as message>
+    <#if message.text?trim?starts_with('[TCRESULT]')>
+        <#assign result=message.text?substring(11)>
+	</#if>  
+</#list>
+
+	${result}
   <div style="color:blue">
     <code style="font-family:monospace;font-family:Menlo,Bitstream Vera Sans Mono,Courier New,Courier,monospace;font-size:12px">
         <#list build.buildLog.messages[(build.buildLog.messages?size - 30)..] as message>
-            <#if message.text?trim?starts_with("      -- ")>
-				${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")}<br/>
+            <#if message.text?trim?starts_with('[TC]')>
+			${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")}<br/>
 			</#if>            
         </#list>
     </code>
