@@ -11,7 +11,8 @@ RSpec::Core::RakeTask.new(:spec) do |t|
 	end
 		
 	# opt
-	t.pattern = ENV["FILE"].nil? ? ["./spec/**/*.rb","./spec/*.rb"] : ENV["FILE"]
+	#t.pattern = ENV["FILE"].nil? ? ["./spec/**/*.rb","./spec/*.rb"] : ENV["FILE"]
+	t.pattern = ENV["FILE"].nil? ? [File.join(File.dirname(__FILE__), "../../home/tasks/*_webrobot.rb")] : ENV["FILE"]
 	t.rspec_opts = ['-f html', '-o results.html', '--color']
 	t.verbose = true
 end
@@ -25,7 +26,7 @@ RSpec::Core::RakeTask.new(:sauce) do |t|
 		Rake::Task["env:display"].reenable
 		Rake::Task["env:display"].invoke
 	end
-		
+
 	# opt
 	t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
 	t.rspec_opts = ['-f html', '-o results.html', '--color']

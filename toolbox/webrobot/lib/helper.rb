@@ -48,7 +48,8 @@ end
 #export SAUCE_ACCESS_KEY=6c3ed64b-e065-4df4-b921-75336e2cb9cf
 
 Sauce.config do |c|
-  if ENV['WR_TUNNEL'].nil?  
+  if !ENV['WR_NOTUNNEL'].nil?  
+		puts "NO TUNNEL"
 		c[:start_tunnel] = false
 	end
 	if ! ENV['WR_FFONLY'].nil?  

@@ -281,27 +281,38 @@ a {
 <div class="results">
 <div id="div_group_1" class="example_group passed">
   <dl style="margin-left: 0px;">
-  <dt id="example_group_1" class="passed">rakefile from webtester should be found</dt>
+  <dt id="example_group_1" class="passed">cloud browser</dt>
     <script type="text/javascript">makeRed('rspec-header');</script>
     <script type="text/javascript">makeRed('div_group_1');</script>
     <script type="text/javascript">makeRed('example_group_1');</script>
-    <script type="text/javascript">moveProgressBar('20.0');</script>
+    <script type="text/javascript">moveProgressBar('100.0');</script>
     <dd class="example failed">
-      <span class="failed_spec_name">aa</span>
-      <span class="duration">0.00300s</span>
+      <span class="failed_spec_name">should open browser remotely</span>
+      <span class="duration">32.59182s</span>
       <div class="failure" id="failure_1">
-        <div class="message"><pre>exit</pre></div>
-        <div class="backtrace"><pre>./spec/rake_test.rb:7:in `block (2 levels) in &lt;top (required)&gt;'</pre></div>
-    <pre class="ruby"><code><span class="linenum">5</span>describe "rakefile from webtester should be found" do
-<span class="linenum">6</span>	it "aa" do		
-<span class="offending"><span class="linenum">7</span>		Rake.application.init</span>
-<span class="linenum">8</span>		Rake.application.load_rakefile
-<span class="linenum">9</span>		Rake.application['test:sauce'].invoke()
-<span class="linenum">10</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
+        <div class="message"><pre>timed out after 15 seconds (Unable to locate element: {&quot;method&quot;:&quot;id&quot;,&quot;selector&quot;:&quot;loginnameid-inputEl&quot;}
+Command duration or timeout: 9 milliseconds
+For documentation on this error, please visit: http://seleniumhq.org/exceptions/no_such_element.html
+Build info: version: '2.30.0', revision: 'dc1ef9c', time: '2013-02-19 00:15:27'
+System info: os.name: 'Linux', os.arch: 'i386', os.version: '3.2.0-53-virtual', java.version: '1.6.0_31'
+Session ID: 3256003a-6596-41e7-901e-d6e8f14610d1
+Driver info: org.openqa.selenium.firefox.FirefoxDriver
+Capabilities [{platform=LINUX, acceptSslCerts=true, javascriptEnabled=true, browserName=firefox, rotatable=false, locationContextEnabled=true, version=19.0, cssSelectorsEnabled=true, databaseEnabled=true, handlesAlerts=true, browserConnectionEnabled=true, nativeEvents=false, webStorageEnabled=true, applicationCacheEnabled=true, takesScreenshot=true}] (org.openqa.selenium.NoSuchElementException))</pre></div>
+        <div class="backtrace"><pre>/mnt/wt/neosuite/home/tasks/login_webrobot.rb:6:in `wait_for_element_present'
+/mnt/wt/neosuite/home/tasks/login_webrobot.rb:12:in `block (2 levels) in &lt;top (required)&gt;'</pre></div>
+    <pre class="ruby"><code><span class="linenum">4</span>	p("-- wait_for_element_present [ #{how.to_s}," + what + "," + how_long.to_s + " ]")
+<span class="linenum">5</span>	wait_for_it = Selenium::WebDriver::Wait.new(:timeout => how_long )
+<span class="offending"><span class="linenum">6</span>	wait_for_it.until { @selenium.find_element(how, what) }</span>
+<span class="linenum">7</span>end
+<span class="linenum">8</span>
+<span class="linenum">9</span><span class="comment"># gem install syntax to get syntax highlighting</span></code></pre>
       </div>
     </dd>
   </dl>
 </div>
-<div id="div_group_2" class="example_group passed">
-  <dl style="margin-left: 0px;">
-  <dt id="example_group_2" class="passed">cloud browser</dt>
+<script type="text/javascript">document.getElementById('duration').innerHTML = "Finished in <strong>83.55996 seconds</strong>";</script>
+<script type="text/javascript">document.getElementById('totals').innerHTML = "1 example, 1 failure";</script>
+</div>
+</div>
+</body>
+</html>

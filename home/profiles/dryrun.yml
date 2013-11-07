@@ -2,7 +2,7 @@ commander: nightly
 
 test_rubyfile: { 
   toolbox: rubyfile,
-  file: "some_file.rb",
+  file: "dryrun_rubytask.rb",
   failover: die,
   retry: no,
   paramlist: [a=1,y=string of win,someshit=1234]
@@ -12,7 +12,7 @@ test_webrobot: {
   toolbox: webrobot, 
   failover: die,
   raketask: 'local:headless',
-  pattern: "robot_test.rb",
+  pattern: "dryrun_webrobot.rb",
   tries: 1
 }
 

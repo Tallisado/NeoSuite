@@ -68,7 +68,7 @@ task :default => [:run]
 
 # -- global needed in classes
 @reports_dir           	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
-@logs_dir           		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["REPORTS"]
+@logs_dir           		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
 @definition_yaml_hash		= read_yaml_file(toolpath("neo_commander")+"/lib/definitions.yml")
 
 # -- the following vars control the behavior of running tests
@@ -91,8 +91,8 @@ task :default => [:run]
 
 # -- prepare reports_dir
 def prepare_workspace_dir
-   FileUtils.mkdir_p @suite_logs_dir
-   FileUtils.mkdir_p @suite_report_dir
+   FileUtils.mkdir_p @logs_dir
+   FileUtils.mkdir_p @reports_dir
 	 #FileUtils.cp(toolpath("webrobot")+'/webrobot.rake', @suite_home)
 	 #FileUtils.rm_r(@task_data['reports_dir']) if File.directory?(@task_data['reports_dir'])
    #FileUtils.mkdir_p(@task_data['reports_dir'])

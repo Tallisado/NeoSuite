@@ -146,3 +146,159 @@
 2013-10-08 11:31:15,421 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:59930 in 9ms
 2013-10-08 11:31:15,842 - sauce_connect:234 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r25","OwnerPorts":["59930"],"Ports":["80"],"Platform":"Java-1.6.0_27-OpenJDK_64-Bit_Server_VM,_20.0-b12,_Sun_Microsystems_Inc.-on-Linux-3.2.0-4-amd64-amd64","Build":"38","ScriptRelease":38,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
 2013-10-08 11:31:17,078 - sauce_connect:0 - INFO - received SIGINT
+2013-11-07 12:38:42,191 - sauce_connect:554 - INFO - / Starting \
+2013-11-07 12:38:42,197 - sauce_connect:555 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-11-07 12:38:42,219 - sauce_connect:567 - DEBUG - System is -4.0 hours off UTC
+2013-11-07 12:38:42,220 - sauce_connect:569 - DEBUG - options: {'user': 'talliskane', 'ports': ['42429'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'boost_mode': True, 'tunnel_identifier': '', 'fast_fail_regexps': '', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False, 'ssh': False, 'se_port': '4445', 'readyfile': 'sauce_connect.ready', 'shared_tunnel': False, 'ssh_port': 443, 'direct_domains': '', 'host': '127.0.0.1'}
+2013-11-07 12:38:42,223 - sauce_connect:570 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r25', 'OwnerPorts': ['42429'], 'Ports': ['80'], 'Platform': 'Java-1.7.0_25-Java_HotSpot-TM-_64-Bit_Server_VM,_23.25-b01,_Oracle_Corporation-on-Linux-3.2.0-4-amd64-amd64', 'Build': '38', 'ScriptRelease': 38, 'ScriptName': 'sauce_connect'}
+2013-11-07 12:38:42,226 - sauce_connect:572 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['42429']
+2013-11-07 12:38:42,252 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:42429 in 5ms
+2013-11-07 12:38:42,734 - sauce_connect:234 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r25","OwnerPorts":["42429"],"Ports":["80"],"Platform":"Java-1.7.0_25-Java_HotSpot-TM-_64-Bit_Server_VM,_23.25-b01,_Oracle_Corporation-on-Linux-3.2.0-4-amd64-amd64","Build":"38","ScriptRelease":38,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-11-07 12:38:46,634 - sauce_connect:246 - INFO - Tunnel remote VM is provisioned (b048d04a772a410697c02f692484c31d)
+2013-11-07 12:38:46,976 - sauce_connect:264 - INFO - Tunnel remote VM is booting ..
+2013-11-07 12:39:15,594 - sauce_connect:268 - INFO - Tunnel remote VM is running at maki10153.miso.saucelabs.com
+2013-11-07 12:39:15,644 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:42429 in 0ms
+2013-11-07 12:39:15,657 - sauce_connect:642 - INFO - Starting connection to tunnel host...
+2013-11-07 12:39:15,661 - sauce_connect:642 - INFO - Connecting to tunnel host maki10153.miso.saucelabs.com as talliskane
+2013-11-07 12:39:15,987 - sauce_connect:642 - INFO - Forwarding Selenium with ephemeral port 43900
+2013-11-07 12:39:16,017 - sauce_connect:642 - INFO - Selenium HTTP proxy listening on port 4445
+2013-11-07 12:39:16,746 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-11-07 12:39:16,846 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: ebfe856275494cb39e64a048741fa33a
+2013-11-07 12:39:16,852 - sauce_connect:642 - INFO - Connected! You may start your tests.
+2013-11-07 12:39:28,747 - sauce_connect:0 - INFO - GET http://www.google.ca/ -> 302 (166ms)
+2013-11-07 12:39:29,543 - sauce_connect:0 - INFO - GET https://www.google.ca/ -> 200 (230ms)
+2013-11-07 12:39:29,924 - sauce_connect:0 - INFO - GET https://www.google.ca/images/icons/product/chrome-48.png -> 200 (51ms)
+2013-11-07 12:39:30,006 - sauce_connect:0 - INFO - GET https://www.google.ca/images/srpr/logo11w.png -> 200 (55ms)
+2013-11-07 12:39:30,134 - sauce_connect:0 - INFO - GET https://www.google.ca/xjs/_/js/k=xjs.s.en_US.fjKNts1I8xA.O/m=c,sb,cr,jp,elog,r,hsm,j,p,pcc,csi/am=EAKAog/rt=j/d=1/sv=1/rs=AItRSTOnB5SPOClnzrkAf6B94dKdBUcDkQ -> 200 (231ms)
+2013-11-07 12:39:30,177 - sauce_connect:0 - INFO - GET https://www.gstatic.com/og/_/js/k=og.og.en_US.YziVIGF05Ng.O/rt=j/m=sy17,sy18,sy19,d,ld,gl,sy22,is,sy20,id,nb,nw,sb,sd,p,vd,awd,ip/rs=AItRSTPM-SCNHUflPTTYl7GovREpRoOhdw -> 200 (226ms)
+2013-11-07 12:39:30,236 - sauce_connect:0 - INFO - GET https://ssl.gstatic.com/gb/images/v1_3fc5b988.png -> 200 (244ms)
+2013-11-07 12:39:30,875 - sauce_connect:0 - INFO - GET https://www.google.ca/extern_chrome/f4b7323ff7b6cedb.js?bav=on.2,or.r_qf. -> 200 (101ms)
+2013-11-07 12:39:30,904 - sauce_connect:0 - INFO - GET https://www.google.ca/xjs/_/js/k=xjs.s.en_US.fjKNts1I8xA.O/m=sy14,cdos,sy31,gf,vm,sy39,sy64,sy65,sy188,tbui,mb,sy100,cfm,sy43,sy46,sy69,sy53,sy41,sy44,sy47,sy70,sy54,sy56,sy57,sy74,sy71,sy101,sy80,sy81,sy55,sy58,sy73,sy72,sy102,sy103,sy104,sy79,sy77,sy40,sy45,sy63,sy75,sy99,sy105,sy106,sy107,actn,abd,sy34,sy87,sy59,sy60,sy52,sy61,sy62,sy66,sy67,sy88,sy86,sy51,llc,foot,sy168,sy170,lu,sy174,m,me,sy143,sy142,sy154,sy144,em2,em3,em4,sy186,tnv,sy42,ttbcdr,sy108,adp,sy122,async,erh,sy89,hv,sy90,jsaleg,sy95,sy96,sy166,kp,lc,ob,sf,sy157,sfa,tbpr,sy180,sy118,sy181,tr/am=EAKAog/rt=j/d=0/sv=1/rs=AItRSTOnB5SPOClnzrkAf6B94dKdBUcDkQ -> 200 (128ms)
+2013-11-07 12:39:31,040 - sauce_connect:0 - INFO - GET https://www.google.com/textinputassistant/tia.png -> 200 (130ms)
+2013-11-07 12:39:31,056 - sauce_connect:0 - INFO - GET https://apis.google.com/_/scs/abc-static/_/js/k=gapi.gapi.en.m6tSbhdDLmw.O/m=googleapis_client,plusone/rt=j/sv=1/d=1/ed=1/rs=AItRSTME_Ha2FhX9c0yBsElqKy-XzbRdqw/cb=gapi.loaded_0 -> 200 (147ms)
+2013-11-07 12:39:31,471 - sauce_connect:0 - INFO - GET https://www.google.ca/favicon.ico -> 200 (12ms)
+2013-11-07 12:39:31,502 - sauce_connect:0 - INFO - GET https://www.google.ca/gen_204?v=3&s=webhp&action=&e=25657,146147,4000116,4006293,4006727,4007232,4007661,4007714,4007830,4008067,4008133,4008142,4008725,4009016,4009033,4009344,4009565,4009663,4009671,4009672,4010061,4010806,4010830,4010899,4010938,4011063,4011125,4011228,4011256,4011258,4011334,4011376,4011423,4011518,4011522,4011524,4011525,4011529,4011550,4011552,4011557,4011559,4011619,4011678,4011683,4011709,4011836,4011847,4011863,4011872,4011911,4011971,4012001,4012003,4012011,4012090,4012137,4012145,4012147,4012271,4012302,4012306,4012316,4012318,4012342,4012360,4012365,4012422,4012544,4012584,4012632&ei=cdB7UpbqDrTNsQS_xILwCQ&imc=1&imn=1&imp=1&atyp=csi&adh=&rt=xjsls.123,prt.124,xjses.880,xjsee.976,xjs.1090,ol.1687,iml.452,wsrt.1226,cst.0,dnst.0,rqst.428,rspt.883 -> 204 (42ms)
+2013-11-07 12:39:31,533 - sauce_connect:0 - INFO - GET https://www.google.ca/images/nav_logo170.png -> 200 (72ms)
+2013-11-07 12:39:32,829 - sauce_connect:0 - INFO - received SIGINT
+2013-11-07 12:57:05,862 - sauce_connect:554 - INFO - / Starting \
+2013-11-07 12:57:05,868 - sauce_connect:555 - INFO - Please wait for "You may start your tests" to start your tests.
+2013-11-07 12:57:05,877 - sauce_connect:567 - DEBUG - System is -4.0 hours off UTC
+2013-11-07 12:57:05,880 - sauce_connect:569 - DEBUG - options: {'user': 'talliskane', 'ports': ['58562'], 'domains': ['sauce-connect.proxy'], 'debug_ssh': False, 'tunnel_ports': ['80'], 'allow_unclean_exit': False, 'rest_url': 'https://saucelabs.com/rest/v1', 'logfile': 'sauce_connect.log', 'squid_opts': '', 'boost_mode': True, 'tunnel_identifier': '', 'fast_fail_regexps': '', 'quiet': False, 'latency_log': 150, 'use_ssh_config': False, 'ssh': False, 'se_port': '4445', 'readyfile': 'sauce_connect.ready', 'shared_tunnel': False, 'ssh_port': 443, 'direct_domains': '', 'host': '127.0.0.1'}
+2013-11-07 12:57:05,882 - sauce_connect:570 - DEBUG - metadata: {'PythonVersion': '2.5.1', 'OwnerHost': '127.0.0.1', 'Release': '3.0-r25', 'OwnerPorts': ['58562'], 'Ports': ['80'], 'Platform': 'Java-1.7.0_25-Java_HotSpot-TM-_64-Bit_Server_VM,_23.25-b01,_Oracle_Corporation-on-Linux-3.2.0-4-amd64-amd64', 'Build': '38', 'ScriptRelease': 38, 'ScriptName': 'sauce_connect'}
+2013-11-07 12:57:05,884 - sauce_connect:572 - INFO - Forwarding: ['sauce-connect.proxy']:['80'] -> 127.0.0.1:['58562']
+2013-11-07 12:57:05,898 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:58562 in 6ms
+2013-11-07 12:57:06,341 - sauce_connect:234 - INFO - {"squid_config":null,"use_caching_proxy":true,"metadata":{"PythonVersion":"2.5.1","OwnerHost":"127.0.0.1","Release":"3.0-r25","OwnerPorts":["58562"],"Ports":["80"],"Platform":"Java-1.7.0_25-Java_HotSpot-TM-_64-Bit_Server_VM,_23.25-b01,_Oracle_Corporation-on-Linux-3.2.0-4-amd64-amd64","Build":"38","ScriptRelease":38,"ScriptName":"sauce_connect"},"use_kgp":true,"tunnel_identifier":"","shared_tunnel":false,"fast_fail_regexps":null,"ssh_port":443,"direct_domains":null,"domain_names":["sauce-connect.proxy"]}
+2013-11-07 12:57:09,822 - sauce_connect:246 - INFO - Tunnel remote VM is provisioned (433ba9eab912489790395f40097512af)
+2013-11-07 12:57:10,032 - sauce_connect:264 - INFO - Tunnel remote VM is booting ..
+2013-11-07 12:57:35,844 - sauce_connect:268 - INFO - Tunnel remote VM is running at maki11152.miso.saucelabs.com
+2013-11-07 12:57:35,884 - sauce_connect:371 - INFO - Succesfully connected to local server 127.0.0.1:58562 in 1ms
+2013-11-07 12:57:35,898 - sauce_connect:642 - INFO - Starting connection to tunnel host...
+2013-11-07 12:57:35,901 - sauce_connect:642 - INFO - Connecting to tunnel host maki11152.miso.saucelabs.com as talliskane
+2013-11-07 12:57:36,249 - sauce_connect:642 - INFO - Forwarding Selenium with ephemeral port 41971
+2013-11-07 12:57:36,259 - sauce_connect:642 - INFO - Selenium HTTP proxy listening on port 4445
+2013-11-07 12:57:37,000 - sauce_connect:0 - INFO - Successful handshake with Sauce Connect server
+2013-11-07 12:57:37,098 - sauce_connect:0 - INFO - Tunnel host version: 0.1.0, remote endpoint ID: 851f7f18a6f946b7aacf18c551aab48c
+2013-11-07 12:57:37,104 - sauce_connect:642 - INFO - Connected! You may start your tests.
+2013-11-07 12:57:52,841 - sauce_connect:0 - INFO - Could not proxy http://10.10.9.129/Login/index.php, exception: java.net.NoRouteToHostException: No route to host
+2013-11-07 12:57:52,898 - sauce_connect:0 - INFO - REPORTING an error to Sauce Labs with info: Could not proxy http://10.10.9.129/Login/index.php, exception: java.net.NoRouteToHostException: No route to host
+    at java.net.PlainSocketImpl.socketConnect(Native Method)
+    at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+    at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+    at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+    at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+    at java.net.Socket.connect(Socket.java:579)
+    at java.net.Socket.connect(Socket.java:528)
+    at sun.net.NetworkClient.doConnect(NetworkClient.java:180)
+    at sun.net.www.http.HttpClient.openServer(HttpClient.java:378)
+    at sun.net.www.http.HttpClient.openServer(HttpClient.java:473)
+    at sun.net.www.http.HttpClient.<init>(HttpClient.java:203)
+    at sun.net.www.http.HttpClient.New(HttpClient.java:290)
+    at sun.net.www.http.HttpClient.New(HttpClient.java:306)
+    at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:995)
+    at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:931)
+    at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:849)
+    at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1299)
+    at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:468)
+    at com.saucelabs.sauceconnect.proxy.ProxyHandler.proxyPlainTextRequest(ProxyHandler.scala:417)
+    at com.saucelabs.sauceconnect.proxy.ProxyHandler.handle(ProxyHandler.scala:113)
+    at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:114)
+    at org.eclipse.jetty.server.Server.handle(Server.java:352)
+    at org.eclipse.jetty.server.HttpConnection.handleRequest(HttpConnection.java:596)
+    at org.eclipse.jetty.server.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:1052)
+    at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:590)
+    at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:212)
+    at org.eclipse.jetty.server.HttpConnection.handle(HttpConnection.java:426)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:510)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint.access$000(SelectChannelEndPoint.java:34)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:40)
+    at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:450)
+    at java.lang.Thread.run(Thread.java:724)
+2013-11-07 12:57:58,819 - sauce_connect:0 - INFO - Could not proxy http://10.10.9.129/favicon.ico, exception: java.net.NoRouteToHostException: No route to host
+2013-11-07 12:57:58,825 - sauce_connect:0 - INFO - REPORTING an error to Sauce Labs with info: Could not proxy http://10.10.9.129/favicon.ico, exception: java.net.NoRouteToHostException: No route to host
+    at java.net.PlainSocketImpl.socketConnect(Native Method)
+    at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+    at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+    at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+    at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+    at java.net.Socket.connect(Socket.java:579)
+    at java.net.Socket.connect(Socket.java:528)
+    at sun.net.NetworkClient.doConnect(NetworkClient.java:180)
+    at sun.net.www.http.HttpClient.openServer(HttpClient.java:378)
+    at sun.net.www.http.HttpClient.openServer(HttpClient.java:473)
+    at sun.net.www.http.HttpClient.<init>(HttpClient.java:203)
+    at sun.net.www.http.HttpClient.New(HttpClient.java:290)
+    at sun.net.www.http.HttpClient.New(HttpClient.java:306)
+    at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:995)
+    at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:931)
+    at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:849)
+    at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1299)
+    at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:468)
+    at com.saucelabs.sauceconnect.proxy.ProxyHandler.proxyPlainTextRequest(ProxyHandler.scala:417)
+    at com.saucelabs.sauceconnect.proxy.ProxyHandler.handle(ProxyHandler.scala:113)
+    at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:114)
+    at org.eclipse.jetty.server.Server.handle(Server.java:352)
+    at org.eclipse.jetty.server.HttpConnection.handleRequest(HttpConnection.java:596)
+    at org.eclipse.jetty.server.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:1052)
+    at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:590)
+    at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:212)
+    at org.eclipse.jetty.server.HttpConnection.handle(HttpConnection.java:426)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:510)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint.access$000(SelectChannelEndPoint.java:34)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:40)
+    at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:450)
+    at java.lang.Thread.run(Thread.java:724)
+2013-11-07 12:58:04,819 - sauce_connect:0 - INFO - Could not proxy http://10.10.9.129/favicon.ico, exception: java.net.NoRouteToHostException: No route to host
+2013-11-07 12:58:04,825 - sauce_connect:0 - INFO - REPORTING an error to Sauce Labs with info: Could not proxy http://10.10.9.129/favicon.ico, exception: java.net.NoRouteToHostException: No route to host
+    at java.net.PlainSocketImpl.socketConnect(Native Method)
+    at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:339)
+    at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:200)
+    at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:182)
+    at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+    at java.net.Socket.connect(Socket.java:579)
+    at java.net.Socket.connect(Socket.java:528)
+    at sun.net.NetworkClient.doConnect(NetworkClient.java:180)
+    at sun.net.www.http.HttpClient.openServer(HttpClient.java:378)
+    at sun.net.www.http.HttpClient.openServer(HttpClient.java:473)
+    at sun.net.www.http.HttpClient.<init>(HttpClient.java:203)
+    at sun.net.www.http.HttpClient.New(HttpClient.java:290)
+    at sun.net.www.http.HttpClient.New(HttpClient.java:306)
+    at sun.net.www.protocol.http.HttpURLConnection.getNewHttpClient(HttpURLConnection.java:995)
+    at sun.net.www.protocol.http.HttpURLConnection.plainConnect(HttpURLConnection.java:931)
+    at sun.net.www.protocol.http.HttpURLConnection.connect(HttpURLConnection.java:849)
+    at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1299)
+    at java.net.HttpURLConnection.getResponseCode(HttpURLConnection.java:468)
+    at com.saucelabs.sauceconnect.proxy.ProxyHandler.proxyPlainTextRequest(ProxyHandler.scala:417)
+    at com.saucelabs.sauceconnect.proxy.ProxyHandler.handle(ProxyHandler.scala:113)
+    at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:114)
+    at org.eclipse.jetty.server.Server.handle(Server.java:352)
+    at org.eclipse.jetty.server.HttpConnection.handleRequest(HttpConnection.java:596)
+    at org.eclipse.jetty.server.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:1052)
+    at org.eclipse.jetty.http.HttpParser.parseNext(HttpParser.java:590)
+    at org.eclipse.jetty.http.HttpParser.parseAvailable(HttpParser.java:212)
+    at org.eclipse.jetty.server.HttpConnection.handle(HttpConnection.java:426)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint.handle(SelectChannelEndPoint.java:510)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint.access$000(SelectChannelEndPoint.java:34)
+    at org.eclipse.jetty.io.nio.SelectChannelEndPoint$1.run(SelectChannelEndPoint.java:40)
+    at org.eclipse.jetty.util.thread.QueuedThreadPool$2.run(QueuedThreadPool.java:450)
+    at java.lang.Thread.run(Thread.java:724)
+2013-11-07 12:58:10,203 - sauce_connect:0 - INFO - received SIGINT
