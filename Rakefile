@@ -213,9 +213,9 @@ def clean_exit
   puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
   puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")
   if tasks_failed.length == 0
-		puts "[TCRESULT]=SUCCESSFUL!YAY \n"
+		puts "[TCRESULT]=SUCCESSFUL\n"
 	else
-		puts "[TCRESULT]=UNSUCCESSUL!BOO \n"
+		puts "[TCRESULT]=UNSUCCESSUL\n"
 	end
 	
    if @task_data['test_retry']
