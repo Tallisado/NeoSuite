@@ -204,14 +204,14 @@ def clean_exit
 	 
 	 
 	 puts("\n==> DONE\n\n")
-   puts(":: [SESSION]\n")
-   puts("      -- reports prepared: #{@reports_dir}\n")
-   puts("      -- reports prepared: #{@logs_dir}\n")
-   puts("      -- execution time  : #{@chain.execution_time.to_s} secs\n")
-   puts("      -- tests executed  : #{@chain.executed_tasks.to_s}\n")
-   puts("      -- tests passed    : #{tasks_passed.length.to_s}\n")
-   puts("      -- tests failed    : #{tasks_failed.length.to_s}\n")
-   puts("      -- tests skipped   : #{tasks_skipped.length.to_s}\n")
+   puts("[TC] :: [SESSION]\n")
+   puts("[TC]   -- reports prepared: #{@reports_dir}\n")
+   puts("[TC]   -- reports prepared: #{@logs_dir}\n")
+   puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")
+   puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
+   puts("[TC]   -- tests passed    : #{tasks_passed.length.to_s}\n")
+   puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
+   puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")
    
    if @task_data['test_retry']
       puts("      -- tests re-tried  : #{@tests_retried_counter.to_s}\n")
