@@ -1,2 +1,2 @@
-Sado-Suite
+NeoSuite
 ==========

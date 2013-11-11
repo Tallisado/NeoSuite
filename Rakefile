@@ -282,14 +282,14 @@ class Publisher
 		end
 		if @task_data['tasks_failed'].length > 0
 			 @task_data['tasks_failed'].each  { |t|
-					document += "   <task name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
+					document += "   <task name='#{t.taskname}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
 					document += "      <error message='Test Failed'><![CDATA[\n\n#{t.output}\n\n]]>\n       </error>\n"
 					document += "   </task>\n"
 			 }
 		end
 		if @task_data['tasks_skipped'].length > 0
 			 @task_data['tasks_skipped'].each  { |t|
-					document += "   <task name='#{t.execute_class}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
+					document += "   <task name='#{t.taskname}' classname='#{@task_data['xml_report_class_name']}' time='#{t.task_execution_time}'>\n"
 					document += "      <skipped message='Test Skipped'><![CDATA[\n\n#{t.output}\n\n]]>\n       </skipped>\n"
 					document += "   </task>\n"
 			 }
@@ -411,7 +411,7 @@ end
 
 class BaseTask
 	attr_accessor :taskname, :exit_status, :output, :task_execution_time, :test_data
-	#attr_accessor :path, :execute_class, :execute_args, :keywords, :description, :author, :testcase_headers,
+	#attr_accessor :path, :execute_args, :keywords, :description, :author, :testcase_headers,
 	#             :exit_status, :output, :task_execution_time, :test_data, :verification_error_count, :verification_count
 	def initialize(taskname, task_data, options = {})
 		
@@ -490,11 +490,11 @@ class BaseTask
 		File.open(file, 'w') {|f| f.write(data) }
 	end
 
-	def write_log
-		d = /^(.*\/).*/.match(@execute_class)[1]
-		FileUtils.mkdir_p(@task_data['reports_dir'] + "/#{d}")	   
-		write_file(@task_data['reports_dir'] + "/#{@execute_class}.html", "<html><body><pre>" + @output + "</pre><pre>:: [Total SubTests]: " + @testcase_headers.length.to_s + "</br>:: [TestCases]</br>---> " + @testcase_headers.join("</br>---> ") + "</pre></body></html>")
-	end
+	# def write_log
+		# d = /^(.*\/).*/.match(@execute_class)[1]
+		# FileUtils.mkdir_p(@task_data['reports_dir'] + "/#{d}")	   
+		# write_file(@task_data['reports_dir'] + "/#{@execute_class}.html", "<html><body><pre>" + @output + "</pre><pre>:: [Total SubTests]: " + @testcase_headers.length.to_s + "</br>:: [TestCases]</br>---> " + @testcase_headers.join("</br>---> ") + "</pre></body></html>")
+	# end
 	
 	def enforce_strict_task_definitions(task_type, task_data, options_hash)	
 		options_hash.each do |key, value|
