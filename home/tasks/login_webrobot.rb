@@ -6,7 +6,7 @@ def wait_for_element_present( how, what, how_long=5)
 	wait_for_it.until { @selenium.find_element(how, what) }
 end
 
-describe "NEO Accessibility", :sauce => true do
+describe "NEO Accessibility", :local => true do
 	it "should serve the login page to access assets" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
 		wait_for_element_present(:id, "loginnameid-inputEl", 15)

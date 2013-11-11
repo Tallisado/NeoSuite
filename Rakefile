@@ -145,7 +145,7 @@ end
 
 task :pull_into_home do
 	Dir.chdir("/home/NeoSuite") do
-		git pull
+		%x{git pull}
 	end
 end
 
