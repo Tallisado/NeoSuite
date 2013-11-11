@@ -24,17 +24,20 @@ ${var.buildCompilationErrors}${var.buildFailedTestsErrors}${var.buildChanges}
   <div>
     Build:: <b>${project.fullName?html} :: ${buildType.name?html}</b> ${result}
     ${var.buildShortStatusDescription}
-	<br/>
-	<a href='${link.buildResultsLink}'>Click to view full report!</a>
-	<br/>
+	<br/><br/><br/>
+	
 	<div style="color:blue">
+	<code style="font-family:monospace;font-family:Menlo,Bitstream Vera Sans Mono,Courier New,Courier,monospace;font-size:12px">
+	NeoSuite QuickReport:
+	</code>
 	<code style="font-family:monospace;font-family:Menlo,Bitstream Vera Sans Mono,Courier New,Courier,monospace;font-size:12px">
 		<#list build.buildLog.messages[(build.buildLog.messages?size - 30)..] as message>
 			<#if message.text?trim?starts_with('[TC]')>
-			${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")?replace("[TCRESULT]", "")}<br/>
+			${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")?replace("[TC]", "    ")}<br/>
 			</#if>            
 		</#list>
 	</code>
+	<a href='${link.buildResultsLink}'>Click to view full report!</a>
 	</div>
 
   </div>

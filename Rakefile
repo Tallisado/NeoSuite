@@ -148,6 +148,15 @@ task :pull_into_home do
 	end
 end
 
+task :copy_template_to_teamcity do
+	puts "Teamplate interval:" + ENV['TEMPLATE_INTERVAL']
+	Dir.chdir("/home/NeoSuite") do
+		%x{rm /root/.BuildServer/config/_notifications/email/build_successful.ftl}
+		%x{cp /home/NeoSuite/toolbox/etc/TeamCity/EmailTemplate/build_successful.ftl ~/.BuildServer/config/_notifications/email/build_successful.ftl}
+		sleep(60)
+	end
+end
+
 desc "-- show usage of Neo Commander"
 task :help do
     puts "\n-- usage: \n\n"
@@ -207,26 +216,27 @@ def clean_exit
   
 	Publisher.new(@task_data).publish_reports	 
 	
+
+	
+	puts("\n==> DONE\n\n")
+  puts("[  :: [SESSION]\n")
   if tasks_failed.length == 0 && tasks_error.length == 0
 		puts "[TCRESULT]=SUCCESSFUL\n"
 	else
 		puts "[TCRESULT]=UNSUCCESSUL\n"
 	end
+  puts("[TC]   -- tests passed      : #{tasks_passed.length.to_s}\n")
+  puts("[TC]   -- tests failed      : #{tasks_failed.length.to_s}\n")
+  puts("[TC]   -- tests executed    : #{@chain.executed_tasks.to_s}\n")
+  puts("[TC]   -- tests skipped     : #{tasks_skipped.length.to_s}\n")
+  puts("[TC]   -- tests error       : #{tasks_error.length.to_s}\n")
+  puts("[TC]   -- execution time    : #{@chain.execution_time.to_s} secs\n")
+	puts("       -- reports prepared  : #{@reports_dir}\n")
+  puts("       -- logs prepared     : #{@logs_dir}\n")
 	
-	puts("\n==> DONE\n\n")
-  puts("[  :: [SESSION]\n")
-  puts("[TC]   -- tests passed    : #{tasks_passed.length.to_s}\n")
-  puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
-  puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
-  puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")  
-  puts("[TC]   -- tests error     : #{tasks_error.length.to_s}\n")  
-  puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")	
-	puts("       -- reports prepared: #{@reports_dir}\n")
-  puts("       -- logs prepared   : #{@logs_dir}\n")
-	
-	puts("[TC] The test run contained the following tasks :\n")
+	puts("[TC]  Tasklist :\n")
 	@chain.get_tasknames.each do |taskname|
-		puts("[TC]  -> #{taskname}\n")	
+		puts("[TC]     {#{taskname}}\n")	
 	end
 		
 	if @task_data['test_retry']
