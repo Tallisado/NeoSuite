@@ -5,11 +5,11 @@
 
 <#list build.buildLog.messages[1..] as message>
     <#if message.text?trim?starts_with('[TCRESULT]')>
-        <#assign result=message.text?replace("[TCRESULT]=", "")>
+        <#assign result=message.text?substring(11)>?replace('[TCRESULT]', "")
 	</#if>  
 </#list>
 
-<#global subject>[<@common.subjMarker/>, ${result}] Build ${project.fullName} :: ${buildType.name} </#global>
+<#global subject>[<@common.subjMarker/>, ${result}] Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/></#global>
 
 <#global body>Build ${project.fullName} :: ${buildType.name} <@common.short_build_info build/> ${result} ${var.buildShortStatusDescription}.
 <@resp.buildTypeInvestigation buildType true/>
@@ -22,16 +22,14 @@ ${var.buildCompilationErrors}${var.buildFailedTestsErrors}${var.buildChanges}
 <#global bodyHtml>
 <div>
   <div>
-    Build:: <b>${project.fullName?html} :: ${buildType.name?html}</b> ${result}
+    Build:: <b>${project.fullName?html} :: ${buildType.name?html}</b> <a href='${link.buildResultsLink}'><@common.short_build_info build/></a> ${result}
     ${var.buildShortStatusDescription}
-	<br/>
-	<a href='${link.buildResultsLink}'>Click to view full report!</a>
 	<br/>
 	<div style="color:blue">
 	<code style="font-family:monospace;font-family:Menlo,Bitstream Vera Sans Mono,Courier New,Courier,monospace;font-size:12px">
 		<#list build.buildLog.messages[(build.buildLog.messages?size - 30)..] as message>
 			<#if message.text?trim?starts_with('[TC]')>
-			${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")?replace("[TCRESULT]", "")}<br/>
+			${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")}<br/>
 			</#if>            
 		</#list>
 	</code>

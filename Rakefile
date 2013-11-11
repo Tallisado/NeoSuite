@@ -40,7 +40,7 @@ def read_yaml_file(file)
 		end
 		raise "-- ERROR: file doesn't exist: " + file
 	# rescue
-		# puts 'FUCK'
+		# puts 'YAML failed and was caught in rescue'
 		# raise "[FATALERROR] The profile was incorrectly parsed (YAML) ~ Verify that the YAML is correct."
 		# exit
 	# end
@@ -143,6 +143,12 @@ task :show do
 	@chain.show_chain
 end
 
+task :pull_into_home do
+	Dir.chdir("/home/NeoSuite") do
+		git pull
+	end
+end
+
 desc "-- show usage of Neo Commander"
 task :help do
     puts "\n-- usage: \n\n"
@@ -199,33 +205,36 @@ def clean_exit
 	tasks_skipped    = all_by_exit_status(@task_data['test_exit_status_skipped'])
   @task_data.merge!({'execution_time' => @chain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped})
   
-	Publisher.new(@task_data).publish_reports
-   
-	 
-	 
-	puts("\n==> DONE\n\n")
-  puts("[TC] :: [SESSION]\n")
-  puts("[TC]   -- reports prepared: #{@reports_dir}\n")
-  puts("[TC]   -- reports prepared: #{@logs_dir}\n")
-  puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")
-  puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
-  puts("[TC]   -- tests passed    : #{tasks_passed.length.to_s}\n")
-  puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
-  puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")
+	Publisher.new(@task_data).publish_reports	 
+	
   if tasks_failed.length == 0
 		puts "[TCRESULT]=SUCCESSFUL\n"
 	else
 		puts "[TCRESULT]=UNSUCCESSUL\n"
 	end
 	
-   if @task_data['test_retry']
-      puts("      -- tests re-tried  : #{@tests_retried_counter.to_s}\n")
-   end
-   if tasks_failed.length > 0
-      puts("\n\n==> STATUS: [ some tests failed - execution failed ]\n")
-      exit(1)
-   end
-   exit(0)
+	puts("\n==> DONE\n\n")
+  puts("[  :: [SESSION]\n")
+  puts("[TC]   -- tests passed    : #{tasks_passed.length.to_s}\n")
+  puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
+  puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
+  puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")  
+  puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")	
+	puts("       -- reports prepared: #{@reports_dir}\n")
+  puts("       -- logs prepared   : #{@logs_dir}\n")
+	
+	puts("[TC] The test run contained the following tasks :\n")
+	@chain.get_tasknames.each do |taskname|
+	puts("[TC]  -> #{taskname}\n")	
+		
+	if @task_data['test_retry']
+		puts("      -- tests re-tried  : #{@tests_retried_counter.to_s}\n")
+	end
+	if tasks_failed.length > 0
+		puts("\n\n==> STATUS: [ some tests failed - execution failed ]\n")
+		exit(1)
+	end
+	exit(0)
 end
 
 #
@@ -320,7 +329,7 @@ class Publisher
 end
 	
 class TaskChain
-	attr_accessor :die, :taskchain_array, :execution_time, :executed_tasks
+	attr_accessor :die, :taskchain_array, :execution_time, :executed_tasks, :chainname
 	def initialize()
 		@current_chain_index = 0
 		@chain_ended = false
@@ -372,6 +381,14 @@ class TaskChain
 		@taskchain_array.each do |task|
 			task.to_s
 		end
+	end
+	
+	def get_tasknames
+		s = []
+		@taskchain_array.each do |task|
+			s.push(@taskchain_array.task_name)
+		end
+		return s
 	end
 	
 	def execute_chain	
