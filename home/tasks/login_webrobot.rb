@@ -15,13 +15,14 @@ end
 describe "NEO Accessibility", :local => true do
 	it "should serve the login page to access assets" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		wait_for_element_present(:id, "loginnameid-inputEl", 15)
-		type(:id, "loginnameid-inputEl", 'admin')
-		type(:id, "loginpasswordid-inputEl", 'password')
-		sleep 1
-		@suite.click(:id, "loginbuttonid-btnIconEl")
-		wait_for_element_present(:id, "createUser_wiz", 20)
-		@selenium.title.should eql("ADTRAN Neo")
+		@selenium.superdave
+		# wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		# type(:id, "loginnameid-inputEl", 'admin')
+		# type(:id, "loginpasswordid-inputEl", 'password')
+		# sleep 1
+		# @suite.click(:id, "loginbuttonid-btnIconEl")
+		# wait_for_element_present(:id, "createUser_wiz", 20)
+		# @selenium.title.should eql("ADTRAN Neo")
 	end
 end
 

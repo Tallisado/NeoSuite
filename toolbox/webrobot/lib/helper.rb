@@ -4,6 +4,13 @@ require 'helper_methods'
 require 'sauce'
 require 'sauce/rspec'
 
+module ObjSingletonMethods
+  def new_method
+    puts "do some things in heer"
+  end
+end
+
+
 RSpec.configure do |config|
 	config.include HelperMethods
 	if ! ENV['WR_INTERFACE'].nil? 
@@ -22,6 +29,7 @@ RSpec.configure do |config|
 			@selenium.manage.timeouts.implicit_wait = 35
 			@selenium.manage.timeouts.script_timeout = 30
 			@selenium.manage.timeouts.page_load = 500
+			@selenium.extend ObjSingletonMethods
 		end
   end
   config.after(:each) do
