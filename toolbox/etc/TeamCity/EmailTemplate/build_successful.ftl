@@ -38,6 +38,8 @@ ${var.buildCompilationErrors}${var.buildFailedTestsErrors}${var.buildChanges}
 			</#if>            
 		</#list>
 	</code>
+	<br />
+	<br />
 	<a href='${link.buildResultsLink}'>Click to view full report!</a>
 	</div>
 
