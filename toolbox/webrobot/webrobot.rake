@@ -2,7 +2,7 @@ require 'rspec/core/rake_task'
 
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:spec) do |t|
-
+	puts "running spec as a sanity against webrobot"
 	ENV['WR_INTERFACE'] = ENV['WR_INTERFACE'].nil? ? "sauce" : ENV['WR_INTERFACE']		
 	
 	if ! ENV['WR_DEBUG'].nil?
@@ -19,7 +19,7 @@ end
 
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:sauce) do |t|
-
+	puts "running sauce as a target interface"
 	ENV['WR_INTERFACE'] = ENV['WR_INTERFACE'].nil? ? "sauce" : ENV['WR_INTERFACE']		
 	
 	if ! ENV['WR_DEBUG'].nil?

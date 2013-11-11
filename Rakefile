@@ -225,7 +225,8 @@ def clean_exit
 	
 	puts("[TC] The test run contained the following tasks :\n")
 	@chain.get_tasknames.each do |taskname|
-	puts("[TC]  -> #{taskname}\n")	
+		puts("[TC]  -> #{taskname}\n")	
+	end
 		
 	if @task_data['test_retry']
 		puts("      -- tests re-tried  : #{@tests_retried_counter.to_s}\n")
@@ -386,7 +387,7 @@ class TaskChain
 	def get_tasknames
 		s = []
 		@taskchain_array.each do |task|
-			s.push(@taskchain_array.task_name)
+			s.push(task.taskname)
 		end
 		return s
 	end

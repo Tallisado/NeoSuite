@@ -1,20 +1,20 @@
-commander: nightly
+commander: dryrun
 
-# test_rubyfile: { 
-  # toolbox: rubyfile,
-  # file: "dryrun_rubytask.rb",
-  # failover: die,
-  # retry: no,
-  # paramlist: [a=1,y=string of win,someshit=1234]
-# }
-
-test_webrobot: { 
-  toolbox: webrobot, 
+test_rubyfile: { 
+  toolbox: rubyfile,
+  file: "dryrun_rubytask.rb",
   failover: die,
-  raketask: 'local:headless',
-  pattern: "login_webrobot.rb",
-  tries: 1
+  retry: no,
+  paramlist: [a=1,y=string of win,someshit=1234]
 }
+
+# test_webrobot: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "login_webrobot.rb",
+  # tries: 1
+# }
 
 # test_webrobot: { 
   # toolbox: webrobot, 

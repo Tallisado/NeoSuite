@@ -6,8 +6,8 @@ def wait_for_element_present( how, what, how_long=5)
 	wait_for_it.until { @selenium.find_element(how, what) }
 end
 
-describe "cloud browser", :sauce => true do
-	it "should open browser remotely" do
+describe "NEO Accessibility", :sauce => true do
+	it "should serve the login page to access assets" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
 		wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		@suite.type(:id, "loginnameid-inputEl", 'admin')
