@@ -77,7 +77,7 @@ task :default => [:run]
 
 # -- global class data
 @task_data = {
-   'output_on'                => @neo_debug,
+   'output_on'                => true,
    'test_retry'               => false,
    'test_exit_status_passed'  => "PASSED", 		#1 example, 0 failures
    'test_exit_status_failed'  => "FAILED",
@@ -359,7 +359,7 @@ class TaskChain
 	end
 	
 	def add_transpose(task_name, task_hash, task_data)
-		p_d "add transpose" if task_name['output_on']
+		p_d "add transpose"
 		if (task_hash["toolbox"] == "wrtest")
 			@transpose_array.push(RubyTask.new(task_name, task_data, task_hash))
 		end
@@ -474,9 +474,9 @@ class BaseTask
 				@exit_status = @task_data['test_exit_status_failed']
 			ensure
 				p @exit_status
-				p_d "[++++++](OUTPUT INFORMATION):"
-				p_d @output
-				p_d "[------](OUTPUT)"
+				p_d "[++++++](OUTPUT INFORMATION):" if @task_data['output_on']
+				p_d @output													if @task_data['output_on']
+				p_d "[------](OUTPUT)"							if @task_data['output_on']
 			end
 			
 			@tEnd = Time.now
