@@ -6,12 +6,18 @@ def wait_for_element_present( how, what, how_long=5)
 	wait_for_it.until { @selenium.find_element(how, what) }
 end
 
+def type(method, element, text)
+	p("-- typing text ['#{text}'] into element ['#{element}'] by ['#{method}']")
+	@selenium.find_element(method, element).send_keys text
+	sleep 0.2
+end
+
 describe "NEO Accessibility", :local => true do
 	it "should serve the login page to access assets" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
 		wait_for_element_present(:id, "loginnameid-inputEl", 15)
-		@suite.type(:id, "loginnameid-inputEl", 'admin')
-		@suite.type(:id, "loginpasswordid-inputEl", 'password')
+		type(:id, "loginnameid-inputEl", 'admin')
+		type(:id, "loginpasswordid-inputEl", 'password')
 		sleep 1
 		@suite.click(:id, "loginbuttonid-btnIconEl")
 		wait_for_element_present(:id, "createUser_wiz", 20)

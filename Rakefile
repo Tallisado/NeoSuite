@@ -79,6 +79,7 @@ task :default => [:run]
    'test_exit_status_passed'  => "PASSED", 		#1 example, 0 failures
    'test_exit_status_failed'  => "FAILED",
    'test_exit_status_skipped' => "SKIPPED",
+   'test_exit_status_error' 	=> "ERROR",
    'reports_dir'              => @reports_dir,
    'logs_dir'		              => @logs_dir,
    'xml_report_class_name'    => "qa.tasks",
@@ -201,11 +202,12 @@ def clean_exit
 	tasks_passed     = all_by_exit_status(@task_data['test_exit_status_passed'])
 	tasks_failed     = all_by_exit_status(@task_data['test_exit_status_failed'])
 	tasks_skipped    = all_by_exit_status(@task_data['test_exit_status_skipped'])
-  @task_data.merge!({'execution_time' => @chain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped})
+	tasks_error    	 = all_by_exit_status(@task_data['test_exit_status_error'])
+  @task_data.merge!({'execution_time' => @chain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped, 'tasks_error' => tasks_error})
   
 	Publisher.new(@task_data).publish_reports	 
 	
-  if tasks_failed.length == 0
+  if tasks_failed.length == 0 && tasks_error.length == 0
 		puts "[TCRESULT]=SUCCESSFUL\n"
 	else
 		puts "[TCRESULT]=UNSUCCESSUL\n"
@@ -217,6 +219,7 @@ def clean_exit
   puts("[TC]   -- tests failed    : #{tasks_failed.length.to_s}\n")
   puts("[TC]   -- tests executed  : #{@chain.executed_tasks.to_s}\n")
   puts("[TC]   -- tests skipped   : #{tasks_skipped.length.to_s}\n")  
+  puts("[TC]   -- tests error     : #{tasks_error.length.to_s}\n")  
   puts("[TC]   -- execution time  : #{@chain.execution_time.to_s} secs\n")	
 	puts("       -- reports prepared: #{@reports_dir}\n")
   puts("       -- logs prepared   : #{@logs_dir}\n")
@@ -461,21 +464,25 @@ class BaseTask
 			p("running: [#{@taskname}] ")
 			p("running: [#{@taskname}] ")
 			
-			begin
-				@exit_status = @task_data['test_exit_status_skipped']
-				status = Timeout::timeout(@timeout.to_i) {
-					self.execute_cmd
-				}
-			rescue Timeout::Error => e
-				@output << "\n\n[ TOTAL TEST TIME EXCEEDED ALLOWED DURATION AND WAS FORCED TO TERMINATE (#{@timeout.to_s}) ]"
-				@exit_status = @task_data['test_exit_status_failed']
-			ensure
-				p @exit_status
-				p_d "[++++++](OUTPUT INFORMATION):" if @task_data['output_on']
-				p_d @output													if @task_data['output_on']
-				p_d "[------](OUTPUT)"							if @task_data['output_on']
-			end
-			
+			# begin
+				# @exit_status = "BOO"
+				# status = Timeout::timeout(@timeout.to_i) {
+					# self.execute_cmd
+				# }
+			# rescue Timeout::Error => e
+				# @exit_status = @task_data['test_exit_status_failed']
+			# rescue Exception => e
+				# puts "-- ERROR: " + e.inspect
+				# puts "   (in test:)"
+				# puts to_s
+				# @exit_status = @task_data['test_exit_status_error']
+			# ensure
+				# p @exit_status
+				# p "[++++++++++++++++][OUTPUT INFORMATION]:" if @task_data['output_on']
+				# p @output																		if @task_data['output_on']
+				# p "[----------------][OUTPUT]"							if @task_data['output_on']
+			# end
+			self.execute_cmd
 			@tEnd = Time.now
 		else
 			# -- skipping this test
@@ -581,22 +588,30 @@ class WRTask < BaseTask
 			Rake.application['for:real'].invoke()
 			@output = "1 example, 0 failures"
 			#@output = "4 examples, 0 failures"
-		else 
-			puts "Executing rake (STDOUT REDIR)"		
-			
+		else			
 			begin
 				redirect_webrobot_stdout{Rake.application[@raketask].invoke() }
-			rescue
-				puts "SHIT BROKE"
-			ensure
 				@output = retrieve_webrobot_log
+				#find out matrix from cloud if needed
+				@matrix = {}
 				@exit_status = case @output
 					when /0 failures/ then @task_data['test_exit_status_passed']
+					when /0 examples, 0 failures/ then @task_data['test_exit_status_skipped']
 					else @task_data['test_exit_status_failed']
-				end	
+				end
+			rescue Exception => e
+				@output = retrieve_webrobot_log
+				@exit_status = @task_data['test_exit_status_error']
+				p "-- ERROR -----: " + e.inspect
+				p "   (in test:)"
+				p to_s
+			ensure
 				@matrix = {}
 			end
 		end		
+		
+		
+				
 		
 	end
 	
@@ -611,7 +626,6 @@ class WRTask < BaseTask
 	end
 
 	def retrieve_webrobot_log
-		puts "getting output from : #{@task_data['logs_dir']}#{@taskname}.txt"
 		return (File.open("#{@task_data['logs_dir']}#{@taskname}.txt")).read
 	end
 		
