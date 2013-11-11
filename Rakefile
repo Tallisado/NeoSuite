@@ -52,9 +52,7 @@ end
 def p(s) puts "-- #{Time.now.strftime('[%H:%M:%S]')} #{s}" end
 #def p_d(s) puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if @neo_debug == true end
 def p_d(s) 
-	if @neo_debug == false
-		return
-	else
+	if ENV["NC_DEBUG"]
 		puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" 
 	end
 end
@@ -76,7 +74,7 @@ task :default => [:run]
 
 # -- global class data
 @task_data = {
-   'output_on'                => false,
+   'output_on'                => @neo_debug,
    'test_retry'               => false,
    'test_exit_status_passed'  => "PASSED", 		#1 example, 0 failures
    'test_exit_status_failed'  => "FAILED",
@@ -343,8 +341,7 @@ class TaskChain
 	end
 	
 	def set_chainname(chainname)
-		p_d "chainname: #{chainname}"
-		p "-----chainname: #{chainname}"
+		p "--chainname: #{chainname}"
 		@chainname = chainname
 	end
 	
@@ -359,7 +356,7 @@ class TaskChain
 	end
 	
 	def add_transpose(task_name, task_hash, task_data)
-		p_d "add transpose"
+		p_d "add transpose" if task_name['output_on']
 		if (task_hash["toolbox"] == "wrtest")
 			@transpose_array.push(RubyTask.new(task_name, task_data, task_hash))
 		end
@@ -474,11 +471,9 @@ class BaseTask
 				@exit_status = @task_data['test_exit_status_failed']
 			ensure
 				p @exit_status
-				p "[++++++](OUTPUT INFORMATION):" if @task_data['output_on']
-				p @output if @task_data['output_on']
-				p "[------](OUTPUT)" if @task_data['output_on']
-				p "[++++++](TESTCASE INFORMATION):" if @task_data['output_on']
-				p "[------](TESTCASE)" if @task_data['output_on']
+				p_d "[++++++](OUTPUT INFORMATION):"
+				p_d @output
+				p_d "[------](OUTPUT)"
 			end
 			
 			@tEnd = Time.now
@@ -579,7 +574,7 @@ class WRTask < BaseTask
 		app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
 		app.load_imports
 
-		puts "executing WRTask command: " + @raketask
+		puts "executing WRTask command:: " + @raketask
 		
 		if @keepstdout 
 			puts "Executing rake (STDOUT)"
@@ -587,16 +582,21 @@ class WRTask < BaseTask
 			@output = "1 example, 0 failures"
 			#@output = "4 examples, 0 failures"
 		else 
-			puts "Executing rake (STDOUT REDIR)"
-			redirect_webrobot_stdout{Rake.application[@raketask].invoke() }
-			@output = retrieve_webrobot_log
-		end
-
-		@exit_status = case @output
-			when /0 failures/ then @task_data['test_exit_status_passed']
-			else @task_data['test_exit_status_failed']
-		end	
-		@matrix = {}
+			puts "Executing rake (STDOUT REDIR)"		
+			
+			begin
+				redirect_webrobot_stdout{Rake.application[@raketask].invoke() }
+			rescue
+				puts "SHIT BROKE"
+			ensure
+				@output = retrieve_webrobot_log
+				@exit_status = case @output
+					when /0 failures/ then @task_data['test_exit_status_passed']
+					else @task_data['test_exit_status_failed']
+				end	
+				@matrix = {}
+			end
+		end		
 	end
 	
 	def redirect_webrobot_stdout
