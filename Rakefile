@@ -431,6 +431,7 @@ class BaseTask
 		@transposed			= false
 		@exit_status 		= options['simulated_result'].nil? ? nil : options['simulated_result']		
 		@output					= ""
+		@error_cap		= ""
 		@matrix					= {}
 		@report_loc			= ""
 		@tStart					= Time.new()
@@ -462,26 +463,6 @@ class BaseTask
 			p_d "time to run"
 			@tStart = Time.now
 			p("running: [#{@taskname}] ")
-			p("running: [#{@taskname}] ")
-			
-			# begin
-				# @exit_status = "BOO"
-				# status = Timeout::timeout(@timeout.to_i) {
-					# self.execute_cmd
-				# }
-			# rescue Timeout::Error => e
-				# @exit_status = @task_data['test_exit_status_failed']
-			# rescue Exception => e
-				# puts "-- ERROR: " + e.inspect
-				# puts "   (in test:)"
-				# puts to_s
-				# @exit_status = @task_data['test_exit_status_error']
-			# ensure
-				# p @exit_status
-				# p "[++++++++++++++++][OUTPUT INFORMATION]:" if @task_data['output_on']
-				# p @output																		if @task_data['output_on']
-				# p "[----------------][OUTPUT]"							if @task_data['output_on']
-			# end
 			self.execute_cmd
 			@tEnd = Time.now
 		else
@@ -542,7 +523,7 @@ class BaseTask
 		s += "        exit_status:  #{@exit_status}"		+ "\n"
 		s += "        matrix:       #{@matrix}"					+ "\n"
 		s += "        exec time:    #{@task_execution_time}"	+ "\n"
-		s += "        output:       #{@output}"
+		s += "        output_short: #{@error_cap}"
 		puts s
 	end
 end
@@ -601,6 +582,7 @@ class WRTask < BaseTask
 				end
 			rescue Exception => e
 				@output = retrieve_webrobot_log
+				@error_cap = @output.match(/Failures:(.*)Finished in/m)[1]
 				@exit_status = @task_data['test_exit_status_error']
 				p "-- ERROR -----: " + e.inspect
 				p "   (in test:)"
@@ -631,8 +613,7 @@ class WRTask < BaseTask
 		
 	def to_s
 		super
-		s = "\n ------------------------------------\n"
-		s += "        pattern:       #{@pattern}"						+ "\n"
+		s =  "        pattern:       #{@pattern}"						+ "\n"
 		s += "        keyword:       #{@keyword}"						+ "\n"
 		s += "        directory:     #{@directory}"				
 		puts s
