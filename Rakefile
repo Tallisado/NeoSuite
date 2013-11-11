@@ -597,6 +597,7 @@ class WRTask < BaseTask
 				@matrix = {}
 			end
 		end		
+		
 	end
 	
 	def redirect_webrobot_stdout
