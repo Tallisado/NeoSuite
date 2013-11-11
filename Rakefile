@@ -153,7 +153,7 @@ task :copy_template_to_teamcity do
 	Dir.chdir("/home/NeoSuite") do
 		%x{rm /root/.BuildServer/config/_notifications/email/build_successful.ftl}
 		%x{cp /home/NeoSuite/toolbox/etc/TeamCity/EmailTemplate/build_successful.ftl ~/.BuildServer/config/_notifications/email/build_successful.ftl}
-		sleep(60)
+		sleep(ENV['TEMPLATE_INTERVAL'].to_s)
 	end
 end
 

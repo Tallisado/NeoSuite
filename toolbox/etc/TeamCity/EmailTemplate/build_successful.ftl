@@ -30,10 +30,11 @@ ${var.buildCompilationErrors}${var.buildFailedTestsErrors}${var.buildChanges}
 	<code style="font-family:monospace;font-family:Menlo,Bitstream Vera Sans Mono,Courier New,Courier,monospace;font-size:12px">
 	NeoSuite QuickReport:
 	</code>
+	<br/>
 	<code style="font-family:monospace;font-family:Menlo,Bitstream Vera Sans Mono,Courier New,Courier,monospace;font-size:12px">
 		<#list build.buildLog.messages[(build.buildLog.messages?size - 30)..] as message>
 			<#if message.text?trim?starts_with('[TC]')>
-			${message.text?replace("\n", "\lbr/\g")?replace(" ", "&nbsp;")?replace("[TC]", "    ")}<br/>
+			${message.text?replace("\n", "\lbr/\g")?replace("[TC]", "    ")?replace(" ", "&nbsp;")}<br/>
 			</#if>            
 		</#list>
 	</code>
