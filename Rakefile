@@ -225,18 +225,26 @@ def clean_exit
 	else
 		puts "[TCRESULT]=UNSUCCESSUL\n"
 	end
-  puts("[TC]   -- tests passed      \t: #{tasks_passed.length.to_s}\n")
-  puts("[TC]   -- tests failed      \t: #{tasks_failed.length.to_s}\n")
-  puts("[TC]   -- tests executed    \t: #{@chain.executed_tasks.to_s}\n")
-  puts("[TC]   -- tests skipped     \t: #{tasks_skipped.length.to_s}\n")
-  puts("[TC]   -- tests error       \t: #{tasks_error.length.to_s}\n")
-  puts("[TC]   -- execution time    \t: #{@chain.execution_time.to_s} secs\n")
-	puts("       -- reports prepared  \t: #{@reports_dir}\n")
-  puts("       -- logs prepared     \t: #{@logs_dir}\n")
+  # puts("[TC]   -- tests passed      \t: #{tasks_passed.length.to_s}\n")
+  # puts("[TC]   -- tests failed      \t: #{tasks_failed.length.to_s}\n")
+  # puts("[TC]   -- tests executed    \t: #{@chain.executed_tasks.to_s}\n")
+  # puts("[TC]   -- tests skipped     \t: #{tasks_skipped.length.to_s}\n")
+  # puts("[TC]   -- tests error       \t: #{tasks_error.length.to_s}\n")
+  # puts("[TC]   -- execution time    \t: #{@chain.execution_time.to_s} secs\n")
+	# puts("       -- reports prepared  \t: #{@reports_dir}\n")
+  # puts("       -- logs prepared     \t: #{@logs_dir}\n")
+  printf("%-27s %s\n","[TC]   -- tests passed:", tasks_passed.length.to_s)
+  printf("%-27s %s\n","[TC]   -- tests failed:", tasks_failed.length.to_s)
+  printf("%-27s %s\n","[TC]   -- tests executed:",@chain.executed_tasks.to_s)
+  printf("%-27s %s\n","[TC]   -- tests skipped:", tasks_skipped.length.to_s)
+  printf("%-27s %s\n","[TC]   -- tests error:", tasks_error.length.to_s)
+  printf("%-27s %.2f %s\n","[TC]   -- execution time:", @chain.execution_time, "secs")
+	printf("       -- reports prepared  \t: #{@reports_dir}\n")
+  printf("       -- logs prepared     \t: #{@logs_dir}\n")
 	
 	puts("[TC]  Tasklist :\n")
 	@chain.get_tasknames.each do |taskname|
-		puts("[TC]     {#{taskname}}\n")	
+		puts("[TC]    \t{#{taskname}}\n")	
 	end
 		
 	if @task_data['test_retry']
