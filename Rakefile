@@ -15,6 +15,7 @@ require 'rake'
 @toolbox_tools					= ["neo_commander", "webrobot", "ssh_commander"]
 @tool_path_lookup				= @toolbox_tools.each_with_object({}) { |v,h| h[v] = "#{@suite_root}/toolbox/#{v}" }
 @neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
+@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 
 ################################
 # NEO COMMANDER - Suite Global Commands
@@ -116,7 +117,7 @@ end
 desc "-- run all tasks..."
 task :run do
 	puts "--- EXECUTING NEO COMMANDER ---"
-	puts "--- [biz]       : " + ENV['BIZ']
+	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
 	puts "--- [logs]      : " + @logs_dir
