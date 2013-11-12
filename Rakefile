@@ -116,6 +116,7 @@ end
 desc "-- run all tasks..."
 task :run do
 	puts "--- EXECUTING NEO COMMANDER ---"
+	puts "--- [biz]       : " + ENV['BIZ']
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
 	puts "--- [logs]      : " + @logs_dir
