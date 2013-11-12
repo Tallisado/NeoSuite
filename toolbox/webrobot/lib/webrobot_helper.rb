@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 
-require 'helper_methods'
+require 'webrobot_helpermethods'
+require 'webrobot_singletonmethods'
 require 'sauce'
 require 'sauce/rspec'
 

@@ -1,11 +1,12 @@
 $LOAD_PATH.unshift File.dirname(__FILE__)
 
-require 'helper_methods'
+require 'webrobot_helpermethods'
+require 'webrobot_singletonmethods'
 require 'sauce'
 require 'sauce/rspec'
 
 RSpec.configure do |config|
-	config.include HelperMethods
+	config.include WebRobotHelperMethods
 	if ! ENV['WR_INTERFACE'].nil?
 		if ENV['WR_INTERFACE'].match('sauce')
 			config.filter_run_including :sauce => true
@@ -27,8 +28,8 @@ RSpec.configure do |config|
   end
   config.after(:each) do
 		if self.example.metadata[:local] == true
-				puts "-- [LOCAL] quit firefox"
-				@selenium.quit if defined?(@selenium)
+			puts "-- [LOCAL] quit firefox"
+			@selenium.quit if defined?(@selenium)
 		end
   end
   config.after(:suite) do

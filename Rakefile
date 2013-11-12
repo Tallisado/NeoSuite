@@ -1,9 +1,11 @@
 # -- usage: rake help
+#wget 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSanity_Nightly&name=BIZFILE&value=amb_abc.biz'
 
 require "timeout"
 require "fileutils"
 require 'yaml'
 require 'rake'
+require './toolbox/neo_commander/lib/neo_helpermethods'
 
 # -- first global
 @profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
@@ -17,35 +19,7 @@ require 'rake'
 @neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
 @neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 
-################################
-# NEO COMMANDER - Suite Global Commands
-################################
-def toolpath(toolname, toolbox_tools=@toolbox_tools, tool_path_lookup=@tool_path_lookup) 
-	#return toolname.any? { |w| toolname =~ /#{w}/ } ? {raise "toolpath does not exist for #{toolname}"} : @tool_path_lookup[toolname.to_s]
-	
-	#puts "toolpath --------"
-	#puts toolbox_tools
-	x = toolbox_tools.any? { |w| toolname =~ /#{w}/ } ? tool_path_lookup[toolname.to_s] : nil
-	if x.nil?
-		puts toolbox_tools
-		raise "toolpath does not exist for #{toolname}"		
-	else
-		return x
-	end
-end
 
-def read_yaml_file(file)
-#	begin
-		if File.exist?(file)
-			return YAML::load(File.read(file))
-		end
-		raise "-- ERROR: file doesn't exist: " + file
-	# rescue
-		# puts 'YAML failed and was caught in rescue'
-		# raise "[FATALERROR] The profile was incorrectly parsed (YAML) ~ Verify that the YAML is correct."
-		# exit
-	# end
-end
 
 ################################
 # STDOUT / STDERR / DEBUG
@@ -53,14 +27,12 @@ end
 def p(s) puts "-- #{Time.now.strftime('[%H:%M:%S]')} #{s}" end
 #def p_d(s) puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if @neo_debug == true end
 def p_d(s) 
-	if ENV["NC_DEBUG"]
-		puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" 
-	end
+	puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if ENV["NC_DEBUG"]
 end
 
 # -- global vars
 task :default => [:run]
-@chain                 	= []
+@taskchain                 	= []
 @tasks_retried_counter 	= 0
 @current_task 				 	= 0
 @task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
@@ -87,9 +59,14 @@ task :default => [:run]
    'xml_report_file_name'     => "report.xml",
 	 'definitions'							=> @definition_yaml_hash,
 	 'toolbox_tools'						=> @toolbox_tools,
-	 'toolbox_tools'						=> @toolbox_tools,
-	 'tool_path_lookup'					=> @tool_path_lookup
+	 'tool_path_lookup'					=> @tool_path_lookup,
+	 'suite_root'								=> @suite_root
+	 
 }
+
+require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/base_task"
+require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/tasks"
+
 
 # -- prepare reports_dir
 def prepare_workspace_dir
@@ -101,14 +78,14 @@ def prepare_workspace_dir
 end
 
 def prepare_taskchain
-	@chain = TaskChain.new()
+	@taskchain = TaskChain.new()
 	@task_hash.each do |task_name, task_yaml_hash|
 		if task_name == "commander"
-			@chain.set_chainname(task_yaml_hash)
+			@taskchain.set_chainname(task_yaml_hash)
 		elsif task_name == "transpose"
-			@chain.add_transpose(task_name, @task_data, task_yaml_hash)
+			@taskchain.add_transpose(task_name, @task_data, task_yaml_hash)
 		else
-			@chain.add_task(task_name, @task_data, task_yaml_hash)
+			@taskchain.add_task(task_name, @task_data, task_yaml_hash)
 		end
 	end
 end
@@ -133,7 +110,7 @@ task :run do
 	prepare_taskchain
 	
 	# -- let's run each test now
-	@chain.execute_chain
+	@taskchain.execute_chain
 	clean_exit
 end
 
@@ -141,7 +118,7 @@ end
 desc "-- print tasks and show how they are loaded..."
 task :show do
 	prepare_taskchain
-	@chain.show_chain
+	@taskchain.show_chain
 end
 
 task :pull_into_home do
@@ -182,19 +159,21 @@ task :help do
 		puts "   [rake create:<toolbox>] NAME=filename.rb"
 		puts "   -- rake create:webrobot NAME=my_new_file.rb"
 		puts "   -- rake create:sshcommander NAME=my_new_file.rb"
-		puts "   -- rake create:cmdline NAME=my_new_file.rb"
+		puts "   -- rake create:ruby NAME=my_new_file.rb"
 end
 
 namespace :create do
 	task :webrobot do
-		puts "-- Creating webrobot template"
+		puts "[CREATE] Creating and formatting template - WebRobot"
 		contents = "#DO NOT DELETE THE FOLLOWING LINE\n"
 		contents += 'require File.join(File.dirname(__FILE__), "./../lib/helper")'
 	end
 	task :sshcommander do
+		puts "[CREATE] Creating and formatting template - SSHCommander"
 		puts "-- Creating sshcommander template"
 	end	
 	task :cmdline do
+		puts "[CREATE] Creating and formatting template - RubyScript"
 		puts "-- Creating cmdline template"
 	end
 end
@@ -202,7 +181,7 @@ end
 # -- total by exit status
 def all_by_exit_status(status)
 	a = Array.new
-	@chain.taskchain_array.each do |task|
+	@taskchain.taskchain_array.each do |task|
 		a << task if task.exit_status == status
   end
   return a
@@ -214,49 +193,37 @@ def clean_exit
 	tasks_failed     = all_by_exit_status(@task_data['test_exit_status_failed'])
 	tasks_skipped    = all_by_exit_status(@task_data['test_exit_status_skipped'])
 	tasks_error    	 = all_by_exit_status(@task_data['test_exit_status_error'])
-  @task_data.merge!({'execution_time' => @chain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped, 'tasks_error' => tasks_error})
+  @task_data.merge!({'execution_time' => @taskchain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped, 'tasks_error' => tasks_error})
   
 	Publisher.new(@task_data).publish_reports	 
 	
-
-	
 	puts("\n==> DONE\n\n")
   puts("[  :: [SESSION]\n")
-  if tasks_failed.length == 0 && tasks_error.length == 0
-		puts "[TCRESULT]=SUCCESSFUL\n"
-	else
-		puts "[TCRESULT]=UNSUCCESSUL\n"
-	end
-  # puts("[TC]   -- tests passed      \t: #{tasks_passed.length.to_s}\n")
-  # puts("[TC]   -- tests failed      \t: #{tasks_failed.length.to_s}\n")
-  # puts("[TC]   -- tests executed    \t: #{@chain.executed_tasks.to_s}\n")
-  # puts("[TC]   -- tests skipped     \t: #{tasks_skipped.length.to_s}\n")
-  # puts("[TC]   -- tests error       \t: #{tasks_error.length.to_s}\n")
-  # puts("[TC]   -- execution time    \t: #{@chain.execution_time.to_s} secs\n")
-	# puts("       -- reports prepared  \t: #{@reports_dir}\n")
-  # puts("       -- logs prepared     \t: #{@logs_dir}\n")
+	
+	# Team City Result
+  teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
+	puts teamcity_result
+
   printf("%-27s %s\n","[TC]   -- tests passed:", tasks_passed.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests failed:", tasks_failed.length.to_s)
-  printf("%-27s %s\n","[TC]   -- tests executed:",@chain.executed_tasks.to_s)
+  printf("%-27s %s\n","[TC]   -- tests executed:",@taskchain.executed_tasks.to_s)
   printf("%-27s %s\n","[TC]   -- tests skipped:", tasks_skipped.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests error:", tasks_error.length.to_s)
-  printf("%-27s %.2f %s\n","[TC]   -- execution time:", @chain.execution_time, "secs")
+  printf("%-27s %.2f %s\n","[TC]   -- execution time:", @taskchain.execution_time, "secs")
 	printf("       -- reports prepared  \t: #{@reports_dir}\n")
   printf("       -- logs prepared     \t: #{@logs_dir}\n")
 	
 	puts("[TC]  Tasklist :\n")
-	@chain.get_tasknames.each do |taskname|
+	@taskchain.get_tasknames.each do |taskname|
 		puts("[TC]    \t{#{taskname}}\n")	
 	end
-		
-	if @task_data['test_retry']
-		puts("      -- tests re-tried  : #{@tests_retried_counter.to_s}\n")
-	end
-	if tasks_failed.length > 0
+
+	if tasks_error.length > 0
 		puts("\n\n==> STATUS: [ some tests failed - execution failed ]\n")
 		exit(1)
+	else
+		exit(0)
 	end
-	exit(0)
 end
 
 #
@@ -283,7 +250,8 @@ class Publisher
 
   def publish_reports	  
 		make_html
-		make_xml
+		#make_xml
+		#make_plot
   end
 	 
 	def make_xml
@@ -325,19 +293,14 @@ class Publisher
       totals += "Tests Passed: <a href='tasks_passed.html'>#{@task_data['tasks_passed'].length.to_s}</a><br>\n"
       totals += "Tests Failed: <a href='tasks_failed.html'>#{@task_data['tasks_failed'].length.to_s}</a><br>\n"
       totals += "Tests Skipped: <a href='tasks_skipped.html'>#{@task_data['tasks_skipped'].length.to_s}</a><br>\n"
+      totals += "Tests Error: <a href='tasks_error.html'>#{@task_data['tasks_error'].length.to_s}</a><br>\n"
       totals += "Execution time: #{@task_data['execution_time']}<br>\n</body></html>"
       write_file(@task_data['reports_dir'] + "/report.html", totals)
       # -- create individual html report files complete with test output
       create_html_reports("tasks_passed", "PASSED")
       create_html_reports("tasks_failed", "FAILED")
       create_html_reports("tasks_skipped", "were SKIPPED")
-	  
-	  # -- write an additional XML file that can be used by jenkins to plot the number of tests (total number of tests, ie:total subtests)
-	  #<report>
-	  #	<serie1>10</serie1>
-	  #	<serie2>20</serie2>
-	  #	<serie3>30</serie3>
-	  #</report>
+      create_html_reports("tasks_error", "had fatal ERRORs")
 	end
 	def make_plot
 	  document  = "<webtester_plot>\n"
@@ -354,45 +317,40 @@ class TaskChain
 	attr_accessor :die, :taskchain_array, :execution_time, :executed_tasks, :chainname
 	def initialize()
 		@current_chain_index = 0
-		@chain_ended = false
-		@chain_term = false
+		@taskchain_ended = false
+		@taskchain_term = false
 		@taskchain_array = Array.new
 		@transpose_array = Array.new
 		@execution_time = 0.0
 		@executed_tasks = 0
-		#@task_data = task_data
 	end
 	
 	def set_chainname(chainname)
 		p "--chainname: #{chainname}"
-		@chainname = chainname
+		@taskchainname = chainname
 	end
 	
 	def add_task(task_name, task_data, task_hash)
-		if (task_hash["toolbox"] == "webrobot")
+		if task_hash["toolbox"] == "webrobot"
 			@taskchain_array.push(WRTask.new(task_name, task_data, task_hash))
-		elsif (task_hash["toolbox"] == "rubyfile")
+		elsif task_hash["toolbox"] == "rubyfile"
 			@taskchain_array.push(RubyTask.new(task_name, task_data, task_hash))
-		elsif (task_hash["toolbox"] == "cmdline")
+		elsif task_hash["toolbox"] == "cmdline"
 			p "no task defined : cmdline"
 		end
 	end
 	
 	def add_transpose(task_name, task_hash, task_data)
 		p_d "add transpose"
-		if (task_hash["toolbox"] == "wrtest")
+		if task_hash["toolbox"] == "wrtest"
 			@transpose_array.push(RubyTask.new(task_name, task_data, task_hash))
 		end
 	end
 	
 	def apply_operational()
-		# determine what happens based on all task information we have
-		if @taskchain_array[@current_chain_index].exit_status.nil?
-			raise "A TASK THAT SHOULD HAVE EXIT_STATUS WAS NULL!"
-		end
+		raise "[ERROR] A task was nil that should have had a resulting exit_status!" if @taskchain_array[@current_chain_index].exit_status.nil?
+
 		p_d "-Task(#{@taskchain_array[@current_chain_index].taskname}) exit_status: "+ @taskchain_array[@current_chain_index].exit_status
-		p_d "DETERMINING WHAT TO DO FOR OPERATIONAL"
-		p_d "-- nothing"
 		
 		@executed_tasks += 1
 		@current_chain_index += 1
@@ -414,285 +372,16 @@ class TaskChain
 	
 	def execute_chain	
 		@tStart = Time.now	
-		while (!@chain_ended)
+		until @taskchain_ended
 			p_d "execute next link in chain"
 			@taskchain_array[@current_chain_index].execute_base_task
 			
 			apply_operational()			
 			
-			if (@current_chain_index >= @taskchain_array.length || @chain_term) 
-				@chain_ended = true
-			end			
+			@taskchain_ended = true if (@current_chain_index >= @taskchain_array.length || @taskchain_term) 
+	
 		end
 		@tFinish = Time.now
 		@execution_time = @tFinish - @tStart
 	end		
-end
-
-class BaseTask
-	attr_accessor :taskname, :exit_status, :output, :task_execution_time, :test_data
-	#attr_accessor :path, :execute_args, :keywords, :description, :author, :testcase_headers,
-	#             :exit_status, :output, :task_execution_time, :test_data, :verification_error_count, :verification_count
-	def initialize(taskname, task_data, options = {})
-		
-		@taskname 			= taskname
-		@task_data      = task_data
-		
-		# definitions - base (mandatory)
-		@toolbox 				= options['toolbox']#options[:toolbox].nil ? raise 'toolbox mandatory for task: ' + task : options[:toolbox]
-		@failover 			= options['failover']
-		
-		# definitions - base (optional)
-		@retry					= options['retry'].nil? ? false : true
-		@transpose			= options['transpose']	
-		@moveto					= options['moveto']
-		
-		@skipped				= false
-		@transposed			= false
-		@exit_status 		= options['simulated_result'].nil? ? nil : options['simulated_result']		
-		@output					= ""
-		@error_cap		= ""
-		@matrix					= {}
-		@report_loc			= ""
-		@tStart					= Time.new()
-		@tEnd						= Time.new()		
-		
-		#@transpose_count = 0
-		#@skipped_count = 0
-		#@exection_count = 0
-		
-		@execute_args_ruby 				= options['paramlist'].join(',') if !options['paramlist'].nil?
-		@execute_args_webtester	 	= options['paramlist'].join(' ') if !options['paramlist'].nil?
-		#puts @execute_args_hash		 
-		 
-		@is_running 		= false	
-		@task_execution_time = 0.0
-		@timeout        = 144000 											# seconds (144000 is 4 hours)
-	end
-
-	# -- we should do something useful here
-	# defined in the subclass
-	def is_valid
-	end	
-	def execute_cmd
-	end
-
-	def execute_base_task
-		# -- run the test if its valid
-		if is_valid
-			p_d "time to run"
-			@tStart = Time.now
-			p("running: [#{@taskname}] ")
-			self.execute_cmd
-			@tEnd = Time.now
-		else
-			# -- skipping this test
-			@exit_status = @task_data['test_exit_status_skipped']
-		end
-	end
-
-	def write_file(file, data)
-		File.open(file, 'w') {|f| f.write(data) }
-	end
-
-	# def write_log
-		# d = /^(.*\/).*/.match(@execute_class)[1]
-		# FileUtils.mkdir_p(@task_data['reports_dir'] + "/#{d}")	   
-		# write_file(@task_data['reports_dir'] + "/#{@execute_class}.html", "<html><body><pre>" + @output + "</pre><pre>:: [Total SubTests]: " + @testcase_headers.length.to_s + "</br>:: [TestCases]</br>---> " + @testcase_headers.join("</br>---> ") + "</pre></body></html>")
-	# end
-	
-	def enforce_strict_task_definitions(task_type, task_data, options_hash)	
-		options_hash.each do |key, value|
-			optional = task_data['definitions'][task_type].gsub(' ','').split(',').keep_if { |v| v =~ /^(~).*/ }
-			mandatory = task_data['definitions'][task_type].gsub(' ','').split(',').keep_if { |v| v =~ /^([^~]).*/ }
-			
-			p_d "mandatory [#{task_type}] :: " + mandatory.to_s
-			mandatory.each do |mandatory_value| 
-				if options_hash.keys.any? { |w| mandatory_value =~ /#{w}/ }
-					#puts "found #{mandatory_value} in above list"
-				else
-					#puts "NOT found #{mandatory_value} in above list"
-					raise "mandatory key: #{mandatory_value} was not found in the list:" + mandatory.to_s
-				end
-			end
-			
-			p_d "optional [#{task_type}] :: " + optional.to_s
-			optional.each do |optional_value| 
-				if options_hash.keys.any? { |w| optional_value =~ /#{w}/ }
-					#puts "~~~~found #{optional_value} in above list"
-				else
-					#puts "~~~~NOT found #{optional_value} in above list"
-					#raise "optional key: #{optional_value} was not found in the list:" + mandatory
-				end
-			end
-		end
-	end
-	
-	def to_s
-		s = "\n ------------------------------------\n"
-		s += " #{@taskname} [#{self.class}]"				+ "\n"
-#		s += "        taskdata:     #{@task_data}"			+ "\n"
-		s += "        toolbox:      #{@toolbox}"				+ "\n"
-		s += "        failover:     #{@failover}"				+ "\n"
-		s += "        retry:        #{@retry}"					+ "\n"
-		s += "        transpose:    #{@transpose}"			+ "\n"
-		s += "        moveto:       #{@moveto}"					+ "\n"
-		s += "        paramlist:    #{@paramlist}"			+ "\n"
-		s += "        skipped:      #{@skipped.to_s}"		+ "\n"
-		s += "        transposed:   #{@transposed.to_s}"+ "\n"
-		s += "        exit_status:  #{@exit_status}"		+ "\n"
-		s += "        matrix:       #{@matrix}"					+ "\n"
-		s += "        exec time:    #{@task_execution_time}"	+ "\n"
-		s += "        output_short: #{@error_cap}"
-		puts s
-	end
-end
-	 
-class WRTask < BaseTask
-	def initialize(taskname, task_data, options = {})
-		enforce_strict_task_definitions(self.class.name, task_data, options)
-		@raketask = options["raketask"]
-		@pattern = options["pattern"]
-		@keyword = options["keyword"]
-		@directory = options["directory"]		
-		super(taskname, task_data, options)
-	end
-
-	def is_valid
-		puts self.class.to_s + " is valid, i checked"
-		return true
-	end
-	
-	# WRTask EXE
-	# rake custom:domaudit[url,username,userpass]  # Run RSpec code examples
-	# rake local:headed                            # Setup fixtures for HEADED and execute the tests
-	# rake local:headless                          # Setup the fixtures for running HEADLESS and execute the tests
-	# rake local:nofixtures:headed                 # SKIP the fixtures for running HEADED and execute the tests
-	# rake local:nofixtures:headless               # SKIP the fixtures for running HEADLESS and execute the tests
-	# rake spec:sauce                              # Default: run tests against the selenium driver on the local machine (components should be currently running)
-	def execute_cmd	
-		#rake_output = toolpath("webrobot") + "./results/#{@uuid}_stdout.tmp"
-		@keepstdout = false
-		ENV['FILE'] = File.join(File.dirname(__FILE__), "/home/tasks/"+@pattern)
-		ENV['WR_DEBUG'] = 'on'
-		
-		puts "BREAK IT OFF"
-		app = Rake.application
-		app.init
-		app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
-		app.load_imports
-
-		puts "executing WRTask command:: " + @raketask
-		
-		if @keepstdout 
-			puts "Executing rake (STDOUT)"
-			Rake.application['for:real'].invoke()
-			@output = "1 example, 0 failures"
-			#@output = "4 examples, 0 failures"
-		else			
-			begin
-				redirect_webrobot_stdout{Rake.application[@raketask].invoke() }
-				@output = retrieve_webrobot_log
-				#find out matrix from cloud if needed
-				@matrix = {}
-				@exit_status = case @output
-					when /0 failures/ then @task_data['test_exit_status_passed']
-					when /0 examples, 0 failures/ then @task_data['test_exit_status_skipped']
-					else @task_data['test_exit_status_failed']
-				end
-			rescue Exception => e
-				@output = retrieve_webrobot_log
-				@error_cap = @output.match(/Failures:(.*)Finished in/m)[1]
-				@exit_status = @task_data['test_exit_status_error']
-				p "-- ERROR -----: " + e.inspect
-				p "   (in test:)"
-				p to_s
-			ensure
-				@matrix = {}
-			end
-		end		
-		
-		
-				
-		
-	end
-	
-	def redirect_webrobot_stdout
-		orig_std_out = STDOUT.clone
-		# $stdout = File.new( '/dev/null', 'w' )
-		$stdout.reopen("#{@task_data['logs_dir']}#{@taskname}.txt", "w")
-		#$stdout.sync = true
-		yield
-	ensure
-		$stdout.reopen(orig_std_out)
-	end
-
-	def retrieve_webrobot_log
-		return (File.open("#{@task_data['logs_dir']}#{@taskname}.txt")).read
-	end
-		
-	def to_s
-		super
-		s =  "        pattern:       #{@pattern}"						+ "\n"
-		s += "        keyword:       #{@keyword}"						+ "\n"
-		s += "        directory:     #{@directory}"				
-		puts s
-	end
-end
-
-class RubyTask < BaseTask
-	def initialize(taskname, task_data, options = {})
-		enforce_strict_task_definitions(self.class.name, task_data, options)
-		@file = options["file"]
-		@pattern = options["pattern"]
-		@keyword = options["keyword"]
-		@directory = options["directory"]		
-		super(taskname, task_data, options)
-	end
-	
-	def is_valid
-		puts self.class.to_s + " is valid, i checked"
-		return true
-	end
-	
-	# RubyTask EXE
-	def execute_cmd
-		full_filepath = File.join(File.dirname(__FILE__), "/home/tasks/#{@file}")
-		@cmd = full_filepath + " " + @execute_args_ruby unless @execute_args_ruby == ""
-		puts "executing RubyTask command: " + @cmd
-		begin
-			@output      = `ruby #{@cmd} 2>&1`
-			@exit_status = case @output
-				when /PASSED/ then @task_data['test_exit_status_passed']
-				when /FAILED/ then @task_data['test_exit_status_failed']
-				else 
-					case $?.exitstatus
-						when 0 then @task_data['test_exit_status_passed']
-						else @task_data['test_exit_status_failed']
-					end
-			end
-		rescue => e
-			 puts "-- ERROR: " + e.inspect
-			 puts "   (in test:)"
-			 puts to_s
-		ensure
-			#log_ruby_output(@output, @taskname)
-			log_output
-		end
-	end
-	
-	def log_output
-		puts "Dumping output to: #{@task_data['logs_dir']}#{@taskname}.txt" 
-		File.open("#{@task_data['logs_dir']}#{@taskname}.txt", "wb") do |file|
-			file.write(output)
-		end
-	end
-	
-	def to_s
-		super
-		s =  "  ~     pattern:     #{@pattern}"							+ "\n"
-		s += "  ~     keyword:     #{@keyword}"							+ "\n"
-		s += "  ~     directory:   #{@directory}"
-		puts s
-	end
 end

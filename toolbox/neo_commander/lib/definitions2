@@ -1,6 +1,0 @@
-ruby_mandatory: toolbox, file, failover
-ruby_optional: simulated_result, tries
-cmdline_mandatory: a
-cmdline_optional: simulated_result, tries
-webrobot_mandatory: toolbox, pattern, failover
-webrobot_optional: simulated_result, keyword, directory, file, tries
