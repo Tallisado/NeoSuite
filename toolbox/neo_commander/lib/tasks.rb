@@ -52,15 +52,14 @@ class WRTask < BaseTask
 				end
 				rescue SystemExit => e
 					@output = retrieve_webrobot_log
-					@error_cap = @output.match(/Failures:(.*)Finished in/m)[1]
 					@exit_status = @task_data['test_exit_status_failed']					
 				rescue Selenium::WebDriver::Error::WebDriverError => e
 					@output = retrieve_webrobot_log
-					@error_cap = @output.match(/Failures:(.*)Finished in/m)[1]
 					@exit_status = @task_data['test_exit_status_error']
 					p "-- ERROR -----: " + e.inspect
 					p "   (in test:)"
 			ensure
+				@error_cap = @output.match(/Failures:(.*)Finished in/m)[1] if @exit_status == @task_data['test_exit_status_failed']
 				@matrix = {}
 				p to_s
 			end
