@@ -218,7 +218,7 @@ def clean_exit
 		puts("[TC]    \t{#{taskname}}\n")	
 		@taskchain.taskchain_array.each do |task|
 			task.examples.each do |example|
-				puts("[TC]    \t\t[#{example}]\n")
+				puts("[TC]    \t\t[#{example}  ]\n")
 			end
 		end
 	end

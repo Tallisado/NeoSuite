@@ -52,8 +52,7 @@ end
 #export SAUCE_ACCESS_KEY=6c3ed64b-e065-4df4-b921-75336e2cb9cf
 
 Sauce.config do |c|
-	break if ENV['WR_INTERFACE'] == 'local'
-  if !ENV['WR_NOTUNNEL'].nil?
+  if !ENV['WR_NOTUNNEL'].nil? || ENV['WR_INTERFACE'] == 'local'
 		puts "[WEBROBOT] (Sauce) Not using the tunnel for SauceConnect"
 		c[:start_tunnel] = false
 	end

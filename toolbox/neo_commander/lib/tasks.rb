@@ -53,7 +53,8 @@ class WRTask < BaseTask
 				rescue SystemExit => e
 					@output = retrieve_webrobot_log
 					@exit_status = @task_data['test_exit_status_failed']					
-				rescue Selenium::WebDriver::Error::WebDriverError => e
+				#rescue Selenium::WebDriver::Error::WebDriverError => e ------- this is throwing the error  NameError: uninitialized constant WRTask::Selenium
+				rescue => e
 					@output = retrieve_webrobot_log
 					@exit_status = @task_data['test_exit_status_error']
 					p "-- ERROR -----: " + e.inspect
