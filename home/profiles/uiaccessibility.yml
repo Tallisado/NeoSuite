@@ -1,0 +1,9 @@
+commander: nightly
+
+test_webrobot: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "uiaccessibility_webrobot.rb",
+  tries: 1
+}

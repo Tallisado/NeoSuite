@@ -18,7 +18,7 @@ RSpec.configure do |config|
 	  #puts -- Interface is: ENV['WR_INTERFACE']
 		if self.example.metadata[:local] == true && ENV['WR_INTERFACE'] != "sauce" ||
 				self.example.metadata[:sauce] == true && ENV['WR_INTERFACE'] != "sauce"
-			puts "-- [LOCAL] Starting firefox :"
+			puts "[WEBROBOT] (Local Firefox) Open:"
 			@selenium = Selenium::WebDriver.for :firefox
 			@selenium.manage.timeouts.implicit_wait = 35
 			@selenium.manage.timeouts.script_timeout = 30
@@ -28,7 +28,7 @@ RSpec.configure do |config|
   end
   config.after(:each) do
 		if self.example.metadata[:local] == true
-			puts "-- [LOCAL] quit firefox"
+			puts "[WEBROBOT] (Local Firefox) Close:"
 			@selenium.quit if defined?(@selenium)
 		end
   end
@@ -51,14 +51,16 @@ end
 
 Sauce.config do |c|
   if !ENV['WR_NOTUNNEL'].nil? || ENV['WR_INTERFACE'] == 'local'
-		puts "[webrobot] helper.rb - NO TUNNEL"
+		puts "[WEBROBOT] (Sauce) Not using the tunnel for SauceConnect"
 		c[:start_tunnel] = false
 	end
 	if ! ENV['WR_FFONLY'].nil?
+		puts "[WEBROBOT] (Sauce) Targeted browsers - Firefox 19"
 		c[:browsers] = [
 			["Linux", "Firefox", "19"]
 		]
 	else
+		puts "[WEBROBOT] (Sauce) Targeted browsers - Full Supported browser list"
 		c[:browsers] = [
 			["Windows 7", "Internet Explorer", "9"],
 			["Linux", "Firefox", "19"],

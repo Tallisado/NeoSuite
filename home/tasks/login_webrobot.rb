@@ -19,17 +19,17 @@ describe "NEO Accessibility", :local => true do
 		@selenium.title.should eql("ADTRAN Neo")
 	end
 	
-	# it "should allow us to login", :local => true do
-		# @selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		# @selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
-		# @selenium.type(:id, "loginnameid-inputEl", 'admin')
-		# @selenium.type(:id, "loginpasswordid-inputEl", 'password')
-		# sleep 1
-		# @selenium.click(:id, "loginbuttonid-btnIconEl")
+	it "should allow us to login", :local => true do
+		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
+		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		@selenium.type(:id, "loginnameid-inputEl", 'admin')
+		@selenium.type(:id, "loginpasswordid-inputEl", 'password')
+		sleep 1
+		@selenium.click(:id, "loginbuttonid-btnIconEl")
 			
-		# @selenium.relaxed_wait_for_element_present(:id, "createUser_wiz", 5)
-		# @selenium.current_url.should_not eq("http://10.10.9.129/Login/index.php")
-	# end
+		@selenium.relaxed_wait_for_element_present(:id, "createUser_wiz", 5)
+		@selenium.current_url.should_not eq("http://10.10.9.129/Login/index.php")
+	end
 end
 
 # local browser

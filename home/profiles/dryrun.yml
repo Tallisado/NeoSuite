@@ -12,7 +12,7 @@ test_webrobot: {
   toolbox: webrobot, 
   failover: die,
   raketask: 'local:headless',
-  pattern: "login_webrobot.rb",
+  pattern: "dryrun_webrobot.rb",
   tries: 1
 }
 
