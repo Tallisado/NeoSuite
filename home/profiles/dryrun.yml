@@ -8,7 +8,7 @@ commander: nightly
   # paramlist: [a=1,y=string of win,someshit=1234]
 # }
 
-test_webrobot: { 
+neosuite_internal_sanity: { 
   toolbox: webrobot, 
   failover: die,
   raketask: 'local:headless',

@@ -1,6 +1,6 @@
 commander: nightly
 
-test_webrobot: { 
+if_the_neo_ui_accessible: { 
   toolbox: webrobot, 
   failover: die,
   raketask: 'local:headless',
