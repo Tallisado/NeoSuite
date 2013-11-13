@@ -50,7 +50,7 @@ class WRTask < BaseTask
 					when /0 examples, 0 failures/ then @task_data['test_exit_status_skipped']
 					else @task_data['test_exit_status_failed']
 				end
-				rescue SystemExit => e
+				rescue Rake::ApplicationAbortedException, SystemExit => e
 					@output = retrieve_webrobot_log
 					@exit_status = @task_data['test_exit_status_failed']					
 				#rescue Selenium::WebDriver::Error::WebDriverError => e ------- this is throwing the error  NameError: uninitialized constant WRTask::Selenium
