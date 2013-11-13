@@ -1,5 +1,7 @@
 # -- usage: rake help
 #wget 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSanity_Nightly&name=BIZFILE&value=amb_abc.biz'
+#wget 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSuite_Nightly&env.name=BIZ&env.value=amb_abc.biz'
+#echo %dep.NeoSuiteNightly_Event.env.BIZ%
 
 require "timeout"
 require "fileutils"
@@ -18,8 +20,6 @@ require './toolbox/neo_commander/lib/neo_helpermethods'
 @tool_path_lookup				= @toolbox_tools.each_with_object({}) { |v,h| h[v] = "#{@suite_root}/toolbox/#{v}" }
 @neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
 @neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
-
-
 
 ################################
 # STDOUT / STDERR / DEBUG
@@ -216,6 +216,11 @@ def clean_exit
 	puts("[TC]  Tasklist :\n")
 	@taskchain.get_tasknames.each do |taskname|
 		puts("[TC]    \t{#{taskname}}\n")	
+		@taskchain.taskchain_array.each do |task|
+			task.examples.each do |example|
+				puts("[TC]    \t\t[#{example}]\n")
+			end
+		end
 	end
 
 	if tasks_error.length > 0

@@ -2,6 +2,7 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 
 require 'webrobot_helpermethods'
 require 'webrobot_singletonmethods'
+gem 'sauce', '=3.2.0'
 require 'sauce'
 require 'sauce/rspec'
 
@@ -9,6 +10,7 @@ RSpec.configure do |config|
 	config.include WebRobotHelperMethods
 	if ! ENV['WR_INTERFACE'].nil?
 		if ENV['WR_INTERFACE'].match('sauce')
+			puts "[WEBROBOT] Sauce v" + Sauce.version 
 			config.filter_run_including :sauce => true
 		elsif ENV['WR_INTERFACE'].match('local')
 			config.filter_run_including :local => true
@@ -50,7 +52,8 @@ end
 #export SAUCE_ACCESS_KEY=6c3ed64b-e065-4df4-b921-75336e2cb9cf
 
 Sauce.config do |c|
-  if !ENV['WR_NOTUNNEL'].nil? || ENV['WR_INTERFACE'] == 'local'
+	break if ENV['WR_INTERFACE'] == 'local'
+  if !ENV['WR_NOTUNNEL'].nil?
 		puts "[WEBROBOT] (Sauce) Not using the tunnel for SauceConnect"
 		c[:start_tunnel] = false
 	end

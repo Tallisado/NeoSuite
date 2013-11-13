@@ -1,5 +1,5 @@
 class BaseTask
-	attr_accessor :taskname, :exit_status, :output, :task_execution_time, :test_data
+	attr_accessor :taskname, :exit_status, :output, :task_execution_time, :test_data, :examples
 	def initialize(taskname, task_data, options = {})
 		
 		@taskname 			= taskname
@@ -18,7 +18,8 @@ class BaseTask
 		@transposed			= false
 		@exit_status 		= options['simulated_result'].nil? ? nil : options['simulated_result']		
 		@output					= ""
-		@error_cap		= ""
+		@output_short		= ""
+		@examples  			= []
 		@matrix					= {}
 		@report_loc			= ""
 		@tStart					= Time.new()
@@ -108,7 +109,7 @@ class BaseTask
 		s += "        exit_status:  #{@exit_status}"		+ "\n"
 		s += "        matrix:       #{@matrix}"					+ "\n"
 		s += "        exec time:    #{@task_execution_time}"	+ "\n"
-		s += "        output_short: #{@error_cap}"
+		s += "        output_short: #{@output_short}"	+ "\n"
 		puts s
 	end
 end

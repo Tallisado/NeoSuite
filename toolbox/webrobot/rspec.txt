@@ -1,7 +1,0 @@
-Run options: include {:sauce=>true}
-
-cloud browser
-  should open browser remotely
-
-Finished in 1 minute 2.22 seconds
-1 example, 0 failures

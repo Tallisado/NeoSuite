@@ -19,7 +19,8 @@ describe "NEO Accessibility", :local => true do
 			
 			@selenium.relaxed_wait_for_element_present(:id, "createUser_wiz", 5)
 		}.to_not raise_error	
-		@selenium.current_url.should_not eq("http://10.10.9.129/Login/index.php")
+		#@selenium.current_url.should eq("http://10.10.9.129/LocalAdmin/index.php")
+		@selenium.current_url.should eq("http://10.10.9.129/LocalAdmin/indasdasdasdexp")
 	end
 end
 
@@ -29,4 +30,4 @@ end
   # should open browser locally
 
 # Finished in 7.48 seconds
-# 1 example, 0 failures
+# 1 example, 0 failuresrequire File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")

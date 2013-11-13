@@ -59,11 +59,25 @@ class WRTask < BaseTask
 					p "-- ERROR -----: " + e.inspect
 					p "   (in test:)"
 			ensure
-				@error_cap = @output.match(/Failures:(.*)Finished in/m)[1] if @exit_status == @task_data['test_exit_status_failed']
+				@examples = parse_for_passing_examples
+				if @exit_status == @task_data['test_exit_status_failed']				
+					@output_short = "\n" + @examples.join("\n") + "\n" + @output.match(/Failures:(.*)Finished in/m)[1]
+				else
+					@output_short = "\n" + parse_for_passing_examples.join("\n")
+				end
 				@matrix = {}
 				p to_s
 			end
 		end				
+	end
+	
+	def parse_for_passing_examples
+		found = []
+		File.read("#{@task_data['logs_dir']}#{@taskname}.txt").split("\n").each do |line|
+			item = line.match(/^(  should)[a-zA-Z ]*/m)
+			found.push item.to_s unless item.nil?
+		end
+		return found
 	end
 	
 	def redirect_webrobot_stdout
