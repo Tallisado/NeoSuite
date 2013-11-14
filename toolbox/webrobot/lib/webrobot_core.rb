@@ -3,26 +3,27 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'webrobot_helpermethods'
 require 'webrobot_singletonmethods'
 
+
+
 if ENV['WR_INTERFACE'].match('sauce')
 	gem 'sauce', '=3.2.0'
 	require 'sauce'
 	require 'sauce/rspec'
 	puts "[WEBROBOT] Sauce v" + Sauce.version
 	require 'webrobot_saucefig'
+	
 elsif ENV['WR_INTERFACE'].match('local')
 	@SELENIUM_VERSION = "2.37.0"
 	gem 'selenium-webdriver', '=' + @SELENIUM_VERSION
 	require 'selenium-webdriver'
 	puts "[WEBROBOT] (Firefox) v" + @SELENIUM_VERSION
 	require 'webrobot_rspecfig'
-	# gem_specs = Gem::Specification.all().map{|g| [g.name, g.version.to_s] }
-	# puts gem_specs
-	puts "+++++++++++++++"
 	a = $LOADED_FEATURES.
-   select { |feature| feature.include? 'gems' }.
-   map { |feature| File.dirname(feature) }.
-   map { |feature| feature.split('/')[-3] }.
-   uniq.sort
+		 select { |feature| feature.include? 'gems' }.
+		 map { |feature| File.dirname(feature) }.
+		 map { |feature| feature.split('/')[-3] }.
+		 uniq.sort.to_s
+	puts "LOADED FEATURES:"
 	puts a
 end
 

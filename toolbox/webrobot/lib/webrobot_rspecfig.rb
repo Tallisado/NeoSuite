@@ -16,6 +16,7 @@ RSpec.configure do |config|
 			@selenium.manage.timeouts.implicit_wait = 35
 			@selenium.manage.timeouts.script_timeout = 30
 			@selenium.manage.timeouts.page_load = 500
+			@selenium.manage.window.resize_to(1280, 1024)
 			@selenium.extend WebRobotSingletonMethods
 		end
   end

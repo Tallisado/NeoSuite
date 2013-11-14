@@ -21,12 +21,15 @@ require './toolbox/neo_commander/lib/neo_helpermethods'
 @neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
 @neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 
+# selenium specific code
+$DEBUG = true
+
 ################################
 # STDOUT / STDERR / DEBUG
 ################################
 def p(s) puts "-- #{Time.now.strftime('[%H:%M:%S]')} #{s}" end
 #def p_d(s) puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if @neo_debug == true end
-def p_d(s) 
+def p_d(s)
 	puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if ENV["NC_DEBUG"]
 end
 
@@ -57,11 +60,11 @@ task :default => [:run]
    'logs_dir'		              => @logs_dir,
    'xml_report_class_name'    => "qa.tasks",
    'xml_report_file_name'     => "report.xml",
+   'configinfo_file_name'     => "configinfo.html",
 	 'definitions'							=> @definition_yaml_hash,
 	 'toolbox_tools'						=> @toolbox_tools,
 	 'tool_path_lookup'					=> @tool_path_lookup,
 	 'suite_root'								=> @suite_root
-	 
 }
 
 require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/base_task"
@@ -255,6 +258,7 @@ class Publisher
 
   def publish_reports	  
 		make_html
+		make_configinfo
 		#make_xml
 		#make_plot
   end
@@ -299,7 +303,8 @@ class Publisher
       totals += "Tests Failed: <a href='tasks_failed.html'>#{@task_data['tasks_failed'].length.to_s}</a><br>\n"
       totals += "Tests Skipped: <a href='tasks_skipped.html'>#{@task_data['tasks_skipped'].length.to_s}</a><br>\n"
       totals += "Tests Error: <a href='tasks_error.html'>#{@task_data['tasks_error'].length.to_s}</a><br>\n"
-      totals += "Execution time: #{@task_data['execution_time']}<br>\n</body></html>"
+      totals += "Execution time: #{@task_data['execution_time']}<br>\n"
+      totals += "<br><br><a href=#{@task_data['configinfo_file_name']}>Configuration Infoormation</a><br>\n</body></html>"
       write_file(@task_data['reports_dir'] + "/report.html", totals)
       # -- create individual html report files complete with test output
       create_html_reports("tasks_passed", "PASSED")
@@ -315,6 +320,18 @@ class Publisher
 	  document += "<v_passed>#{@task_data['verifications_passed'].to_s}</v_passed>\n"
 	  document += "</webtester_plot>\n"
 	  write_file(@task_data['reports_dir'] + "/" + @task_data['xml_plot_file_name'], document)
+	end
+	
+	def make_configinfo
+		document  = "<html><body>\n\n This document details the configuration information specific to its execution<br><br>\n"
+		a = $LOADED_FEATURES.
+		 select { |feature| feature.include? 'gems' }.
+		 map { |feature| File.dirname(feature) }.
+		 map { |feature| feature.split('/')[-3] }.
+		 uniq.sort.to_s
+		document += "<p> #{a} </p><br><br>"
+		document += "<br>\n</body></html>"
+		write_file(@task_data['reports_dir'] + "/" + @task_data['configinfo_file_name'], document)
 	end
 end
 	

@@ -1,5 +1,8 @@
 require 'rspec/core/rake_task'
 
+	# selenium specific code
+	$DEBUG = true
+	
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:spec) do |t|
 	puts "running spec as a sanity against webrobot"
@@ -210,7 +213,8 @@ namespace :xvfb do
   task :start do
     # System call to start the server on display :99
 		ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
-    %x{Xvfb #{ENV['WR_DISPLAY']} 2>/dev/null >/dev/null &}
+    #%x{Xvfb #{ENV['WR_DISPLAY']} 2>/dev/null >/dev/null &}
+	%x{Xvfb #{ENV['WR_DISPLAY']} -screen 0 1280x1024x16 2>/dev/null >/dev/null &}
   end
 end
 

@@ -196,6 +196,51 @@ module WebRobotSingletonMethods
 		end
 	end
 	
+		# @name click
+	# @desc sends a click event to the targeted element. (if jQuery, we execute the js to click that element)
+	def smart_click(method, element)
+		p("smart click time")
+		# -- 'element' could be a javascript, then we need to call 'run_script' instead of 'click'
+		if self.find_element(method, element).displayed?
+			p("-- clicking on element that is visible: " + element.to_s + " by " + method.to_s)
+			self.find_element(method, element).click
+		else
+			not_found = true
+			while not_found
+				self.execute_script("window.scrollBy(0, window.innerHeight);")
+				not_found = !self.find_element(method, element).displayed?
+			end
+			p("-- clicking on element that is scrolled into view: " + element.to_s + " by " + method.to_s)
+			self.find_element(method, element).click
+		end
+	end
+	
+	# def save_screenshot filepath=nil
+		# p "CAPTURE SCREENSHOT"
+		# begin
+			# screenshot_flag = true
+			# filepath = (filepath + '.png') unless filepath
+			# screenshot = self.selenium.capture_screenshot_to_string()
+			# tmp_file = File.open(filepath,'w')
+			# tmp_file.puts(Base64.decode64(screenshot))
+			# tmp_file.close()
+			# p "SCREENSHOT CAPTURED TO #{filepath}"
+			# screenshot_flag = false
+			# screenshot = self.capture_entire_page_screenshot_to_string()
+			# tmp_file = File.open(filepath,'w')
+			# tmp_file.puts(Base64.decode64(screenshot))
+			# tmp_file.close()
+			# p "ENTIRE SCREENSHOT CAPTURED TO #{filepath}"
+	 # rescue => e
+			# if screenshot_flag
+				 # p "FAILED TO CAPTURE SCREENSHOT: "
+				 # p e.inspect
+				 # p e.backtrace
+			# end
+		# end
+# end
+	
+	
 	# @name double_click
 	# @desc sends an action sequence to the target element to perform a double click
 	def double_click(method, element)
