@@ -4,7 +4,7 @@ test_ui_ppm: {
  toolbox: webrobot, 
  failover: die,
  raketask: 'local:headless',
- pattern: "localadmin_createuser_webrobot.rb",
+ pattern: "localadmin_editringmembership_webrobot.rb",
  tries: 1
  }
 
