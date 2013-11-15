@@ -42,7 +42,7 @@ RSpec.configure do |config|
 	config.around do |ex|
 	puts "RUNNNING " + example.description
 		ex.run
-		@selenium.save_screenshot(ENV['LOGS'] + '/' + example.description.gsub(' ', '_') + .png) if !example.exception.nil? && ENV['WR_OWNER'] == 'NEOSUITE'		
+		@selenium.save_screenshot(ENV['LOGS'] + '/' + example.description.gsub(' ', '_') + '.png') if !example.exception.nil? && ENV['WR_OWNER'] == 'NEOSUITE'		
 		puts "[WEBROBOT] (Local Firefox) Close:"
 		@selenium.quit if defined?(@selenium)
   end
