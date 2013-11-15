@@ -1,0 +1,49 @@
+commander: startupwiz_test
+
+reset_unit: { 
+  toolbox: rubyfile,
+  file: "baseline_config.rb",
+  failover: die,
+  retry: no,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password]
+}
+
+test_sshconnect: { 
+  toolbox: rubyfile,
+  file: "factorysshconnect_rubytask.rb",
+  failover: die,
+  retry: no,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password]
+}
+
+test_installwizard_pbxonly: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "installwizard_pbxonly.rb",
+  tries: 1
+}
+
+test_installwizard_pbxandrouter: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "installwizard_pbxandrouter.rb",
+  tries: 1
+}
+
+transpose: {
+  test_config1a: { 
+    toolbox: ruby, 
+    failover: transpose,
+    transpose: test_config1b,
+    tries: 1
+  },
+  test_config1b: { 
+    toolbox: ruby, 
+    failover: die,
+    tries: 1
+  }
+}
+
+# pattern: "**/*_webrobot.rb", 
