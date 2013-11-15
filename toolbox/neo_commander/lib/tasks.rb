@@ -25,11 +25,12 @@ class WRTask < BaseTask
 		@keepstdout = false
 		ENV['FILE'] = File.join(@task_data['suite_root'], "/home/tasks/"+@pattern)
 		ENV['WR_DEBUG'] = 'on'
+		ENV['WR_OWNER'] = 'NEOSUITE'
 		
-		app = Rake.application
-		app.init
-		app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
-		app.load_imports
+		@app = Rake.application
+		@app.init
+		@app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
+		@app.load_imports
 
 		p "-- Executing WRTask command: " + @raketask
 		
@@ -50,9 +51,10 @@ class WRTask < BaseTask
 					when /0 examples, 0 failures/ then @task_data['test_exit_status_skipped']
 					else @task_data['test_exit_status_failed']
 				end
-				rescue Rake::ApplicationAbortedException, SystemExit => e
+				#rescue Rake::ApplicationAbortedException, SystemExit => e
+				rescue Rake::Application, SystemExit => e
 					@output = retrieve_webrobot_log
-					@exit_status = @task_data['test_exit_status_failed']					
+					@exit_status = @task_data['test_exit_status_failed']			
 				#rescue Selenium::WebDriver::Error::WebDriverError => e ------- this is throwing the error  NameError: uninitialized constant WRTask::Selenium
 				rescue => e
 					@output = retrieve_webrobot_log
@@ -60,19 +62,19 @@ class WRTask < BaseTask
 					p "-- ERROR -----: " + e.inspect
 					p "   (in test:)"
 			ensure
-				@examples = parse_for_passing_examples
+				@examples = parse_logs_for_examples
 				if @exit_status == @task_data['test_exit_status_failed']				
 					@output_short = "\n" + @examples.join("\n") + "\n" + @output.match(/Failures:(.*)Finished in/m)[1]
 				else
-					@output_short = "\n" + parse_for_passing_examples.join("\n")
+					@output_short = "\n" + parse_logs_for_examples.join("\n")
 				end
 				@matrix = {}
-				p to_s
+				p @task_data['output_on'] == true ? @output : to_s 
 			end
 		end				
 	end
 	
-	def parse_for_passing_examples
+	def parse_logs_for_examples
 		found = []
 		File.read("#{@task_data['logs_dir']}#{@taskname}.txt").split("\n").each do |line|
 			item = line.match(/^(  should)[a-zA-Z ]*/m)

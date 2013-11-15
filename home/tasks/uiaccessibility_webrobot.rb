@@ -19,6 +19,7 @@ describe "NEO Accessibility", :local => true do
 			
 			@selenium.relaxed_wait_for_element_present(:id, "createUser_wiz", 5)
 		}.to_not raise_error	
-		@selenium.current_url.should eq("http://10.10.9.129/LocalAdmin/index.php")
+		#@selenium.current_url.should eq("http://10.10.9.129/LocalAdmin/index.php")
+		@selenium.current_url.should eq("http://10.10.9.129/LocalAdmin/index.phpasd")
 	end
 end

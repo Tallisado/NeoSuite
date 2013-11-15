@@ -3,6 +3,7 @@
 #wget 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSuite_Nightly&env.name=BIZ&env.value=amb_abc.biz'
 #echo %dep.NeoSuiteNightly_Event.env.BIZ%
 
+require 'rake'
 require "timeout"
 require "fileutils"
 require 'yaml'
@@ -207,7 +208,7 @@ def clean_exit
   teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
 	puts teamcity_result
 
-	puts("[TC]Target BIZ File : [#{@neo_bizfile}]")
+	puts("[TC] Target BIZ File : [#{@neo_bizfile}]")
   printf("%-27s %s\n","[TC]   -- tests passed:", tasks_passed.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests failed:", tasks_failed.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests executed:",@taskchain.executed_tasks.to_s)

@@ -3,8 +3,6 @@ $LOAD_PATH.unshift File.dirname(__FILE__)
 require 'webrobot_helpermethods'
 require 'webrobot_singletonmethods'
 
-
-
 if ENV['WR_INTERFACE'].match('sauce')
 	gem 'sauce', '=3.2.0'
 	require 'sauce'
@@ -13,10 +11,7 @@ if ENV['WR_INTERFACE'].match('sauce')
 	require 'webrobot_saucefig'
 	
 elsif ENV['WR_INTERFACE'].match('local')
-	@SELENIUM_VERSION = "2.37.0"
-	gem 'selenium-webdriver', '=' + @SELENIUM_VERSION
-	require 'selenium-webdriver'
-	puts "[WEBROBOT] (Firefox) v" + @SELENIUM_VERSION
+
 	require 'webrobot_rspecfig'
 	a = $LOADED_FEATURES.
 		 select { |feature| feature.include? 'gems' }.

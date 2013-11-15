@@ -1,7 +1,6 @@
 require 'rspec/core/rake_task'
 
-	# selenium specific code
-	$DEBUG = true
+ENV['WR_OWNER'] = "SELF" if ENV['WR_OWNER'].nil?
 	
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:spec) do |t|
