@@ -1,7 +1,5 @@
 # -- usage: rake help
-#wget 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSanity_Nightly&name=BIZFILE&value=amb_abc.biz'
-#wget 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSuite_Nightly&env.name=BIZ&env.value=amb_abc.biz'
-#echo %dep.NeoSuiteNightly_Event.env.BIZ%
+# curl 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSuiteNightly_Event&env.name=BIZ&env.value=amb_abc.biz'
 
 require 'rake'
 require "timeout"
@@ -126,18 +124,63 @@ task :show do
 end
 
 task :pull_into_home do
-	Dir.chdir("/home/NeoSuite") do
+	Dir.chdir(@suite_root) do
 		%x{git pull}
 	end
 end
 
 task :copy_template_to_teamcity do
 	puts "Teamplate interval:" + ENV['TEMPLATE_INTERVAL']
-	Dir.chdir("/home/NeoSuite") do
+	Dir.chdir(@suite_root) do
 		%x{rm /root/.BuildServer/config/_notifications/email/build_successful.ftl}
-		%x{cp /home/NeoSuite/toolbox/etc/TeamCity/EmailTemplate/build_successful.ftl ~/.BuildServer/config/_notifications/email/build_successful.ftl}
+		%x{cp #{@suite_root}/toolbox/etc/TeamCity/CustomNotificationEmail/build_successful.ftl ~/.BuildServer/config/_notifications/email/build_successful.ftl}
 		sleep(ENV['TEMPLATE_INTERVAL'].to_i)
 	end
+end
+
+#neosuite\toolbox\etc\TeamCity\IncrementalAssets
+task :email_p4_incremental do
+	puts "VCS ID:" + ENV['NS_VCSID']
+	puts "BUILD ID:" + ENV['NS_BUILDID']
+	
+	## generate and parge logs for result
+	pass = false
+	Dir.chdir("#{@suite_root}/home") do
+		%x{wget -O /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}}
+		
+		file = File.new("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log", "r")
+		match = ""
+		while (line = file.gets)
+				match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFU
+		end
+		pass = true if match.include?('SUCCESSFUL')
+	end
+	
+	## find perforce data from changelist ID
+	Dir.chdir("/home") do
+		ENV['P4CONFIG']='/home/.p4config'
+		full = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
+		description = full.split('\'')[1]
+		description_long = %x{p4 changes -l -m 1 @108944}
+		username_and_workspace = %x{p4 changes -m 1 @108944 | awk '{ print $6 }'}
+		username = username_and_workspace.split('@')[0]
+		email = username + '@adtran.com'
+		puts "PASS: " + pass.to_s
+		puts "EMAIL: " + email
+		puts "DESC: " + description
+		puts "DESCLONG: " + description_long		
+		text = File.read("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_original.html")
+		
+		pass = false # CHANGe later
+		
+		text.gsub!('NAME', username_and_workspace)
+		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
+		text.gsub!(/(DESCRIPTION)/, description_long)
+		File.open("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html", 'w') {|f| f.write(text) }
+		end
+		
+		pass = false
+		%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail tallis.vanek@adtran.com}
 end
 
 desc "-- show usage of Neo Commander"
