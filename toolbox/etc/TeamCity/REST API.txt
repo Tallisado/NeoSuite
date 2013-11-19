@@ -1,0 +1,18 @@
+wget http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/application.wadl
+wget http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/projects
+wget http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/builds/id:BuildWebrootTest_P4Trigger
+wget http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/builds/buildType:(id:BuildWebrootTest_P4Trigger)/statusIcon
+wget http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/buildTypes/id:BuildWebrootTest_P4Trigger/builds/running:false
+wget http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/downloadBuildLog.html?buildId=NeoSuiteIncremental_UIAccessiblility
+
+
+wget -qO- http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=369
+
+
+http://teamcity:8111/httpAuth/app/rest/builds/id:BuildWebrootTest_P4Trigger
+http://teamcity:8111/httpAuth/app/rest/projects
+
+
+
+
+wget -qO- http://root:Password1@10.10.9.157/teamcity/httpAuth/app/rest/buildTypes/id:BuildWebrootTest_P4Trigger/builds/running:true
