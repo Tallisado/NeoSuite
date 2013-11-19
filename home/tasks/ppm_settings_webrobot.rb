@@ -1,23 +1,9 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
-def wait_for_element_present( how, what, how_long=5)
-	p("-- wait_for_element_present [ #{how.to_s}," + what + "," + how_long.to_s + " ]")
-	wait_for_it = Selenium::WebDriver::Wait.new(:timeout => how_long )
-	wait_for_it.until { @selenium.find_element(how, what) }
-end
-
-def verify_text_from_element(method, location_id, compare_value)
-      p ("locating element [ " + location_id + " / " + method.to_s + " ] for the comparative text: " + compare_value)
-	  t = @selenium.find_element(method, location_id).text
-	  p("-- current value in a given location_id: " + t)
-	  verify { @selenium.find_element(method, location_id).text.should == compare_value }
-	  #verify { t.to_s == compare_value.to_s }
-end   
-
 describe "PPM Settings", :local => true do
 	it "should set and verify settings" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		@selenium.type(:id, "loginnameid-inputEl", '3011')
 		@selenium.type(:id, "loginpasswordid-inputEl", '1234')
 		sleep 1
@@ -61,12 +47,12 @@ describe "PPM Settings", :local => true do
 		# @selenium.click(:id, 'settingsButton-btnIconEl')
 		# @selenium.click(:id, 'settingsProfile')
 		# @selenium.verify_attribute_from_element(:id, "profile_img", "src", "/Images/Avatars/unknown.png")
-		# verify_text_from_element(:id, 'profileName_field-inputEl', "Kyle Turris");
-		# verify_text_from_element(:id, 'profileDesc_field-inputEl', "Centre");
-		# verify_text_from_element(:id, 'profileExt_field-inputEl', "3007");
-		# verify_text_from_element(:id, 'profileEmergLoc_field-inputEl', "1000 Palladium Dr. Ottawa, Ontario K2V 1A5 Canada");
-		# verify_text_from_element(:id, 'profileAssignedGroups_field-bodyEl', "");
-		# verify_text_from_element(:id, 'ProfileHelp-inputEl', "Click on a field at the left to see help text");
+		# @selenium.verify_text_from_element(:id, 'profileName_field-inputEl', "Kyle Turris");
+		# @selenium.verify_text_from_element(:id, 'profileDesc_field-inputEl', "Centre");
+		# @selenium.verify_text_from_element(:id, 'profileExt_field-inputEl', "3007");
+		# @selenium.verify_text_from_element(:id, 'profileEmergLoc_field-inputEl', "1000 Palladium Dr. Ottawa, Ontario K2V 1A5 Canada");
+		# @selenium.verify_text_from_element(:id, 'profileAssignedGroups_field-bodyEl', "");
+		# @selenium.verify_text_from_element(:id, 'ProfileHelp-inputEl', "Click on a field at the left to see help text");
 		# @selenium.verify_attribute_from_element(:id, "profileHomeNumber_field-inputEl", "value", "(613) 599-0100")
 		# @selenium.verify_attribute_from_element(:id, "profileCellNumber_field-inputEl", "value", "(613) 333-3007")
 		# @selenium.verify_attribute_from_element(:id, "profilePrimaryEmail_field-inputEl", "value", "Kyle.Turris@senators.nhl.com")
@@ -74,7 +60,7 @@ describe "PPM Settings", :local => true do
 
 		# @selenium.click(:id, 'settingsButton-btnIconEl')
 		# @selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[2]")
-		# verify_text_from_element(:id, 'PasswordHelp-inputEl', "Click on a field at the left to see help text");
+		# @selenium.verify_text_from_element(:id, 'PasswordHelp-inputEl', "Click on a field at the left to see help text");
 		# @selenium.verify_attribute_from_element(:id, "userPassword_input-inputEl", "value", "1234")
 		# @selenium.verify_attribute_from_element(:id, "userPasswordReenter_input-inputEl", "value", "1234")
 		# @selenium.verify_attribute_from_element(:id, "voicemailPin_input-inputEl", "value", "1234")
@@ -83,7 +69,7 @@ describe "PPM Settings", :local => true do
 
 		@selenium.click(:id, 'settingsButton-btnIconEl')
 		@selenium.click(:id, "settingsVoicemail")
-		# verify_text_from_element(:id, 'VMConfigProfileHelp-inputEl', "Click on a field at the left to see help text");
+		# @selenium.verify_text_from_element(:id, 'VMConfigProfileHelp-inputEl', "Click on a field at the left to see help text");
 		@selenium.verify_attribute_from_element(:id, "greeting_combobox-inputEl", "value", "1")
 		@selenium.verify_attribute_from_element(:id, "primaryEmailNotification_combobox-inputEl", "value", "Never")
 		@selenium.verify_attribute_from_element(:id, "secondaryEmailNotification_combobox-inputEl", "value", "Always")

@@ -1,15 +1,9 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
-def wait_for_element_present( how, what, how_long=5)
-	p("-- wait_for_element_present [ #{how.to_s}," + what + "," + how_long.to_s + " ]")
-	wait_for_it = Selenium::WebDriver::Wait.new(:timeout => how_long )
-	wait_for_it.until { @selenium.find_element(how, what) }
-end
-
 describe "PPM Settings", :local => true do
 	it "should login to PPM and set/verify the fields" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		@selenium.type(:id, "loginnameid-inputEl", '3011')
 		@selenium.type(:id, "loginpasswordid-inputEl", '1234')
 		sleep 1
