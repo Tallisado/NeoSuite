@@ -40,7 +40,7 @@ describe "PPM - FMFM Additions", :local => true do
 	# Do Delete //*[@id="defaultruleviewid"]/table/tbody/tr/td[6]/div/i
 	
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		@selenium.type(:id, "loginnameid-inputEl", '3011')
 		@selenium.type(:id, "loginpasswordid-inputEl", '1234')
 		sleep 1
