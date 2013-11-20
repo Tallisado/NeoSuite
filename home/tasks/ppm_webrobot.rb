@@ -8,7 +8,7 @@ describe "PPM Tasks", :local => true do
 		@selenium.type(:id, "loginpasswordid-inputEl", '1234')
 		sleep 1
 		@selenium.click(:id, "loginbuttonid-btnIconEl")
-		wait_for_element_present(:id, "settingsButton-btnEl", 20)
+		@selenium.wait_for_element_present(:id, "settingsButton-btnEl", 20)
 		@selenium.title.should eql("ADTRAN Neo")
 		sleep 5
 		@selenium.click(:id, "logout-btnEl")

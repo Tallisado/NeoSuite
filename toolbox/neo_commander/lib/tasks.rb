@@ -36,40 +36,48 @@ class WRTask < BaseTask
 		
 		if @keepstdout 
 			puts "Executing rake (STDOUT)"
-			Rake.application['for:real'].invoke()
+			Rake.application[@raketask].reenable()
+			Rake.application[@raketask].invoke()
 			@output = "1 example, 0 failures"
+			@exit_status = @task_data['test_exit_status_passed']
 			#@output = "4 examples, 0 failures"
 		else			
 			begin
-				redirect_webrobot_stdout{Rake.application[@raketask].invoke() }
-				@output = retrieve_webrobot_log
-				#find out matrix from cloud if needed
-				@matrix = {}
+				redirect_webrobot_stdout{Rake.application[@raketask].reenable; Rake.application[@raketask].invoke}
+			rescue Exception => e
 				@exit_status = 
-					case @output
+					case e.inspect
+					when /Selenium::WebDriver::Error::NoSuchElementError/ then 
+						puts "*** RESCUE ERROR: Selenium::WebDriver::Error::NoSuchElementError"
+						@task_data['test_exit_status_noelement']
+					when /Selenium::WebDriver::Error::WebDriverError/ then
+						puts "*** RESCUE ERROR: Selenium::WebDriver::Error::WebDriverError"
+						@task_data['test_exit_status_error']
+					when /Rake::Application/, /SystemExit/ then
+						puts "*** RESCUE ERROR: Rake::Application or SystemExit"						
+						@task_data['test_exit_status_failed']
+					else
+						puts "*** RESCURE ERROR: " + e.inspect
+						@task_data['test_exit_status_error']
+					end
+					
+			else				
+				@exit_status = 
+					case retrieve_webrobot_log
 					when /0 failures/ then @task_data['test_exit_status_passed']
 					when /0 examples, 0 failures/ then @task_data['test_exit_status_skipped']
 					else @task_data['test_exit_status_failed']
 				end
-				#rescue Rake::ApplicationAbortedException, SystemExit => e
-				rescue Rake::Application, SystemExit => e
-					@output = retrieve_webrobot_log
-					@exit_status = @task_data['test_exit_status_failed']			
-				#rescue Selenium::WebDriver::Error::WebDriverError => e ------- this is throwing the error  NameError: uninitialized constant WRTask::Selenium
-				rescue => e
-					@output = retrieve_webrobot_log
-					@exit_status = @task_data['test_exit_status_error']
-					p "-- ERROR -----: " + e.inspect
-					p "   (in test:)"
 			ensure
+				@output = retrieve_webrobot_log
 				@examples = parse_logs_for_examples
-				if @exit_status == @task_data['test_exit_status_failed']				
-					@output_short = "\n" + @examples.join("\n") + "\n" + @output.match(/Failures:(.*)Finished in/m)[1]
-				else
-					@output_short = "\n" + parse_logs_for_examples.join("\n")
-				end
-				@matrix = {}
+				@output_short = "\n"+parse_logs_for_examples.join("\n")
+				@output_short += "\n"+@examples.join("\n")+"\n"+@output.match(/Failures:(.*)Finished in/m)[1] if @exit_status == @task_data['test_exit_status_failed']
+				
+				@matrix = {:FireFox => @exit_status}
+				
 				p @task_data['output_on'] == true ? @output : to_s 
+				
 			end
 		end				
 	end
@@ -77,24 +85,31 @@ class WRTask < BaseTask
 	def parse_logs_for_examples
 		found = []
 		File.read("#{@task_data['logs_dir']}#{@taskname}.txt").split("\n").each do |line|
-			item = line.match(/^(  should)[a-zA-Z ]*/m)
+			item = line.match(/^(  should)[a-zA-Z0-9 ]*/m)
 			found.push item.to_s unless item.nil?
 		end
 		return found
 	end
 	
 	def redirect_webrobot_stdout
-		orig_std_out = STDOUT.clone
+		@orig_std_out = $stdout.clone
+		@orig_std_err = $stderr.clone
 		# $stdout = File.new( '/dev/null', 'w' )
 		$stdout.reopen("#{@task_data['logs_dir']}#{@taskname}.txt", "w")
+		$stderr.reopen("#{@task_data['logs_dir']}#{@taskname}.txt", "w")
 		#$stdout.sync = true
 		yield
 	ensure
-		$stdout.reopen(orig_std_out)
+		$stdout.reopen(@orig_std_out)
+		$stderr.reopen(@orig_std_err)
 	end
 
 	def retrieve_webrobot_log
-		return (File.open("#{@task_data['logs_dir']}#{@taskname}.txt")).read
+		log = 
+			File.open("#{@task_data['logs_dir']}#{@taskname}.txt") do |f|
+				f.read
+			end
+		return log
 	end
 		
 	def to_s

@@ -109,6 +109,7 @@ class BaseTask
 		s += "        exit_status:  #{@exit_status}"		+ "\n"
 		s += "        matrix:       #{@matrix}"					+ "\n"
 		s += "        exec time:    #{@task_execution_time}"	+ "\n"
+		s += "        examples:     #{@examples.join("\n")}"	+ "\n"
 		s += "        output_short: #{@output_short}"	+ "\n"
 		puts s
 	end

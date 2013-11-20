@@ -1,5 +1,16 @@
 module WebRobotSingletonMethods
 
+	@last_saved_screenshot = nil
+	
+	def last_saved_screenshot
+		return @last_saved_screenshot unless @last_saved_screenshot.nil?
+	end
+	
+	def save_screenshot!(full_filepath)
+		self.save_screenshot(full_filepath)
+		@last_saved_screenshot = full_filepath
+	end
+
 	def drag_and_drop(draggable_element_type, draggable_element, droppable_element_type, droppable_element)
 		p "-- dragging (#{draggable_element}) and dropping into (#{droppable_element})"
 		draggable = self.find_element(draggable_element_type, draggable_element)

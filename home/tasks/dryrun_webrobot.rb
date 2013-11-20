@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
-describe "NeoSuite", :local => true do
+describe "NeoSuite DryRun", :local => true do
 	it "should instantiate the local WebRobot Firefox object" do
 		expect { @selenium.navigate.to "http://www.google.ca" }.to_not raise_error
 	end
@@ -14,6 +14,11 @@ describe "NeoSuite", :local => true do
 	it "should navigate the a url" do
 		@selenium.navigate.to "http://www.google.ca"   
 		@selenium.title.should eql("Google")
+	end
+	
+	it "should save screenshot on test failure" do
+		@selenium.navigate.to "http://www.google.ca"   
+		expect { @selenium.title.should eql("NotGoogle") }.to raise_error
 	end
 end
 

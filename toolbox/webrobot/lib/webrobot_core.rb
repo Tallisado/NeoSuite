@@ -11,7 +11,6 @@ if ENV['WR_INTERFACE'].match('sauce')
 	require 'webrobot_saucefig'
 	
 elsif ENV['WR_INTERFACE'].match('local')
-
 	require 'webrobot_rspecfig'
 	a = $LOADED_FEATURES.
 		 select { |feature| feature.include? 'gems' }.

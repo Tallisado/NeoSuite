@@ -7,6 +7,7 @@ require "fileutils"
 require 'yaml'
 require 'rake'
 require './toolbox/neo_commander/lib/neo_helpermethods'
+require 'selenium-webdriver'
 
 # -- first global
 @profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
@@ -21,7 +22,7 @@ require './toolbox/neo_commander/lib/neo_helpermethods'
 @neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 
 # selenium specific code
-$DEBUG = true
+#$DEBUG = true
 
 ################################
 # STDOUT / STDERR / DEBUG
@@ -40,7 +41,10 @@ task :default => [:run]
 @task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 
 # -- global needed in classes
+# -- TODO : figure out what variable are cross toolbox dependent and make them ENV only, since they cannot access these Rake globals --- OR -- create a suite to pass them to all tools/tasks
+ENV["REPORTS"]         	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
 @reports_dir           	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
+ENV["LOGS"]          		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
 @logs_dir           		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
 @definition_yaml_hash		= read_yaml_file(toolpath("neo_commander")+"/lib/definitions.yml")
 
@@ -49,21 +53,22 @@ task :default => [:run]
 
 # -- global class data
 @task_data = {
-   'output_on'                => true,
-   'test_retry'               => false,
-   'test_exit_status_passed'  => "PASSED", 		#1 example, 0 failures
-   'test_exit_status_failed'  => "FAILED",
-   'test_exit_status_skipped' => "SKIPPED",
-   'test_exit_status_error' 	=> "ERROR",
-   'reports_dir'              => @reports_dir,
-   'logs_dir'		              => @logs_dir,
-   'xml_report_class_name'    => "qa.tasks",
-   'xml_report_file_name'     => "report.xml",
-   'configinfo_file_name'     => "configinfo.html",
-	 'definitions'							=> @definition_yaml_hash,
-	 'toolbox_tools'						=> @toolbox_tools,
-	 'tool_path_lookup'					=> @tool_path_lookup,
-	 'suite_root'								=> @suite_root
+   'output_on'                		=> false,
+   'test_retry'               		=> false,
+   'test_exit_status_passed'  		=> "PASSED", 		#1 example, 0 failures
+   'test_exit_status_failed'  		=> "FAILED",
+   'test_exit_status_skipped' 		=> "SKIPPED",
+   'test_exit_status_error' 			=> "ERROR",
+   'test_exit_status_noelement' 	=> "NOELEMENT",
+   'reports_dir'              		=> @reports_dir,
+   'logs_dir'		              		=> @logs_dir,
+   'xml_report_class_name' 				=> "qa.tasks",
+   'xml_report_file_name'  				=> "report.xml",
+   'configinfo_file_name'  				=> "configinfo.html",
+	 'definitions'									=> @definition_yaml_hash,
+	 'toolbox_tools'								=> @toolbox_tools,
+	 'tool_path_lookup'							=> @tool_path_lookup,
+	 'suite_root'										=> @suite_root
 }
 
 require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/base_task"
@@ -161,8 +166,8 @@ task :email_p4_incremental do
 		ENV['P4CONFIG']='/home/.p4config'
 		full = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
 		description = full.split('\'')[1]
-		description_long = %x{p4 changes -l -m 1 @108944}
-		username_and_workspace = %x{p4 changes -m 1 @108944 | awk '{ print $6 }'}
+		description_long = %x{p4 changes -l -m 1 @#{ENV['NS_VCSID']}}
+		username_and_workspace = %x{p4 changes -m 1 @#{ENV['NS_VCSID']} | awk '{ print $6 }'}
 		username = username_and_workspace.split('@')[0]
 		email = username + '@adtran.com'
 		puts "PASS: " + pass.to_s
@@ -240,7 +245,8 @@ def clean_exit
 	tasks_failed     = all_by_exit_status(@task_data['test_exit_status_failed'])
 	tasks_skipped    = all_by_exit_status(@task_data['test_exit_status_skipped'])
 	tasks_error    	 = all_by_exit_status(@task_data['test_exit_status_error'])
-  @task_data.merge!({'execution_time' => @taskchain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped, 'tasks_error' => tasks_error})
+	noelement_error	 = all_by_exit_status(@task_data['test_exit_status_noelement'])
+  @task_data.merge!({'execution_time' => @taskchain.execution_time, 'tasks_passed' => tasks_passed, 'tasks_failed' => tasks_failed, 'tasks_skipped' => tasks_skipped, 'tasks_error' => tasks_error, 'test_exit_status_noelement' => noelement_error })
   
 	Publisher.new(@task_data).publish_reports	 
 	
@@ -248,7 +254,7 @@ def clean_exit
   puts("[  :: [SESSION]\n")
 	
 	# Team City Result
-  teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
+  teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 && noelement_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
 	puts teamcity_result
 
 	puts("[TC] Target BIZ File : [#{@neo_bizfile}]")
@@ -257,17 +263,16 @@ def clean_exit
   printf("%-27s %s\n","[TC]   -- tests executed:",@taskchain.executed_tasks.to_s)
   printf("%-27s %s\n","[TC]   -- tests skipped:", tasks_skipped.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests error:", tasks_error.length.to_s)
+  printf("%-27s %s\n","[TC]   -- tests no element:", noelement_error.length.to_s)
   printf("%-27s %.2f %s\n","[TC]   -- execution time:", @taskchain.execution_time, "secs")
 	printf("       -- reports prepared  \t: #{@reports_dir}\n")
   printf("       -- logs prepared     \t: #{@logs_dir}\n")
 	
-	puts("[TC]  Tasklist :\n")
-	@taskchain.get_tasknames.each do |taskname|
-		puts("[TC]    \t{#{taskname}}\n")	
-		@taskchain.taskchain_array.each do |task|
-			task.examples.each do |example|
-				puts("[TC]    \t\t[#{example}  ]\n")
-			end
+	puts("[TC]  Tasklist :\n")		
+	@taskchain.taskchain_array.each do |task|
+		puts("[TC]    \t{#{task.taskname}}\n")			
+		task.examples.each do |ex|
+			puts("[TC]    \t\t[#{ex}  ]\n")
 		end
 	end
 
