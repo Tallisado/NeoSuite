@@ -3,3 +3,4 @@ toolbox/webrobot/ondemand.yml
 ondemand.yml
 sauce_connect.log
 Thumbs.db
+toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log
