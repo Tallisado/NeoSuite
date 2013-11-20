@@ -9,79 +9,16 @@ require 'rake'
 require './toolbox/neo_commander/lib/neo_helpermethods'
 require 'selenium-webdriver'
 
-# -- first global
-@profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
-@suite_root							= File.expand_path "#{File.dirname(__FILE__)}"		
-@suite_home							= "#{@suite_root}/home"
-@suite_workspace				= "#{@suite_home}/workspace/" + Time.now.strftime("%Y_%m_%d_%H.%M.%S")
-@suite_logs_dir					= "#{@suite_workspace}/logs/"
-@suite_report_dir				= "#{@suite_workspace}/reports/"
-@toolbox_tools					= ["neo_commander", "webrobot", "ssh_commander"]
-@tool_path_lookup				= @toolbox_tools.each_with_object({}) { |v,h| h[v] = "#{@suite_root}/toolbox/#{v}" }
-@neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
-@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
-
-# selenium specific code
-#$DEBUG = true
-
 ################################
 # STDOUT / STDERR / DEBUG
 ################################
 def p(s) puts "-- #{Time.now.strftime('[%H:%M:%S]')} #{s}" end
-#def p_d(s) puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if @neo_debug == true end
-def p_d(s)
-	puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if ENV["NC_DEBUG"]
-end
-
-# -- global vars
-task :default => [:run]
-@taskchain                 	= []
-@tasks_retried_counter 	= 0
-@current_task 				 	= 0
-@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
-
-# -- global needed in classes
-# -- TODO : figure out what variable are cross toolbox dependent and make them ENV only, since they cannot access these Rake globals --- OR -- create a suite to pass them to all tools/tasks
-ENV["REPORTS"]         	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
-@reports_dir           	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
-ENV["LOGS"]          		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
-@logs_dir           		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
-@definition_yaml_hash		= read_yaml_file(toolpath("neo_commander")+"/lib/definitions.yml")
-
-# -- the following vars control the behavior of running tests
-#@task_types = {"ruby" => "RubyTask" , "WRTask"]
-
-# -- global class data
-@task_data = {
-   'output_on'                		=> false,
-   'test_retry'               		=> false,
-   'test_exit_status_passed'  		=> "PASSED", 		#1 example, 0 failures
-   'test_exit_status_failed'  		=> "FAILED",
-   'test_exit_status_skipped' 		=> "SKIPPED",
-   'test_exit_status_error' 			=> "ERROR",
-   'test_exit_status_noelement' 	=> "NOELEMENT",
-   'reports_dir'              		=> @reports_dir,
-   'logs_dir'		              		=> @logs_dir,
-   'xml_report_class_name' 				=> "qa.tasks",
-   'xml_report_file_name'  				=> "report.xml",
-   'configinfo_file_name'  				=> "configinfo.html",
-	 'definitions'									=> @definition_yaml_hash,
-	 'toolbox_tools'								=> @toolbox_tools,
-	 'tool_path_lookup'							=> @tool_path_lookup,
-	 'suite_root'										=> @suite_root
-}
-
-require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/base_task"
-require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/tasks"
-
+def p_d(s)	puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if ENV["NC_DEBUG"] end
 
 # -- prepare reports_dir
 def prepare_workspace_dir
-   FileUtils.mkdir_p @logs_dir
-   FileUtils.mkdir_p @reports_dir
-	 #FileUtils.cp(toolpath("webrobot")+'/webrobot.rake', @suite_home)
-	 #FileUtils.rm_r(@task_data['reports_dir']) if File.directory?(@task_data['reports_dir'])
-   #FileUtils.mkdir_p(@task_data['reports_dir'])
+   FileUtils.mkdir_p ENV["LOGS"]
+   FileUtils.mkdir_p ENV["REPORTS"]
 end
 
 def prepare_taskchain
@@ -97,15 +34,64 @@ def prepare_taskchain
 	end
 end
 
+@suite_root							= File.expand_path "#{File.dirname(__FILE__)}"		
+@suite_home							= "#{@suite_root}/home"
+@suite_workspace				= "#{@suite_home}/workspace/" + Time.now.strftime("%Y_%m_%d_%H.%M.%S")
+@suite_logs_dir					= "#{@suite_workspace}/logs/"
+@suite_report_dir				= "#{@suite_workspace}/reports/"
+@toolbox_tools					= ["neo_commander", "webrobot", "ssh_commander"]
+@tool_path_lookup				= @toolbox_tools.each_with_object({}) { |v,h| h[v] = "#{@suite_root}/toolbox/#{v}" }
+@neo_debug							= ENV["NC_DEBUG"].nil? ? false : true
+@taskchain              = []
+@tasks_retried_counter 	= 0
+@current_task 				 	= 0
+
+@definition_yaml_hash		= read_yaml_file(toolpath("neo_commander")+"/lib/definitions.yml")
+
+# -- global class data
+@task_data = {
+	 'output_on'                		=> false,
+	 'test_retry'               		=> false,
+	 'test_exit_status_passed'  		=> "PASSED", 		#1 example, 0 failures
+	 'test_exit_status_failed'  		=> "FAILED",
+	 'test_exit_status_skipped' 		=> "SKIPPED",
+	 'test_exit_status_error' 			=> "ERROR",
+	 'test_exit_status_noelement' 	=> "NOELEMENT",
+	 'reports_dir'              		=> ENV["REPORTS"],
+	 'logs_dir'		              		=> ENV["LOGS"],
+	 'xml_report_class_name' 				=> "qa.tasks",
+	 'xml_report_file_name'  				=> "report.xml",
+	 'configinfo_file_name'  				=> "configinfo.html",
+	 'definitions'									=> @definition_yaml_hash,
+	 'toolbox_tools'								=> @toolbox_tools,
+	 'tool_path_lookup'							=> @tool_path_lookup,
+	 'suite_root'										=> @suite_root
+}
+	
+	@task_data.merge!({})
+
+# -- TODO : figure out if --- create a suite to pass them to all tools/tasks
+ENV["REPORTS"]         	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
+ENV["LOGS"]          		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
+
+require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/base_task"
+require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/tasks"
+	
 # -- run all tests
+task :default => [:run]
 desc "-- run all tasks..."
 task :run do
+	# -- first global
+	@profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
+	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
+	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
+	
 	puts "--- EXECUTING NEO COMMANDER ---"
 	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
-	puts "--- [logs]      : " + @logs_dir
-	puts "--- [reports]   : " + @reports_dir
+	puts "--- [logs]      : " + ENV["LOGS"]
+	puts "--- [reports]   : " + ENV["REPORTS"]
 	puts "-------------------------------"
 
 	#puts "running all the tasks"
@@ -117,6 +103,19 @@ task :run do
 	prepare_taskchain
 	
 	# -- let's run each test now
+	@taskchain.execute_chain
+	clean_exit
+end
+
+task :wrsolo do
+	if ENV['FILE'].nil?
+		puts "FATAL: 'FILE' needed when running wr solo!"; exit(1) 
+	end
+	@task_hash	= read_yaml_file(toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/wr_solo.yml")
+	@task_hash["pattern"] = ENV['FILE']
+		
+	prepare_workspace_dir
+	prepare_taskchain
 	@taskchain.execute_chain
 	clean_exit
 end
@@ -303,7 +302,7 @@ class Publisher
          output += "<tr><td><a href='../logs/#{t.taskname}.txt'>#{t.taskname}</a></td><td>#{t.task_execution_time}</td></tr>\n"
       }
       output += "</table></body></html>"
-      write_file(@task_data['reports_dir'] + "/#{status}.html", output)
+      write_file(ENV["REPORTS"] + "#{status}.html", output)
    end
 
   def publish_reports	  
@@ -344,7 +343,7 @@ class Publisher
 		document += "   </suite>\n"
 		document += "</report>\n"
 		# -- write XML report
-		write_file(@task_data['reports_dir'] + "/" + @task_data['xml_report_file_name'], document)
+		write_file(ENV["REPORTS"] + @task_data['xml_report_file_name'], document)
 	end
 	def make_html
       # -- write HTML report
@@ -355,7 +354,7 @@ class Publisher
       totals += "Tests Error: <a href='tasks_error.html'>#{@task_data['tasks_error'].length.to_s}</a><br>\n"
       totals += "Execution time: #{@task_data['execution_time']}<br>\n"
       totals += "<br><br><a href=#{@task_data['configinfo_file_name']}>Configuration Infoormation</a><br>\n</body></html>"
-      write_file(@task_data['reports_dir'] + "/report.html", totals)
+      write_file(ENV["REPORTS"] + "report.html", totals)
       # -- create individual html report files complete with test output
       create_html_reports("tasks_passed", "PASSED")
       create_html_reports("tasks_failed", "FAILED")
@@ -369,7 +368,7 @@ class Publisher
 	  document += "<verifications>#{@task_data['verifications'].to_s}</verifications>\n"
 	  document += "<v_passed>#{@task_data['verifications_passed'].to_s}</v_passed>\n"
 	  document += "</webtester_plot>\n"
-	  write_file(@task_data['reports_dir'] + "/" + @task_data['xml_plot_file_name'], document)
+	  write_file(ENV["REPORTS"] + @task_data['xml_plot_file_name'], document)
 	end
 	
 	def make_configinfo
@@ -381,7 +380,7 @@ class Publisher
 		 uniq.sort.to_s
 		document += "<p> #{a} </p><br><br>"
 		document += "<br>\n</body></html>"
-		write_file(@task_data['reports_dir'] + "/" + @task_data['configinfo_file_name'], document)
+		write_file(ENV["REPORTS"] + @task_data['configinfo_file_name'], document)
 	end
 end
 	

@@ -23,7 +23,8 @@ class WRTask < BaseTask
 	def execute_cmd	
 		#rake_output = toolpath("webrobot") + "./results/#{@uuid}_stdout.tmp"
 		@keepstdout = false
-		ENV['FILE'] = File.join(@task_data['suite_root'], "/home/tasks/"+@pattern)
+		#ENV['NS_PATTERN'] = File.join(@task_data['suite_root'], "/home/tasks/"+@pattern)
+		ENV['FILE'] = @pattern
 		ENV['WR_DEBUG'] = 'on'
 		ENV['WR_OWNER'] = 'NEOSUITE'
 		
@@ -53,7 +54,7 @@ class WRTask < BaseTask
 					when /Selenium::WebDriver::Error::WebDriverError/ then
 						puts "*** RESCUE ERROR: Selenium::WebDriver::Error::WebDriverError"
 						@task_data['test_exit_status_error']
-					when /Rake::Application/, /SystemExit/ then
+					when /(Rake::Application)/, /(SystemExit)/ then
 						puts "*** RESCUE ERROR: Rake::Application or SystemExit"						
 						@task_data['test_exit_status_failed']
 					else

@@ -1,7 +1,5 @@
 require 'rspec/core/rake_task'
 
-ENV['WR_OWNER'] = "SELF" if ENV['WR_OWNER'].nil?
-	
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:spec) do |t|
 	puts "running spec as a sanity against webrobot"
@@ -87,7 +85,8 @@ namespace :local do
 			
 			#t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
 			#t.pattern = ENV["FILE"].nil? ? ["#{task_path}/**/*_webrobot.rb","#{task_path}/*_webrobot.rb"] : ENV["FILE"]
-			t.pattern = ENV["FILE"].nil? ? [File.join(File.dirname(__FILE__), "../../home/tasks/*_webrobot.rb")] : ENV["FILE"]
+			#File.join(File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}")
+			t.pattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}") ]
 			t.rspec_opts = ['-f documentation', '--color']
 			t.verbose = true			
 			ENV

@@ -1,0 +1,9 @@
+commander: wr_solo_run
+
+wr_solo: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "dryrun_webrobot.rb",
+  tries: 1
+}

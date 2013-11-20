@@ -1,0 +1,24 @@
+
+Can't find file /root/.vnc/ROCKSTAR3:5.pid
+You'll have to kill the Xtightvnc process manually
+
+dryrun_two_webrobot.rb
+WR_INTERFACE:   		 local
+WR_RUNFILTER:   		 
+WR_FORCEDISPLAY:		 
+WR_FFONLY:      		 
+WR_NOTUNNEL:    		 
+/usr/bin/ruby1.9.1 -S rspec /mnt/wt/neosuite/toolbox/webrobot/../../home/tasks/dryrun_two_webrobot.rb -f documentation --color
+[WEBROBOT] (Firefox) v2.37.0
+LOADED FEATURES:
+["childprocess-0.3.9", "gems", "lib", "multi_json-1.8.0", "rspec", "rspec-2.14.1", "rspec-core-2.14.7", "ruby", "rubyzip-1.0.0", "selenium", "selenium-webdriver-2.37.0", "webdriver"]
+Run options: include {:local=>true}
+
+NeoSuite DryRun
+RUNNNING should save screenshot
+[WEBROBOT] (Local Firefox) Open:
+[WEBROBOT] (Local Firefox) Close:
+  should save screenshot
+
+Finished in 4.78 seconds
+1 example, 0 failures
