@@ -2,54 +2,37 @@
 Can't find file /root/.vnc/ROCKSTAR3:5.pid
 You'll have to kill the Xtightvnc process manually
 
-ppm_preferences_webrobot.rb
+ppm_webrobot.rb
 WR_INTERFACE:   		 local
 WR_RUNFILTER:   		 
 WR_FORCEDISPLAY:		 
 WR_FFONLY:      		 
 WR_NOTUNNEL:    		 
-/usr/bin/ruby1.9.1 -S rspec /home/MikeNeoSuite/toolbox/webrobot/../../home/tasks/ppm_preferences_webrobot.rb -f documentation --color
+/usr/bin/ruby1.9.1 -S rspec /mnt/wt/neosuite/toolbox/webrobot/../../home/tasks/ppm_webrobot.rb -f documentation --color
 [WEBROBOT] (Firefox) v2.37.0
 LOADED FEATURES:
 ["childprocess-0.3.9", "gems", "lib", "multi_json-1.8.0", "rspec", "rspec-2.14.1", "rspec-core-2.14.7", "ruby", "rubyzip-1.0.0", "selenium", "selenium-webdriver-2.37.0", "webdriver"]
 Run options: include {:local=>true}
 
-PPM Settings
-RUNNNING should login to PPM and set/verify the fields
+PPM Tasks
+RUNNNING should test the PPM page
 [WEBROBOT] (Local Firefox) Open:
 "-- wait_for_element_present [ id,loginnameid-inputEl,15 ]"
 "-- typing text ['3011'] into element ['loginnameid-inputEl'] by ['id']"
 "-- typing text ['1234'] into element ['loginpasswordid-inputEl'] by ['id']"
 "-- clicking on element: loginbuttonid-btnIconEl by id"
-"-- clicking on element: settingsButton by id"
-"-- clicking on element: settingsVoicemail by id"
--- sencha element found
--- sencha element found
-"-- waiting for element"
-"-- wait_for_element_present [ id,greeting_combobox-inputEl,10 ]"
-"-- clicking element"
-"-- waiting for element"
-"-- wait_for_element_present [ id,primaryEmailNotification_combobox-inputEl,10 ]"
-"-- clicking element"
-"-- waiting for element"
-"-- wait_for_element_present [ id,secondaryEmailNotification_combobox-inputEl,10 ]"
-"-- clicking element"
-"-- waiting for element"
-"-- wait_for_element_present [ id,emailAction_combobox-inputEl,10 ]"
-"-- clicking element"
-"-- clicking on element: //*[@id=\"settingVMConfigClose-btnEl\"] by xpath"
-"-- clicking on element: settingsButton by id"
-"-- clicking on element: settingsVoicemail by id"
-"locating element [ greeting_combobox-inputEl / id ] @value for the comparative text: Default"
-"-- current attribute value given the location and attribute name : Default"
-"locating element [ primaryEmailNotification_combobox-inputEl / id ] @value for the comparative text: Never"
-"-- current attribute value given the location and attribute name : Never"
-"locating element [ secondaryEmailNotification_combobox-inputEl / id ] @value for the comparative text: Always"
-"-- current attribute value given the location and attribute name : Always"
-"locating element [ emailAction_combobox-inputEl / id ] @value for the comparative text: None"
-"-- current attribute value given the location and attribute name : None"
+"-- wait_for_element_present [ id,settingsButton-btnEl,20 ]"
+"-- clicking on element: logout-btnEl by id"
+"-- wait_for_element_present [ id,loginnameid-inputEl,15 ]"
+"-- typing text ['3011'] into element ['loginnameid-inputEl'] by ['id']"
+"-- typing text ['password'] into element ['loginpasswordid-inputEl'] by ['id']"
+"-- clicking on element: loginbuttonid-btnIconEl by id"
+"-- wait_for_element_present [ id,loginnameid-inputEl,15 ]"
+"-- typing text ['3011'] into element ['loginnameid-inputEl'] by ['id']"
+"-- typing text ['4567'] into element ['loginpasswordid-inputEl'] by ['id']"
+"-- clicking on element: loginbuttonid-btnIconEl by id"
 [WEBROBOT] (Local Firefox) Close:
-  should login to PPM and set/verify the fields
+  should test the PPM page
 
-Finished in 20.51 seconds
+Finished in 1 minute 29.58 seconds
 1 example, 0 failures

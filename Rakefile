@@ -67,8 +67,6 @@ end
 	 'tool_path_lookup'							=> @tool_path_lookup,
 	 'suite_root'										=> @suite_root
 }
-	
-	@task_data.merge!({})
 
 # -- TODO : figure out if --- create a suite to pass them to all tools/tasks
 ENV["REPORTS"]         	= ENV["REPORTS"].nil? ? @suite_report_dir : ENV["REPORTS"]
@@ -77,7 +75,10 @@ ENV["LOGS"]          		= ENV["LOGS"].nil? ? @suite_logs_dir : ENV["LOGS"]
 require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/base_task"
 require toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/tasks"
 	
+##########################
+# RAKE: run (default)
 # -- run all tests
+##########################
 task :default => [:run]
 desc "-- run all tasks..."
 task :run do
@@ -107,9 +108,14 @@ task :run do
 	clean_exit
 end
 
+##########################
+# RAKE: wrsolo
+# -- run target webrobot file
+##########################
+desc "run target webrobot file"
 task :wrsolo do
-	if ENV['FILE'].nil?
-		puts "FATAL: 'FILE' needed when running wr solo!"; exit(1) 
+	if ENV['FILE'].nil? || !File.exist?(File.join( File.dirname(__FILE__), "/home/tasks/#{ENV['FILE']}"))
+		puts "FATAL: Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"; exit(1) 
 	end
 	@task_hash	= read_yaml_file(toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/wr_solo.yml")
 	@task_hash["pattern"] = ENV['FILE']
@@ -120,19 +126,29 @@ task :wrsolo do
 	clean_exit
 end
 
-# -- print tests
+##########################
+# RAKE: wrsolo
+##########################
 desc "-- print tasks and show how they are loaded..."
 task :show do
 	prepare_taskchain
 	@taskchain.show_chain
 end
 
+##########################
+# RAKE: pull_into_home
+##########################
+desc "-- git pull from the suite_root directory"
 task :pull_into_home do
 	Dir.chdir(@suite_root) do
 		%x{git pull}
 	end
 end
 
+##########################
+# RAKE: copy_template_to_teamcity
+##########################
+desc "-- copies the template for the teamcity resulting notification email"
 task :copy_template_to_teamcity do
 	puts "Teamplate interval:" + ENV['TEMPLATE_INTERVAL']
 	Dir.chdir(@suite_root) do
@@ -142,7 +158,11 @@ task :copy_template_to_teamcity do
 	end
 end
 
+##########################
+# RAKE: email_p4_incremental
+##########################
 #neosuite\toolbox\etc\TeamCity\IncrementalAssets
+desc "-- sendmail : incremental"
 task :email_p4_incremental do
 	puts "VCS ID:" + ENV['NS_VCSID']
 	puts "BUILD ID:" + ENV['NS_BUILDID']

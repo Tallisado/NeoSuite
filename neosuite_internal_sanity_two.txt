@@ -20,5 +20,5 @@ RUNNNING should save screenshot
 [WEBROBOT] (Local Firefox) Close:
   should save screenshot
 
-Finished in 4.78 seconds
+Finished in 4.63 seconds
 1 example, 0 failures

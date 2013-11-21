@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "PPM Settings", :local => true do
-	it "should login to PPM and set/verify the fields" do
+	it "should login to PPM and set verify the fields" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
 		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		@selenium.type(:id, "loginnameid-inputEl", '3011')
