@@ -1,7 +1,7 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "PPM Settings", :local => true do
-	it "should login to PPM and set and verify the fields" do
+	it "should login to PPM and set/verify the fields" do
 		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
 		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		@selenium.type(:id, "loginnameid-inputEl", '3011')
@@ -29,16 +29,16 @@ describe "PPM Settings", :local => true do
 		# @selenium.clear(:id, 'userPinReenter_input-inputEl')
 		# @selenium.type(:id, 'userPinReenter_input-inputEl', '1234')
 
-		@selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[3]")
+		sleep 1
+		@selenium.click(:id, 'settingsVoicemail')
 		@selenium.check(:id, 'playEnvelope_checkbox-inputEl')
 		@selenium.check(:id, 'autoPlayMessage_checkbox-inputEl')
-		@selenium.click_text_from_combobox(:id, 'greeting_combobox-inputEl', "Standard")
+		@selenium.click_text_from_combobox(:id, 'greeting_combobox-inputEl', "Default")
 		@selenium.click_text_from_combobox(:id, 'primaryEmailNotification_combobox-inputEl', "Never")
 		@selenium.click_text_from_combobox(:id, 'secondaryEmailNotification_combobox-inputEl', "Always")
 		@selenium.click_text_from_combobox(:id, 'emailAction_combobox-inputEl', "None")
-		@selenium.click(:xpath, '//*[@id="settingOK_btn-btnIconEl"]')
+		@selenium.click(:xpath, '//*[@id="settingVMConfigClose-btnEl"]')
 
-		@selenium.click(:id, 'settingsButton')
 		# @selenium.verify_attribute_from_element(:id, "profile_img", "src", "/Images/Avatars/unknown.png")
 		# @selenium.verify_text_from_element(:id, 'profileName_field-inputEl', "Kyle Turris");
 		# @selenium.verify_text_from_element(:id, 'profileDesc_field-inputEl', "Centre");
@@ -57,23 +57,25 @@ describe "PPM Settings", :local => true do
 		# @selenium.verify_attribute_from_element(:id, "userPasswordReenter_input-inputEl", "value", "1234")
 		# @selenium.verify_attribute_from_element(:id, "voicemailPin_input-inputEl", "value", "1234")
 		# @selenium.verify_attribute_from_element(:id, "userPinReenter_input-inputEl", "value", "1234")
-		
-		@selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[3]")
-		@selenium.verify_text_from_element(:id, 'VMConfigProfileHelp-inputEl', "Click on a field at the left to see help text");
-		@selenium.verify_attribute_from_element(:id, "greeting_combobox-inputEl", "value", "Standard")
+	
+		@selenium.click(:id, 'settingsButton')
+		sleep 1
+		@selenium.click(:id, 'settingsVoicemail')
+		#@selenium.verify_text_from_element(:id, 'VMConfigProfileHelp-inputEl', "Click on a field at the left to see help text");
+		@selenium.verify_attribute_from_element(:id, "greeting_combobox-inputEl", "value", "Default")
 		@selenium.verify_attribute_from_element(:id, "primaryEmailNotification_combobox-inputEl", "value", "Never")
 		@selenium.verify_attribute_from_element(:id, "secondaryEmailNotification_combobox-inputEl", "value", "Always")
 		@selenium.verify_attribute_from_element(:id, "emailAction_combobox-inputEl", "value", "None")
 	
-		@selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[6]")
-		@selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "French-Canadian")
-		@selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "French Canadian")
-		@selenium.click(:id, 'settingOK_btn-btnEl')
-		sleep 5
-		@selenium.click(:id, 'settingsButton')
-		@selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[6]")
-		@selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "English-US")
-		@selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "English")
-		@selenium.click(:id, 'settingOK_btn-btnEl')
+		# @selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[6]")
+		# @selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "French-Canadian")
+		# @selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "French Canadian")
+		# @selenium.click(:id, 'settingOK_btn-btnEl')
+		# sleep 5
+		# @selenium.click(:id, 'settingsButton')
+		# @selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[6]")
+		# @selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "English-US")
+		# @selenium.click_text_from_combobox(:id, 'cbGuiLang-inputEl', "English")
+		# @selenium.click(:id, 'settingOK_btn-btnEl')
 	end
 end

@@ -35,16 +35,18 @@ describe "PPM Settings", :local => true do
 		# @selenium.click(:id, 'savePasswordId')
 
 		@selenium.click(:id, 'settingsButton-btnIconEl')
+		sleep 1
 		@selenium.click(:id, "settingsVoicemail")
 		@selenium.check(:id, 'playEnvelope_checkbox-inputEl')
 		@selenium.check(:id, 'autoPlayMessage_checkbox-inputEl')
-		@selenium.click_text_from_combobox(:id, 'greeting_combobox-inputEl', "1")
+		@selenium.click_text_from_combobox(:id, 'greeting_combobox-inputEl', "Default")
 		@selenium.click_text_from_combobox(:id, 'primaryEmailNotification_combobox-inputEl', "Never")
 		@selenium.click_text_from_combobox(:id, 'secondaryEmailNotification_combobox-inputEl', "Always")
 		@selenium.click_text_from_combobox(:id, 'emailAction_combobox-inputEl', "None")
 		@selenium.click(:id, 'settingVMConfigClose')
 
 		# @selenium.click(:id, 'settingsButton-btnIconEl')
+		# sleep 1
 		# @selenium.click(:id, 'settingsProfile')
 		# @selenium.verify_attribute_from_element(:id, "profile_img", "src", "/Images/Avatars/unknown.png")
 		# @selenium.verify_text_from_element(:id, 'profileName_field-inputEl', "Kyle Turris");
@@ -68,9 +70,10 @@ describe "PPM Settings", :local => true do
 		# @selenium.click(:id, 'saveUserProfileId')
 
 		@selenium.click(:id, 'settingsButton-btnIconEl')
+		sleep 1
 		@selenium.click(:id, "settingsVoicemail")
 		# @selenium.verify_text_from_element(:id, 'VMConfigProfileHelp-inputEl', "Click on a field at the left to see help text");
-		@selenium.verify_attribute_from_element(:id, "greeting_combobox-inputEl", "value", "1")
+		@selenium.verify_attribute_from_element(:id, "greeting_combobox-inputEl", "value", "Default")
 		@selenium.verify_attribute_from_element(:id, "primaryEmailNotification_combobox-inputEl", "value", "Never")
 		@selenium.verify_attribute_from_element(:id, "secondaryEmailNotification_combobox-inputEl", "value", "Always")
 		@selenium.verify_attribute_from_element(:id, "emailAction_combobox-inputEl", "value", "None")

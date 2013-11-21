@@ -2,40 +2,54 @@
 Can't find file /root/.vnc/ROCKSTAR3:5.pid
 You'll have to kill the Xtightvnc process manually
 
-/usr/bin/ruby1.9.1 -S rspec /mnt/wt/neosuite/toolbox/webrobot/../../home/tasks/ppm_preferences_webrobot.rb -f documentation --color failed
-in/ruby1.9.1 -S rspec /mnt/wt/neosuite/toolbox/webrobot/../../home/tasks/ppm_preferences_webrobot.rb -f documentation --color
+ppm_preferences_webrobot.rb
+WR_INTERFACE:   		 local
+WR_RUNFILTER:   		 
+WR_FORCEDISPLAY:		 
+WR_FFONLY:      		 
+WR_NOTUNNEL:    		 
+/usr/bin/ruby1.9.1 -S rspec /home/MikeNeoSuite/toolbox/webrobot/../../home/tasks/ppm_preferences_webrobot.rb -f documentation --color
 [WEBROBOT] (Firefox) v2.37.0
 LOADED FEATURES:
 ["childprocess-0.3.9", "gems", "lib", "multi_json-1.8.0", "rspec", "rspec-2.14.1", "rspec-core-2.14.7", "ruby", "rubyzip-1.0.0", "selenium", "selenium-webdriver-2.37.0", "webdriver"]
 Run options: include {:local=>true}
 
 PPM Settings
-RUNNNING should login to PPM and set and verify the fields
+RUNNNING should login to PPM and set/verify the fields
 [WEBROBOT] (Local Firefox) Open:
 "-- wait_for_element_present [ id,loginnameid-inputEl,15 ]"
 "-- typing text ['3011'] into element ['loginnameid-inputEl'] by ['id']"
 "-- typing text ['1234'] into element ['loginpasswordid-inputEl'] by ['id']"
 "-- clicking on element: loginbuttonid-btnIconEl by id"
 "-- clicking on element: settingsButton by id"
-"-- clicking on element: //div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[3] by xpath"
+"-- clicking on element: settingsVoicemail by id"
+-- sencha element found
+-- sencha element found
+"-- waiting for element"
+"-- wait_for_element_present [ id,greeting_combobox-inputEl,10 ]"
+"-- clicking element"
+"-- waiting for element"
+"-- wait_for_element_present [ id,primaryEmailNotification_combobox-inputEl,10 ]"
+"-- clicking element"
+"-- waiting for element"
+"-- wait_for_element_present [ id,secondaryEmailNotification_combobox-inputEl,10 ]"
+"-- clicking element"
+"-- waiting for element"
+"-- wait_for_element_present [ id,emailAction_combobox-inputEl,10 ]"
+"-- clicking element"
+"-- clicking on element: //*[@id=\"settingVMConfigClose-btnEl\"] by xpath"
+"-- clicking on element: settingsButton by id"
+"-- clicking on element: settingsVoicemail by id"
+"locating element [ greeting_combobox-inputEl / id ] @value for the comparative text: Default"
+"-- current attribute value given the location and attribute name : Default"
+"locating element [ primaryEmailNotification_combobox-inputEl / id ] @value for the comparative text: Never"
+"-- current attribute value given the location and attribute name : Never"
+"locating element [ secondaryEmailNotification_combobox-inputEl / id ] @value for the comparative text: Always"
+"-- current attribute value given the location and attribute name : Always"
+"locating element [ emailAction_combobox-inputEl / id ] @value for the comparative text: None"
+"-- current attribute value given the location and attribute name : None"
 [WEBROBOT] (Local Firefox) Close:
-  should login to PPM and set and verify the fields (FAILED - 1)
+  should login to PPM and set/verify the fields
 
-Failures:
-
-  1) PPM Settings should login to PPM and set and verify the fields
-     Failure/Error: @selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[3]")
-     Selenium::WebDriver::Error::NoSuchElementError:
-       Unable to locate element: {"method":"xpath","selector":"//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[3]"}
-     # [remote server] file:///tmp/webdriver-profile20131120-12861-dqkqgz/extensions/fxdriver@googlecode.com/components/driver_component.js:8891:in `FirefoxDriver.prototype.findElementInternal_'
-     # [remote server] file:///tmp/webdriver-profile20131120-12861-dqkqgz/extensions/fxdriver@googlecode.com/components/driver_component.js:396:in `fxdriver.Timer.prototype.setTimeout/<.notify'
-     # ./toolbox/webrobot/lib/webrobot_singletonmethods.rb:206:in `click'
-     # ./home/tasks/ppm_preferences_webrobot.rb:32:in `block (2 levels) in <top (required)>'
-     # ./toolbox/webrobot/lib/webrobot_rspecfig.rb:44:in `block (2 levels) in <top (required)>'
-
-Finished in 45.79 seconds
-1 example, 1 failure
-
-Failed examples:
-
-rspec ./home/tasks/ppm_preferences_webrobot.rb:4 # PPM Settings should login to PPM and set and verify the fields
+Finished in 20.51 seconds
+1 example, 0 failures
