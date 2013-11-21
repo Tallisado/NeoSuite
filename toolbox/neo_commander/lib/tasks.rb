@@ -85,7 +85,7 @@ class WRTask < BaseTask
 	
 	def parse_logs_for_examples
 		found = []
-		File.read("#{@task_data['logs_dir']}#{@taskname}.txt").split("\n").each do |line|
+		File.read("#{ENV["LOGS"]}#{@taskname}.txt").split("\n").each do |line|
 			item = line.match(/^(  should)[a-zA-Z0-9 ]*/m)
 			found.push item.to_s unless item.nil?
 		end
@@ -96,8 +96,8 @@ class WRTask < BaseTask
 		@orig_std_out = $stdout.clone
 		@orig_std_err = $stderr.clone
 		# $stdout = File.new( '/dev/null', 'w' )
-		$stdout.reopen("#{@task_data['logs_dir']}#{@taskname}.txt", "w")
-		$stderr.reopen("#{@task_data['logs_dir']}#{@taskname}.txt", "w")
+		$stdout.reopen("#{ENV["LOGS"]}#{@taskname}.txt", "w")
+		$stderr.reopen("#{ENV["LOGS"]}#{@taskname}.txt", "w")
 		#$stdout.sync = true
 		yield
 	ensure
@@ -107,7 +107,7 @@ class WRTask < BaseTask
 
 	def retrieve_webrobot_log
 		log = 
-			File.open("#{@task_data['logs_dir']}#{@taskname}.txt") do |f|
+			File.open("#{ENV["LOGS"]}#{@taskname}.txt") do |f|
 				f.read
 			end
 		return log
@@ -167,7 +167,7 @@ class RubyTask < BaseTask
 	
 	def log_output
 		puts "Dumping output to: #{@task_data['logs_dir']}#{@taskname}.txt" 
-		File.open("#{@task_data['logs_dir']}#{@taskname}.txt", "wb") do |file|
+		File.open("#{ENV["LOGS"]}#{@taskname}.txt", "wb") do |file|
 			file.write(output)
 		end
 	end

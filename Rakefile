@@ -285,8 +285,8 @@ def clean_exit
   printf("%-27s %s\n","[TC]   -- tests error:", tasks_error.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests no element:", noelement_error.length.to_s)
   printf("%-27s %.2f %s\n","[TC]   -- execution time:", @taskchain.execution_time, "secs")
-	printf("       -- reports prepared  \t: #{@reports_dir}\n")
-  printf("       -- logs prepared     \t: #{@logs_dir}\n")
+	printf("       -- reports prepared  \t: #{ENV["reports"]}\n")
+  printf("       -- logs prepared     \t: #{ENV["LOGS"]}\n")
 	
 	puts("[TC]  Tasklist :\n")		
 	@taskchain.taskchain_array.each do |task|
