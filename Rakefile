@@ -150,7 +150,7 @@ task :email_p4_incremental do
 	## generate and parge logs for result
 	pass = false
 	Dir.chdir("#{@suite_root}/home") do
-		%x{wget -O /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}}
+		%x{wget -O #{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}}
 		
 		file = File.new("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log", "r")
 		match = ""
@@ -185,6 +185,7 @@ task :email_p4_incremental do
 		
 		pass = false
 		%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail tallis.vanek@adtran.com}
+		#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail email}
 end
 
 desc "-- show usage of Neo Commander"
