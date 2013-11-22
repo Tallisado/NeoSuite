@@ -9,21 +9,13 @@ commander: nightly
   # tries: 1
 # }
 
-preference_unittest_and_data_flow: { 
-  toolbox: webrobot, 
-  failover: die,
-  raketask: 'local:headless',
-  pattern: "ppm_preferences_webrobot.rb",
-  tries: 1
-}
-
-phonedialog_setting_unittest_and_data_flow: { 
-  toolbox: webrobot, 
-  failover: die,
-  raketask: 'local:headless',
-  pattern: "ppm_settings_phonedialog_webrobot.rb",
-  tries: 1
-}
+# phonedialog_setting_unittest_and_data_flow: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "ppm_settings_phonedialog_webrobot.rb",
+  # tries: 1
+# }
 
 # spre_setting_unittest_and_data_flow: { 
   # toolbox: webrobot, 
@@ -33,10 +25,10 @@ phonedialog_setting_unittest_and_data_flow: {
   # tries: 1
 # }
 
-# base_settings_unittest_and_data_flow: { 
-  # toolbox: webrobot, 
-  # failover: die,
-  # raketask: 'local:headless',
-  # pattern: "ppm_settings_webrobot.rb",
-  # tries: 1
-# }
+base_settings_unittest_and_data_flow: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "ppm_settings_webrobot.rb",
+  tries: 1
+}

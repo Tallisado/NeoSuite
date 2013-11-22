@@ -10,29 +10,29 @@ describe "PPM Settings", :local => true do
 		@selenium.click(:id, "loginbuttonid-btnIconEl")
 		sleep 5
 
-		# @selenium.click(:id, 'settingsButton-btnIconEl')
-		# @selenium.click(:id, 'settingsProfile')
-		# @selenium.clear(:id, 'profileHomeNumber_field-inputEl')
-		# @selenium.type(:id, 'profileHomeNumber_field-inputEl', '(613) 599-0100')
-		# @selenium.clear(:id, 'profileCellNumber_field-inputEl')
-		# @selenium.type(:id, 'profileCellNumber_field-inputEl', '(613) 333-3007')
-		# @selenium.clear(:id, 'profilePrimaryEmail_field-inputEl')
-		# @selenium.type(:id, 'profilePrimaryEmail_field-inputEl', 'Kyle.Turris@senators.nhl.com')
-		# @selenium.clear(:id, 'profileSecondaryEmail_field-inputEl')
-		# @selenium.type(:id, 'profileSecondaryEmail_field-inputEl', 'Kyle.Turris@hotmail.com')
-		# @selenium.click(:id, 'saveUserProfileId')
+		@selenium.click(:id, 'settingsButton-btnIconEl')
+		@selenium.click(:id, 'settingsProfile')
+		@selenium.clear(:name, 'HomeNumber')
+		@selenium.type(:name, 'HomeNumber', '(613) 599-0100')
+		@selenium.clear(:name, 'MobileNumber')
+		@selenium.type(:name, 'MobileNumber', '(613) 333-3007')
+		@selenium.clear(:name, 'PrimaryEmail')
+		@selenium.type(:name, 'PrimaryEmail', 'Kyle.Turris@senators.nhl.com')
+		@selenium.clear(:name, 'SecondaryEmail')
+		@selenium.type(:name, 'SecondaryEmail', 'Kyle.Turris@hotmail.com')
+		@selenium.click(:id, 'saveUserProfileId')
 
-		# @selenium.click(:id, 'settingsButton-btnIconEl')
-		# @selenium.click(:id, 'settingsPassword')
-		# @selenium.clear(:id, 'userPassword_input-inputEl')
-		# @selenium.type(:id, 'userPassword_input-inputEl', '1234')
-		# @selenium.clear(:id, 'userPasswordReenter_input-inputEl')
-		# @selenium.type(:id, 'userPasswordReenter_input-inputEl', '1234')
-		# @selenium.clear(:id, 'voicemailPin_input-inputEl')
-		# @selenium.type(:id, 'voicemailPin_input-inputEl', '1234')
-		# @selenium.clear(:id, 'userPinReenter_input-inputEl')
-		# @selenium.type(:id, 'userPinReenter_input-inputEl', '1234')
-		# @selenium.click(:id, 'savePasswordId')
+		@selenium.click(:id, 'settingsButton-btnIconEl')
+		@selenium.click(:id, 'settingsPassword')
+		@selenium.clear(:name, 'userPassword')
+		@selenium.type(:name, 'userPassword', '1234')
+		@selenium.clear(:name, 'userPasswordReEnter')
+		@selenium.type(:name, 'userPasswordReEnter', '1234')
+		@selenium.clear(:name, 'voicemailPIN')
+		@selenium.type(:name, 'voicemailPIN', '1234')
+		@selenium.clear(:name, 'voicemailPINReEnter')
+		@selenium.type(:name, 'voicemailPINReEnter', '1234')
+		@selenium.click(:id, 'savePasswordId-btnEl')
 
 		@selenium.click(:id, 'settingsButton-btnIconEl')
 		sleep 1
@@ -45,29 +45,29 @@ describe "PPM Settings", :local => true do
 		@selenium.click_text_from_combobox(:id, 'emailAction_combobox-inputEl', "None")
 		@selenium.click(:id, 'settingVMConfigClose')
 
-		# @selenium.click(:id, 'settingsButton-btnIconEl')
-		# sleep 1
-		# @selenium.click(:id, 'settingsProfile')
-		# @selenium.verify_attribute_from_element(:id, "profile_img", "src", "/Images/Avatars/unknown.png")
-		# @selenium.verify_text_from_element(:id, 'profileName_field-inputEl', "Kyle Turris");
-		# @selenium.verify_text_from_element(:id, 'profileDesc_field-inputEl', "Centre");
-		# @selenium.verify_text_from_element(:id, 'profileExt_field-inputEl', "3007");
-		# @selenium.verify_text_from_element(:id, 'profileEmergLoc_field-inputEl', "1000 Palladium Dr. Ottawa, Ontario K2V 1A5 Canada");
-		# @selenium.verify_text_from_element(:id, 'profileAssignedGroups_field-bodyEl', "");
-		# @selenium.verify_text_from_element(:id, 'ProfileHelp-inputEl', "Click on a field at the left to see help text");
-		# @selenium.verify_attribute_from_element(:id, "profileHomeNumber_field-inputEl", "value", "(613) 599-0100")
-		# @selenium.verify_attribute_from_element(:id, "profileCellNumber_field-inputEl", "value", "(613) 333-3007")
-		# @selenium.verify_attribute_from_element(:id, "profilePrimaryEmail_field-inputEl", "value", "Kyle.Turris@senators.nhl.com")
-		# @selenium.verify_attribute_from_element(:id, "profileSecondaryEmail_field-inputEl", "value", "Kyle.Turris@hotmail.com")
+		@selenium.click(:id, 'settingsButton-btnIconEl')
+		sleep 1
+		@selenium.click(:id, 'settingsProfile')
+		#@selenium.verify_text_from_element(:id, 'profileName_field-inputEl', "Kyle Turris");
+		#@selenium.verify_text_from_element(:id, 'profileDesc_field-inputEl', "Centre");
+		#@selenium.verify_text_from_element(:id, 'profileExt_field-inputEl', "3007");
+		#@selenium.verify_text_from_element(:id, 'profileEmergLoc_field-inputEl', "1000 Palladium Dr. Ottawa, Ontario K2V 1A5 Canada");
+		#@selenium.verify_text_from_element(:id, 'profileAssignedGroups_field-bodyEl', "");
+		#@selenium.verify_text_from_element(:id, 'ProfileHelp-inputEl', "Click on a field at the left to see help text");
+		@selenium.verify_attribute_from_element(:name, "HomeNumber", "value", "(613) 599-0100")
+		@selenium.verify_attribute_from_element(:name, "MobileNumber", "value", "(613) 333-3007")
+		@selenium.verify_attribute_from_element(:name, "PrimaryEmail", "value", "Kyle.Turris@senators.nhl.com")
+		@selenium.verify_attribute_from_element(:name, "SecondaryEmail", "value", "Kyle.Turris@hotmail.com")
 
-		# @selenium.click(:id, 'settingsButton-btnIconEl')
-		# @selenium.click(:xpath, "//div[@id='SettingsDialogTabPanelId']/div/div/div[2]/div/a[2]")
+		@selenium.click(:id, 'settingsButton-btnIconEl')
+		sleep 1
+		@selenium.click(:id, 'settingsPassword-textEl')
 		# @selenium.verify_text_from_element(:id, 'PasswordHelp-inputEl', "Click on a field at the left to see help text");
-		# @selenium.verify_attribute_from_element(:id, "userPassword_input-inputEl", "value", "1234")
-		# @selenium.verify_attribute_from_element(:id, "userPasswordReenter_input-inputEl", "value", "1234")
-		# @selenium.verify_attribute_from_element(:id, "voicemailPin_input-inputEl", "value", "1234")
-		# @selenium.verify_attribute_from_element(:id, "userPinReenter_input-inputEl", "value", "1234")
-		# @selenium.click(:id, 'saveUserProfileId')
+		@selenium.verify_attribute_from_element(:name, "userPassword", "value", "1234")
+		@selenium.verify_attribute_from_element(:name, "userPasswordReEnter", "value", "1234")
+		@selenium.verify_attribute_from_element(:name, "voicemailPIN", "value", "1234")
+		@selenium.verify_attribute_from_element(:name, "voicemailPINReEnter", "value", "1234")
+		@selenium.click(:id, 'savePasswordId-btnEl')
 
 		@selenium.click(:id, 'settingsButton-btnIconEl')
 		sleep 1
