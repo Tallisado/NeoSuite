@@ -91,7 +91,7 @@ task :run do
 	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 	
-	
+	puts ""
 	puts "--- EXECUTING NEO COMMANDER ---"
 	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
@@ -121,23 +121,26 @@ end
 ##########################
 desc "run target webrobot file"
 task :wrsolo do
-	puts "WTF: " + ENV['FILE']
+	puts "wrsolo: " + ENV['FILE']
 	filepath = File.join( File.dirname(__FILE__), "/home/tasks/#{ENV['FILE']}")
 	if ENV['FILE'].nil? || !File.exist?(filepath)
 		puts "FATAL: (URL) 'FILE' Cannot be missing from the ommand line when using wrsolo rake task. Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"
 		puts filepath unless ENV['FILE'].nil?
 		exit(1)
-	end
+	end	
 	@task_hash	= read_yaml_file(toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/wr_solo.yml")
-	# puts "***** im forcing this in this pattern var:"
-	# puts @task_hash
-	# @task_hash.merge!(:pattern => ENV['FILE'])
-			# puts "***** im forcing this in this pattern var:"
-	# puts @task_hash
 	prepare_workspace_dir
 	prepare_taskchain
 	@taskchain.execute_chain
 	clean_exit
+end
+
+desc :wrsolo_fixtures do
+	@app = Rake.application
+	@app.init
+	@app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
+	@app.load_imports
+	Rake.application['vnc:start'].invoke()
 end
 
 ##########################

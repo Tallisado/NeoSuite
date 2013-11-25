@@ -32,13 +32,18 @@ class WRTask < BaseTask
 		else
 			ENV['BASEURL'] = ENV['URL'].nil? ? @task_url : ENV['URL']
 		end
+		
 
-		puts "*********** pattern found here : " + @pattern
-		ENV['FILE'] = @pattern if ENV['FILE'].nil?
+		ENV['FILENAME'] = @pattern if ENV['FILE'].nil?
+		
+		puts "******"
+		puts "******"
+		puts "******"
+		puts "FILENAME: " + ENV['FILENAME']
+		puts "pattern: " + @pattern
+		
 		ENV['WR_DEBUG'] = 'on'
-		ENV['WR_OWNER'] = 'NEOSUITE'
-		
-		
+		ENV['WR_OWNER'] = 'NEOSUITE'		
 		
 		@app = Rake.application
 		@app.init

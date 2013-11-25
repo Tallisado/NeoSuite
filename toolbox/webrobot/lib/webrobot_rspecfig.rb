@@ -1,5 +1,8 @@
 @SELENIUM_VERSION = "2.37.0"
+#@SELENIUM_VERSION = "2.33.0"
 @RSPEC_VERSION = "2.14.7"
+
+# we are using Mozilla Firefox 24.0
 
 gem 'selenium-webdriver', '=' + @SELENIUM_VERSION
 require 'selenium-webdriver'

@@ -25,7 +25,7 @@ module WebRobotSingletonMethods
 	
 	def login(login_name, login_password, wait_for_element)
 		#"http://10.10.9.129/Login/index.php"
-		p "-- logging into #{} with --> #{login_name} : #{login_password} | page will load with #{wait_for_element} to continue."
+		p "-- logging into #{ENV['BASEURL']} with --> #{login_name} : #{login_password} | page will load with #{wait_for_element} to continue."
 		self.navigate.to ENV['BASEURL']
 		self.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		self.type(:id, "loginnameid-inputEl", login_name)
@@ -46,6 +46,18 @@ module WebRobotSingletonMethods
 		@last_saved_screenshot = full_filepath
 	end
 
+	# "-- logging into  with --> 3011 : 1234 | page will load with settingsButton to continue."
+# "-- wait_for_element_present [ id,loginnameid-inputEl,15 ]"
+# "-- typing text ['3011'] into element ['loginnameid-inputEl'] by ['id']"
+# "-- typing text ['1234'] into element ['loginpasswordid-inputEl'] by ['id']"
+# "-- clicking on element: loginbuttonid-btnIconEl by id"
+# "-- wait_for_element_present [ id,settingsButton,15 ]"
+# "-- clicking on element: settingsButton by id"
+# "-- clicking on element: settingsPhone by id"
+# "-- dragging (phoneFunc0_1) and dropping into (phone_btn2)"
+# @selenium.action.drag_and_drop(@selenium.find_element(:id, 'phoneFunc0_1'), @selenium.find_element(:id, 'phone_btn2') ).perform
+	
+	
 	def drag_and_drop(draggable_element_type, draggable_element, droppable_element_type, droppable_element)
 		p "-- dragging (#{draggable_element}) and dropping into (#{droppable_element})"
 		draggable = self.find_element(draggable_element_type, draggable_element)

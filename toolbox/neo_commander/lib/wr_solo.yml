@@ -4,7 +4,7 @@ wr_solo: {
   toolbox: webrobot, 
   failover: die,
   #raketask: 'local:headless',
-  raketask: 'local:headed',
+  raketask: 'local:nofixtures:headed',
   pattern: "does_not_exist_in_solo.rb",
   tries: 1
 }

@@ -1,5 +1,7 @@
 require 'rspec/core/rake_task'
 
+@wrpattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILENAME']}") ] 
+
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:spec) do |t|
 	puts "running spec as a sanity against webrobot"
@@ -38,7 +40,6 @@ namespace :local do
 
 	desc "Setup fixtures for HEADED and execute the tests. WR_DISPLAY=:5 will override the DISPLAY used."
 	RSpec::Core::RakeTask.new(:headed) do |t|
-	
 			ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
 			ENV['WR_INTERFACE'] = ENV['WR_INTERFACE'].nil? ? "local" : ENV['WR_INTERFACE']
 			
@@ -81,13 +82,10 @@ namespace :local do
 			# Start the Xvfb server
 			Rake::Task["xvfb:start"].reenable
 			Rake::Task["xvfb:start"].invoke			
-			# opt			
+
 			
-			
-			#t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
-			#t.pattern = ENV["FILE"].nil? ? ["#{task_path}/**/*_webrobot.rb","#{task_path}/*_webrobot.rb"] : ENV["FILE"]
-			#File.join(File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}")
-			t.pattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}") ]
+			t.pattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILENAME']}") ] 
+			#t.pattern = @wrpattern
 			t.rspec_opts = ['-f documentation', '--color']
 			t.verbose = true			
 			ENV
@@ -108,7 +106,8 @@ namespace :local do
 			
 			# opt
 			t.rspec_opts = ['-f documentation', '--color']
-			t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
+			#t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
+			t.pattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}") ]
 			t.verbose = true
 		end
 		
@@ -230,16 +229,9 @@ namespace :vnc do
   task :start do
     # This is what links the server to the test
     ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
-    %x{vncserver #{ENV['WR_DISPLAY']} 2>/dev/null >/dev/null &}
+    %x{vncserver #{ENV['WR_DISPLAY']} -geometry 1280x1024 2>/dev/null >/dev/null &}
   end
 	
-  desc "vnc setup"
-  task :start do
-    # This is what links the server to the test
-    ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
-    %x{vncserver #{ENV['WR_DISPLAY']} &}
-  end
-
 	desc "vnc firefox setup"
   task :firefox do
     # System call to start f irefox on display :99
@@ -255,7 +247,7 @@ namespace :env do
 
 	desc "Display all internally set ENV variables"
 	task :display do
-		puts "-- Display all set parameters --"
+		puts "---------------------------------------------"
 		puts "DISPLAY:        \t\t #{ENV['DISPLAY']}"
 		puts "WR_DISPLAY:     \t\t #{ENV['WR_DISPLAY']}"
 		puts "FILE            \t\t #{ENV['FILE']}"
@@ -264,6 +256,7 @@ namespace :env do
 		puts "WR_FORCEDISPLAY:\t\t #{ENV['WR_FORCEDISPLAY']}"
 		puts "WR_FFONLY:      \t\t #{ENV['WR_FFONLY']}"
 		puts "WR_NOTUNNEL:    \t\t #{ENV['WR_NOTUNNEL']}"
+		puts "---------------------------------------------"
 	end
 	
 end
