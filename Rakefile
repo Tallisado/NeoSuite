@@ -120,8 +120,11 @@ end
 ##########################
 desc "run target webrobot file"
 task :wrsolo do
-	if ENV['FILE'].nil? || !File.exist?(File.join( File.dirname(__FILE__), "/home/tasks/#{ENV['FILE']}"))
-		puts "FATAL: Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"; exit(1) 
+	puts "WTF: " + ENV['FILE']
+	filepath = File.join( File.dirname(__FILE__), "/home/tasks/#{ENV['FILE']}")
+	if ENV['FILE'].nil? || !File.exist?(filepath)
+		puts "FATAL: (URL) 'FILE' Cannot be missing from the ommand line when using wrsolo rake task. Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"
+		puts filepath unless ENV['FILE'].nil?
 	end
 	@task_hash	= read_yaml_file(toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/wr_solo.yml")
 	@task_hash["pattern"] = ENV['FILE']
