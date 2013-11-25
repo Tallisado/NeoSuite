@@ -11,17 +11,29 @@ describe "PPM Settings - Phone Dialog", :local => true do
 		sleep 3
 		@selenium.click(:id, 'settingsButton')
 		sleep 1
-		@selenium.click(:xpath, "settingsPhone")
+		@selenium.click(:id, "settingsPhone")
 		sleep 15
 	end
 		
-	it "should drag and drop all button types to the main button screen and then delete" do		
+	it "should drag and drop all button types to the main button screen and then delete" do
+		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
+		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		@selenium.type(:id, "loginnameid-inputEl", '3011')
+		@selenium.type(:id, "loginpasswordid-inputEl", '1234')
+		sleep 1
+		@selenium.click(:id, "loginbuttonid-btnIconEl")
+		sleep 3
+		@selenium.click(:id, 'settingsButton')
+		sleep 1
+		@selenium.click(:id, "settingsPhone")
+		sleep 15
+	
 		#@selenium.verify_text_from_element(:id, 'phoneModel_label', "Phone Assigned: Polycom 650");			
 		#@selenium.verify_attribute_from_element(:id, "phone_img", "src", "polycom650.png")
 		
 		#@selenium.testheader "PPM-Setting (Phone-MAIN) Menu Items (Default Setting)"
-		@selenium.verify_text_from_element(:id, 'phone_btn0_lbl', "line 1");
-		@selenium.verify_text_from_element(:id, 'phone_btn1_lbl', "line 2");
+		@selenium.verify_text_from_element(:id, 'phone_btn0_lbl', "3011");
+		@selenium.verify_text_from_element(:id, 'phone_btn1_lbl', "3011");
 		@selenium.verify_text_from_element(:id, 'phone_btn2_lbl', "");
 		@selenium.verify_text_from_element(:id, 'phone_btn3_lbl', "");
 		@selenium.verify_text_from_element(:id, 'phone_btn4_lbl', "");

@@ -2,12 +2,8 @@ require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_c
 #
 describe "Local Admin - Edit Call Queue", :local => true do
 	it "should edit the call queue membership" do
-		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
-		@selenium.type(:id, "loginnameid-inputEl", 'admin')
-		@selenium.type(:id, "loginpasswordid-inputEl", 'password')
-		sleep 1
-		@selenium.click(:id, "loginbuttonid-btnIconEl")
+		@selenium.login('admin', 'password', 'helpButton-btnIconEl')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
 		sleep 3
 		@selenium.click(:xpath, '//*[@id="editCallQueueMembership_wiz"]')
 		sleep 5

@@ -1,14 +1,15 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "PPM Settings", :local => true do
+
+	it "should login to PPM" do
+		@selenium.login('3011', '1234', 'settingsButton')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
+	end
+
 	it "should set and verify settings" do
-		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
-		@selenium.type(:id, "loginnameid-inputEl", '3011')
-		@selenium.type(:id, "loginpasswordid-inputEl", '1234')
-		sleep 1
-		@selenium.click(:id, "loginbuttonid-btnIconEl")
-		sleep 5
+		@selenium.login('3011', '1234', 'settingsButton')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
 
 		@selenium.click(:id, 'settingsButton-btnIconEl')
 		@selenium.click(:id, 'settingsProfile')

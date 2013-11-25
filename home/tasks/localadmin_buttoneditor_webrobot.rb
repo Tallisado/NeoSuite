@@ -2,12 +2,8 @@ require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_c
 
 describe "Local Admin - Button Editor", :local => true do
 	it "should drag and drop button types" do
-		@selenium.navigate.to "http://10.10.9.129/Login/index.php"
-		@selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
-		type(:id, "loginnameid-inputEl", 'admin')
-		type(:id, "loginpasswordid-inputEl", 'password')
-		sleep 1
-		click(:id, "loginbuttonid-btnIconEl")
+		@selenium.login('admin', 'password', 'helpButton-btnIconEl')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
 		sleep 3
 		@selenium.click(:xpath, '//*[@id="editPhoneButton_wiz"]')
 		
