@@ -1,20 +1,18 @@
 commander: nightly
 
-if_the_neo_ui_accessible: { 
-  toolbox: webrobot, 
-  failover: die,
-  raketask: 'local:headless',
-  pattern: "uiaccessibility_webrobot.rb",
-  url: 'http://10.10.9.165',
-  tries: 1
-}
+# if_the_neo_ui_accessible: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "uiaccessibility_webrobot.rb",
+  # tries: 1
+# }
 
 ui_PPM_tasks: { 
   toolbox: webrobot, 
   failover: die,
   raketask: 'local:headless',
   pattern: "ppm_webrobot.rb",
-  url: 'http://10.10.9.165',
   tries: 1
 }
 
@@ -23,7 +21,6 @@ ui_PPM_settings: {
   failover: die,
   raketask: 'local:headless',
   pattern: "ppm_settings_webrobot.rb",
-  url: 'http://10.10.9.165',
   tries: 1
 }
 
@@ -32,7 +29,6 @@ ui_LocalAdmin_createuser: {
   failover: die,
   raketask: 'local:headless',
   pattern: "localadmin_createuser_webrobot.rb",
-  url: 'http://10.10.9.165',
   tries: 1
 }
 
@@ -41,7 +37,6 @@ ui_LocalAdmin_changepassword: {
   failover: die,
   raketask: 'local:headless',
   pattern: "localadmin_changepassword_webrobot.rb",
-  url: 'http://10.10.9.165',
   tries: 1
 }
 
@@ -50,7 +45,6 @@ ui_LocalAdmin_reassignextension: {
   failover: die,
   raketask: 'local:headless',
   pattern: "localadmin_reassignext_webrobot.rb",
-  url: 'http://10.10.9.165',
   tries: 1
 }
 
@@ -59,6 +53,5 @@ ui_LocalAdmin_removeuser: {
   failover: die,
   raketask: 'local:headless',
   pattern: "localadmin_removeuser_webrobot.rb",
-  url: 'http://10.10.9.165',
   tries: 1
 }

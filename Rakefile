@@ -91,7 +91,7 @@ task :run do
 	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 	
-	
+	puts ""
 	puts "--- EXECUTING NEO COMMANDER ---"
 	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
@@ -121,7 +121,7 @@ end
 ##########################
 desc "run target webrobot file"
 task :wrsolo do
-	puts "WTF: " + ENV['FILE']
+	puts "wrsolo: " + ENV['FILE']
 	filepath = File.join( File.dirname(__FILE__), "/home/tasks/#{ENV['FILE']}")
 	if ENV['FILE'].nil? || !File.exist?(filepath)
 		puts "FATAL: (URL) 'FILE' Cannot be missing from the ommand line when using wrsolo rake task. Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"

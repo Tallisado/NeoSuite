@@ -25,7 +25,7 @@ module WebRobotSingletonMethods
 	
 	def login(login_name, login_password, wait_for_element)
 		#"http://10.10.9.129/Login/index.php"
-		p "-- logging into #{} with --> #{login_name} : #{login_password} | page will load with #{wait_for_element} to continue."
+		p "-- logging into #{ENV['BASEURL']} with --> #{login_name} : #{login_password} | page will load with #{wait_for_element} to continue."
 		self.navigate.to ENV['BASEURL']
 		self.wait_for_element_present(:id, "loginnameid-inputEl", 15)
 		self.type(:id, "loginnameid-inputEl", login_name)

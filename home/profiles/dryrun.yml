@@ -5,13 +5,14 @@ neosuite_internal_sanity_multiple: {
   failover: die,
   raketask: 'local:headless',
   pattern: "dryrun_webrobot.rb",
-  url: 'http://www.google.ca',
+  url: 'http://10.10.9.129/Login/index.php',
   tries: 1
 }
-# neosuite_internal_sanity_single: { 
-  # toolbox: webrobot, 
-  # failover: die,
-  # raketask: 'local:headless',
-  # pattern: "dryrun_screenshot_webrobot.rb",
-  # tries: 1
-# }
+neosuite_internal_sanity_single: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "dryrun_screenshot_webrobot.rb",
+  url: 'http://10.10.9.129/Login/index.php',
+  tries: 1
+}
