@@ -108,7 +108,8 @@ namespace :local do
 			
 			# opt
 			t.rspec_opts = ['-f documentation', '--color']
-			t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
+			#t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
+			t.pattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}") ]
 			t.verbose = true
 		end
 		
@@ -230,16 +231,9 @@ namespace :vnc do
   task :start do
     # This is what links the server to the test
     ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
-    %x{vncserver #{ENV['WR_DISPLAY']} 2>/dev/null >/dev/null &}
+    %x{vncserver #{ENV['WR_DISPLAY']} -geometry 1280x1024 2>/dev/null >/dev/null &}
   end
 	
-  desc "vnc setup"
-  task :start do
-    # This is what links the server to the test
-    ENV['DISPLAY'] = ENV['WR_DISPLAY'] = ENV['WR_DISPLAY'].nil? ? ':5' : ENV['WR_DISPLAY']
-    %x{vncserver #{ENV['WR_DISPLAY']} &}
-  end
-
 	desc "vnc firefox setup"
   task :firefox do
     # System call to start f irefox on display :99

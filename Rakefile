@@ -127,17 +127,20 @@ task :wrsolo do
 		puts "FATAL: (URL) 'FILE' Cannot be missing from the ommand line when using wrsolo rake task. Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"
 		puts filepath unless ENV['FILE'].nil?
 		exit(1)
-	end
+	end	
 	@task_hash	= read_yaml_file(toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/wr_solo.yml")
-	# puts "***** im forcing this in this pattern var:"
-	# puts @task_hash
-	# @task_hash.merge!(:pattern => ENV['FILE'])
-			# puts "***** im forcing this in this pattern var:"
-	# puts @task_hash
 	prepare_workspace_dir
 	prepare_taskchain
 	@taskchain.execute_chain
 	clean_exit
+end
+
+desc :wrsolo_fixtures do
+	@app = Rake.application
+	@app.init
+	@app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
+	@app.load_imports
+	Rake.application['vnc:start'].invoke()
 end
 
 ##########################

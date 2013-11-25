@@ -33,7 +33,6 @@ class WRTask < BaseTask
 			ENV['BASEURL'] = ENV['URL'].nil? ? @task_url : ENV['URL']
 		end
 
-		puts "*********** pattern found here : " + @pattern
 		ENV['FILE'] = @pattern if ENV['FILE'].nil?
 		ENV['WR_DEBUG'] = 'on'
 		ENV['WR_OWNER'] = 'NEOSUITE'
