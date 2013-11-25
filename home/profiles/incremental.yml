@@ -5,5 +5,60 @@ if_the_neo_ui_accessible: {
   failover: die,
   raketask: 'local:headless',
   pattern: "uiaccessibility_webrobot.rb",
+  url: 'http://10.10.9.165',
+  tries: 1
+}
+
+ui_PPM_tasks: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "ppm_webrobot.rb",
+  url: 'http://10.10.9.165',
+  tries: 1
+}
+
+ui_PPM_settings: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "ppm_settings_webrobot.rb",
+  url: 'http://10.10.9.165',
+  tries: 1
+}
+
+ui_LocalAdmin_createuser: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "localadmin_createuser_webrobot.rb",
+  url: 'http://10.10.9.165',
+  tries: 1
+}
+
+ui_LocalAdmin_changepassword: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "localadmin_changepassword_webrobot.rb",
+  url: 'http://10.10.9.165',
+  tries: 1
+}
+
+ui_LocalAdmin_reassignextension: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "localadmin_reassignext_webrobot.rb",
+  url: 'http://10.10.9.165',
+  tries: 1
+}
+
+ui_LocalAdmin_removeuser: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "localadmin_removeuser_webrobot.rb",
+  url: 'http://10.10.9.165',
   tries: 1
 }
