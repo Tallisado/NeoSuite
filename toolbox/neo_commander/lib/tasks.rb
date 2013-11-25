@@ -27,7 +27,8 @@ class WRTask < BaseTask
 		#ENV['NS_PATTERN'] = File.join(@task_data['suite_root'], "/home/tasks/"+@pattern)
 		
 		if ENV['URL'].nil? && @task_url.nil?
-			puts "FATAL: Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"; exit(1)
+			puts "FATAL: (ENV) 'URL' cannot be missing if not specified in the task profile YML" if @task_url.nil?
+			exit(1)
 		else
 			ENV['BASEURL'] = ENV['URL'].nil? ? @task_url : ENV['URL']
 		end
