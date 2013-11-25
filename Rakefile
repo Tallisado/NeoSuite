@@ -50,7 +50,7 @@ end
 
 # -- global class data
 @task_data = {
-	 'output_on'                		=> false,
+	 'output_on'                		=> true,
 	 'test_retry'               		=> false,
 	 'test_exit_status_passed'  		=> "PASSED", 		#1 example, 0 failures
 	 'test_exit_status_failed'  		=> "FAILED",
@@ -87,6 +87,7 @@ task :run do
 	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 	
+	puts ""
 	puts "--- EXECUTING NEO COMMANDER ---"
 	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
@@ -188,22 +189,21 @@ task :email_p4_incremental do
 		description_long = %x{p4 changes -l -m 1 @#{ENV['NS_VCSID']}}
 		username_and_workspace = %x{p4 changes -m 1 @#{ENV['NS_VCSID']} | awk '{ print $6 }'}
 		username = username_and_workspace.split('@')[0]
-		email = username + '@adtran.com'
+		
+		email = %x{p4 users -m 1 #{username} | awk '{print $2}'}.gsub!(/[<>]/, '')
+		
 		puts "PASS: " + pass.to_s
 		puts "EMAIL: " + email
 		puts "DESC: " + description
 		puts "DESCLONG: " + description_long		
 		text = File.read("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_original.html")
-		
-		pass = false # CHANGe later
-		
+
 		text.gsub!('NAME', username_and_workspace)
 		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
 		text.gsub!(/(DESCRIPTION)/, description_long)
 		File.open("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html", 'w') {|f| f.write(text) }
 		end
-		
-		pass = false
+
 		%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail tallis.vanek@adtran.com}
 		#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail email}
 end

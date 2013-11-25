@@ -5,6 +5,7 @@ class WRTask < BaseTask
 		@pattern = options["pattern"]
 		@keyword = options["keyword"]
 		@directory = options["directory"]		
+		@task_url = options["url"]	
 		super(taskname, task_data, options)
 	end
 
@@ -24,9 +25,18 @@ class WRTask < BaseTask
 		#rake_output = toolpath("webrobot") + "./results/#{@uuid}_stdout.tmp"
 		@keepstdout = false
 		#ENV['NS_PATTERN'] = File.join(@task_data['suite_root'], "/home/tasks/"+@pattern)
+		
+		if ENV['URL'].nil? && @task_url.nil?
+			puts "FATAL: Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"; exit(1)
+		else
+			ENV['BASEURL'] = ENV['URL'].nil? ? @task_url : ENV['URL']
+		end
+
 		ENV['FILE'] = @pattern
 		ENV['WR_DEBUG'] = 'on'
 		ENV['WR_OWNER'] = 'NEOSUITE'
+		
+		
 		
 		@app = Rake.application
 		@app.init
@@ -86,8 +96,8 @@ class WRTask < BaseTask
 	def parse_logs_for_examples
 		found = []
 		File.read("#{ENV["LOGS"]}#{@taskname}.txt").split("\n").each do |line|
-			item = line.match(/^(  should)[a-zA-Z0-9 ]*/m)
-			found.push item.to_s unless item.nil?
+			item = line.match(/^(\[TESTCASE\]).*/m)
+			found.push item.to_s.gsub!('[TESTCASE] ', '') unless item.nil?
 		end
 		return found
 	end

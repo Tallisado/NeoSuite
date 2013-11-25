@@ -20,6 +20,29 @@ describe "NeoSuite DryRun", :local => true do
 		@selenium.navigate.to "http://www.google.ca"   
 		expect { @selenium.title.should eql("NotGoogle") }.to raise_error
 	end
+
+		# need reliable way to do this
+	# it "should use url from profile" do
+		# p "-- using env variable from task definition"
+		# @selenium.navigate.to ENV['BASEURL']
+		# expect { @selenium.current_url.should eql(ENV['URL']) }.to_not raise_error
+	# end
+	
+	# need reliable way to do this
+	# it "should use url from rake" do
+		# p "-- overriding env url variable locally"
+		# ENV['BASEURL'] = "http://www.reddit.com/"
+		# @selenium.navigate.to ENV['BASEURL']
+		# expect { @selenium.title.should eql("reddit: the front page of the internet") }.to_not raise_error
+	# end
+	
+
+	#it "::custom#login http://10.10.9.129/Login/index.php 3011 1234 settingsButton" do
+	it "selenium#login" do
+		@selenium.login(3011, 1234, 'settingsButton')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
+	end
+	
 end
 
 # local browser

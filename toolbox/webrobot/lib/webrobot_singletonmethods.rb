@@ -1,5 +1,40 @@
 module WebRobotSingletonMethods
 
+	# class CustomSeleniumMacro
+		# def initialize(sel)
+			# @selenium = sel
+		# end
+		
+		# def login(login_name, login_password, wait_for_element)
+			# #"http://10.10.9.129/Login/index.php"
+			# p "-- logging into #{} with --> #{login_name} : #{login_password} | page will load with #{wait_for_element} to continue."
+			# @selenium.navigate.to ENV['BASEURL']
+			# @selenium.wait_for_element_present(:id, "loginnameid-inputEl", 15)
+			# @selenium.type(:id, "loginnameid-inputEl", login_name)
+			# @selenium.type(:id, "loginpasswordid-inputEl", login_password)
+			# sleep 1
+			# @selenium.click(:id, "loginbuttonid-btnIconEl")
+			# @selenium.wait_for_element_present(:id, wait_for_element, 15)			
+		# end
+		
+	# end
+	
+	#@custom = CustomSeleniumMacro.new(self)
+	#@custom = "HELLO"
+	
+	
+	def login(login_name, login_password, wait_for_element)
+		#"http://10.10.9.129/Login/index.php"
+		p "-- logging into #{} with --> #{login_name} : #{login_password} | page will load with #{wait_for_element} to continue."
+		self.navigate.to ENV['BASEURL']
+		self.wait_for_element_present(:id, "loginnameid-inputEl", 15)
+		self.type(:id, "loginnameid-inputEl", login_name)
+		self.type(:id, "loginpasswordid-inputEl", login_password)
+		sleep 1
+		self.click(:id, "loginbuttonid-btnIconEl")
+		self.wait_for_element_present(:id, wait_for_element, 15)			
+	end
+	
 	@last_saved_screenshot = nil
 	
 	def last_saved_screenshot
