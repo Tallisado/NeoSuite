@@ -1,0 +1,9 @@
+commander: nightly
+
+if_the_neo_ui_accessible: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "uiaccessibility_webrobot.rb",
+  tries: 1
+}

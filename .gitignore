@@ -4,3 +4,4 @@ ondemand.yml
 sauce_connect.log
 Thumbs.db
 toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log
+toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html
