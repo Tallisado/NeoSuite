@@ -49,9 +49,13 @@ module WebRobotSingletonMethods
 	def drag_and_drop(draggable_element_type, draggable_element, droppable_element_type, droppable_element)
 		p "-- dragging (#{draggable_element}) and dropping into (#{droppable_element})"
 		draggable = self.find_element(draggable_element_type, draggable_element)
+		p "--1"
 		droppable = self.find_element(droppable_element_type, droppable_element)
-		self.action.click_and_hold(draggable).perform
+		p "--2"
+		#self.action.click_and_hold(draggable).perform
+		p "--3"
 		self.action.drag_and_drop(draggable, droppable).perform
+		p "--4"
 		self.action.release.perform
 	end
 

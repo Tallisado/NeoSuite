@@ -3,7 +3,8 @@ commander: wr_solo_run
 wr_solo: { 
   toolbox: webrobot, 
   failover: die,
-  raketask: 'local:headless',
-  pattern: "dryrun_webrobot.rb",
+  #raketask: 'local:headless',
+  raketask: 'local:headed',
+  pattern: "does_not_exist_in_solo.rb",
   tries: 1
 }

@@ -83,6 +83,7 @@ namespace :local do
 			Rake::Task["xvfb:start"].invoke			
 			# opt			
 			
+			
 			#t.pattern = ENV["FILE"].nil? ? ["./tests/**/*_test.rb","./tests/*_test.rb"] : ENV["FILE"]
 			#t.pattern = ENV["FILE"].nil? ? ["#{task_path}/**/*_webrobot.rb","#{task_path}/*_webrobot.rb"] : ENV["FILE"]
 			#File.join(File.dirname(__FILE__), "../../home/tasks/#{ENV['FILE']}")

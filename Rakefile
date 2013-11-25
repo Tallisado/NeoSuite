@@ -91,14 +91,15 @@ task :run do
 	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
 	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 	
-	puts ""
+	
 	puts "--- EXECUTING NEO COMMANDER ---"
 	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
 	puts "--- [logs]      : " + ENV["LOGS"]
 	puts "--- [reports]   : " + ENV["REPORTS"]
-	puts "--- [rake url]  : " + ENV["URL"]
+	
+	puts "--- [rake url]  : " + (ENV["URL"].nil? ? "Task Based" : ENV["URL"])
 	puts "-------------------------------"
 
 	#puts "running all the tasks"
@@ -125,10 +126,14 @@ task :wrsolo do
 	if ENV['FILE'].nil? || !File.exist?(filepath)
 		puts "FATAL: (URL) 'FILE' Cannot be missing from the ommand line when using wrsolo rake task. Please specifiy existing webrobot test using hte 'FILE=abc_webrobot.rb' environment variable!"
 		puts filepath unless ENV['FILE'].nil?
+		exit(1)
 	end
 	@task_hash	= read_yaml_file(toolpath("neo_commander", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/lib/wr_solo.yml")
-	@task_hash["pattern"] = ENV['FILE']
-		
+	# puts "***** im forcing this in this pattern var:"
+	# puts @task_hash
+	# @task_hash.merge!(:pattern => ENV['FILE'])
+			# puts "***** im forcing this in this pattern var:"
+	# puts @task_hash
 	prepare_workspace_dir
 	prepare_taskchain
 	@taskchain.execute_chain
