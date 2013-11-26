@@ -181,48 +181,58 @@ end
 #neosuite\toolbox\etc\TeamCity\IncrementalAssets
 desc "-- sendmail : incremental"
 task :email_p4_incremental do
+	
+	# -- set p4 home for our p4cmdline tool
 	puts "@suite_root: " + @suite_root 
 	puts "VCS ID:" + ENV['NS_VCSID']
 	puts "BUILD ID:" + ENV['NS_BUILDID']
+	ENV['P4CONFIG']='/home/.p4config'
 	
-	## generate and parge logs for result
-	pass = false
-	Dir.chdir("#{@suite_root}/home") do
-		%x{wget -O #{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}}
+	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log"
+	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
 		
-		file = File.new("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log", "r")
-		match = ""
-		while (line = file.gets)
-				match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFU
-		end
-		pass = true if match.include?('SUCCESSFUL')
+	# -- wget buildresults and parse them for results
+	%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid}}		
+	file = File.new("#{buildresults_fullpath}", "r")
+	match = ""
+	while (line = file.gets)
+			match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFU
 	end
+	pass = match.include?('SUCCESSFUL') ? true : false
+
+	# -- grab p4 data on user, parsing all required fields	
+	full_p4_changeinfo = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
+	description = full_p4_changeinfo.split('\'')[1]
+	description_long = %x{p4 changes -l -m 1 @#{ENV['NS_VCSID']}}
+	username_and_workspace = %x{p4 changes -m 1 @#{ENV['NS_VCSID']} | awk '{ print $6 }'}
+	username = username_and_workspace.split('@')[0]
+	email = %x{p4 users -m 1 #{username} | awk '{print $2}'}.gsub!(/[<>]/, '')
+		
+	# -- paths to the files we will use	
+	orig_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_original.html"
+	mod_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_mod.html"
+		
+	puts "PASS: " + pass.to_s
+	puts "EMAIL: " + email
+	puts "DESC: " + description
+	puts "DESCLONG: " + description_long		
+	puts "orig_audit_fullpath: " + orig_audit_fullpath
+	puts "mod_audit_fullpath: " + mod_audit_fullpath
 	
-	## find perforce data from changelist ID
-	Dir.chdir("/home") do
-		ENV['P4CONFIG']='/home/.p4config'
-		full = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
-		description = full.split('\'')[1]
-		description_long = %x{p4 changes -l -m 1 @#{ENV['NS_VCSID']}}
-		username_and_workspace = %x{p4 changes -m 1 @#{ENV['NS_VCSID']} | awk '{ print $6 }'}
-		username = username_and_workspace.split('@')[0]
+	# -- using the template, we modify it with the new results
+	text = File.read(orig_audit_fullpath)
+	text.gsub!('NAME', username_and_workspace)
+	text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
+	text.gsub!(/(DESCRIPTION)/, description_long)
+	File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }
 		
-		email = %x{p4 users -m 1 #{username} | awk '{print $2}'}.gsub!(/[<>]/, '')
-		
-		puts "PASS: " + pass.to_s
-		puts "EMAIL: " + email
-		puts "DESC: " + description
-		puts "DESCLONG: " + description_long		
-		text = File.read("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_original.html")
-
-		text.gsub!('NAME', username_and_workspace)
-		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
-		text.gsub!(/(DESCRIPTION)/, description_long)
-		File.open("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html", 'w+') {|f| f.write(text) }
-		end
-
-		%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail tallis.vanek@adtran.com}
-		#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail email}
+	# -- send the email to the p4 user
+	%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail tallis.vanek@adtran.com}
+	#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat mod_audit_fullpath; ) | sendmail email}
+	
+	# -- delete the modified file and the build results we pulled
+	File.delete(mod_audit_fullpath)
+	#File.delete(buildresults_fullpath)
 end
 
 desc "-- show usage of Neo Commander"
