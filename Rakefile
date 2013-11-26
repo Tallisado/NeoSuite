@@ -181,6 +181,7 @@ end
 #neosuite\toolbox\etc\TeamCity\IncrementalAssets
 desc "-- sendmail : incremental"
 task :email_p4_incremental do
+	puts "@suite_root: " + @suite_root 
 	puts "VCS ID:" + ENV['NS_VCSID']
 	puts "BUILD ID:" + ENV['NS_BUILDID']
 	
@@ -217,7 +218,7 @@ task :email_p4_incremental do
 		text.gsub!('NAME', username_and_workspace)
 		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
 		text.gsub!(/(DESCRIPTION)/, description_long)
-		File.open("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html", 'w') {|f| f.write(text) }
+		File.open("#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html", 'w+') {|f| f.write(text) }
 		end
 
 		%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat /mnt/wt/neosuite/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html; ) | sendmail tallis.vanek@adtran.com}
