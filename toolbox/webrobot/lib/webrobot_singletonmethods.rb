@@ -83,7 +83,7 @@ module WebRobotSingletonMethods
 			wait_for_it = Selenium::WebDriver::Wait.new(:timeout => how_long )
 			wait_for_it.until { self.find_element(how, what) }
 		rescue
-			puts "[Failure Here] .. "
+			puts "[relaxed_wait_for_element_present] element not found .. "
 		end
 	end
 
@@ -315,9 +315,36 @@ module WebRobotSingletonMethods
 	# @name click_text_from_combobox
 	# @desc clicks the text from the combobox specified. (built in timer that will wait for the combobox dropdown to be populated before click is issued) 
 	def click_text_from_combobox(method, element, contains_text_to_select)
-		p "-- waiting for element"
+		p "-- waiting for element to be present"
 		wait_for_element_present(method, element, 10)
 		p "-- clicking element"
+		self.find_element(method, element).click
+		sleep 1
+
+		i = 0
+		elements = self.find_elements(:xpath, "//li[contains(@class, 'x-boundlist-item') and contains(text(),'"+contains_text_to_select+"')]")
+		while i < elements.length do
+			if elements[i].displayed?
+				elements[i].click
+			# rescue Selenium::WebDriver::Error::StaleElementReferenceError =>
+				# sleep 2
+				# elements[i].click
+			# end
+			else
+				i = i+1
+			end
+		end
+	end	
+	
+	# @name click_text_from_combobox
+	# @desc clicks the text from the combobox specified. (built in timer that will wait for the combobox dropdown to be populated before click is issued) 
+	def smartclick_text_from_combobox(method, element, contains_text_to_select)
+		p "-- waiting for element"
+		wait_for_element_present(method, element, 10)
+		
+		if !!self.find_elements(
+		p "-- clicking element"
+		sleep 1
 		self.find_element(method, element).click
 		sleep 1
 
