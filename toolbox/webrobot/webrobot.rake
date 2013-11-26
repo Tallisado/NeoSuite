@@ -1,6 +1,44 @@
 require 'rspec/core/rake_task'
 
-@wrpattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILENAME']}") ] 
+XVFB_LAUNCH_TIMEOUT = 10
+
+# --env check
+def verify_environment
+	ensure_xvfb_is_running
+	puts "Xvfb is ALIVE!"
+end
+
+def ensure_xvfb_is_running
+	start_time = Time.now
+	begin
+		sleep 0.01 # to avoid cpu hogging
+		raise "Xvfb is frozen" if (Time.now-start_time)>=XVFB_LAUNCH_TIMEOUT
+	end while !xvfb_running?
+end
+
+def xvfb_running?
+	!!read_xvfb_pid
+end
+
+def pid_filename
+	"/tmp/.X#{ENV['DISPLAY'].gsub(':','').strip.to_i.to_s}-lock"
+end
+
+def read_xvfb_pid
+	pid = (File.read(pid_filename) rescue "").strip.to_i
+	pid = nil if pid.zero?
+	
+	if pid
+		begin
+			Process.kill(0, pid)
+			pid
+		rescue Errno::ESRCH
+			nil
+		end
+	else
+		nil
+	end
+end
 
 desc 'run tests against the cloud'
 RSpec::Core::RakeTask.new(:spec) do |t|
@@ -79,10 +117,13 @@ namespace :local do
 			Rake::Task["vnc:kill"].invoke
 			Rake::Task["xvfb:kill"].reenable
 			Rake::Task["xvfb:kill"].invoke
+			
 			# Start the Xvfb server
 			Rake::Task["xvfb:start"].reenable
 			Rake::Task["xvfb:start"].invoke			
 
+			# Verify that Xvfb is running
+			verify_environment
 			
 			t.pattern = [File.join( File.dirname(__FILE__), "../../home/tasks/#{ENV['FILENAME']}") ] 
 			#t.pattern = @wrpattern

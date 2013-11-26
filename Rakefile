@@ -97,12 +97,13 @@ task :run do
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
 	puts "--- [logs]      : " + ENV["LOGS"]
-	puts "--- [reports]   : " + ENV["REPORTS"]
-	
+	puts "--- [reports]   : " + ENV["REPORTS"]	
 	puts "--- [rake url]  : " + (ENV["URL"].nil? ? "Task Based" : ENV["URL"])
+	puts "--- [Xvfb]      : " + (ENV["WR_DISPLAY"].nil? ? "DEFUALT DISPLAY :5" : ENV["WR_DISPLAY"])
 	puts "-------------------------------"
 
-	#puts "running all the tasks"
+	# -- check to see if the ake environment was correctly setup"	
+	#verify_environment
 	
 	# -- first, let's setup/cleanup reports_dir
 	prepare_workspace_dir
@@ -298,12 +299,14 @@ def clean_exit
 	Publisher.new(@task_data).publish_reports	 
 	
 	puts("\n==> DONE\n\n")
+  puts("[  ::\n")
   puts("[  :: [SESSION]\n")
-	
+	puts("[  ::\n")
 	# Team City Result
   teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 && noelement_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
 	puts teamcity_result
-
+	puts("[  ::\n")
+	
 	puts("[TC] Target BIZ File : [#{@neo_bizfile}]")
   printf("%-27s %s\n","[TC]   -- tests passed:", tasks_passed.length.to_s)
   printf("%-27s %s\n","[TC]   -- tests failed:", tasks_failed.length.to_s)
