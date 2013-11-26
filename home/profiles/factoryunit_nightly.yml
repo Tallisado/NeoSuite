@@ -1,0 +1,28 @@
+commander: mikesandbox
+
+reset_unit: { 
+  toolbox: rubyfile,
+  file: "baseline_config_nightly.rb",
+  failover: die,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password],
+  retry: no
+}
+
+check_unit: { 
+  toolbox: rubyfile,
+  file: "factorysshconnect_rubytask_nightly.rb",
+  failover: die,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password],
+  retry: no
+}
+
+if_the_neo_ui_accessible: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "uiaccessibility_webrobot.rb",
+  url: 'http://10.10.9.129',
+  tries: 1
+}
+
+# pattern: "**/*_webrobot.rb",
