@@ -31,17 +31,9 @@ class WRTask < BaseTask
 			exit(1)
 		else
 			ENV['BASEURL'] = ENV['URL'].nil? ? @task_url : ENV['URL']
-		end
-		
+		end		
 
-		ENV['FILENAME'] = @pattern if ENV['FILE'].nil?
-		
-		puts "******"
-		puts "******"
-		puts "******"
-		puts "FILENAME: " + ENV['FILENAME']
-		puts "pattern: " + @pattern
-		
+		ENV['FILENAME'] = @pattern if ENV['FILE'].nil?	
 		ENV['WR_DEBUG'] = 'on'
 		ENV['WR_OWNER'] = 'NEOSUITE'		
 		
@@ -156,7 +148,9 @@ class RubyTask < BaseTask
 	
 	# RubyTask EXE
 	def execute_cmd
-		full_filepath = File.join(File.dirname(__FILE__), "/home/tasks/#{@file}")
+		#full_filepath = File.join(File.dirname(__FILE__), "/home/tasks/#{@file}")
+		full_filepath = "#{@task_data['suite_root']}/home/tasks/#{@file}"
+		#puts "*********" + full_filepath
 		@cmd = full_filepath + " " + @execute_args_ruby unless @execute_args_ruby == ""
 		puts "executing RubyTask command: " + @cmd
 		begin
