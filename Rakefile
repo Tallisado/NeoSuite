@@ -2,7 +2,8 @@
 # curl 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSuiteNightly_Event&env.name=BIZ&env.value=amb_abc.biz'
 # NS_VCSID=109489 NS_BUILDID=444 rake email_p4_incremental
 # rake PROFILE=dryrun.yml NC_DEBUG=t URL='http://10.10.9.129/Login/index.php'
-# rake wrsolo FILE=ppm_preferences_webrobot.rb
+# rake wrsolo FILE=dryrun_webrobot.rb WR_DISPLAY=':7' URL='http://10.10.9.129/Login/index.php'
+# rake PROFILE=ui_incremental.yml URL='http://10.10.9.165/Login/index.php'
 
 
 require 'rake'

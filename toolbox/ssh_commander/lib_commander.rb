@@ -1,6 +1,15 @@
 require 'net/ssh'
 require 'net/ssh/telnet'
 
+module RubyTaskSingletonMethods
+	def arg_available?
+		!!self.ARGV
+	end
+	def getArgList
+		self.ARGV
+	end
+end
+
 class ShellCommander
   attr_accessor :telnet_session
 	
@@ -67,8 +76,28 @@ class ShellCommander
 		output = @telnet_session.cmd({ "String" => command, "Match" => @exec_matcher })
 		return output
 	end
+	
+	# def self.included(base)
+    # base.extend RubyTaskSingletonMethods
+  # end
+	
+	def self.args?
+		!!ARGV
+	end
+	def self.get_arg_string
+		ARGV.to_s.gsub!(/[\[\]"]/, '')
+	end
+	def self.get_arg_list
+		ARGV.to_s.gsub!(/[\[\]"]/, '').split(',')
+	end
+	def self.get_arg(name)
+		begin
+			ARGV.to_s.gsub!(/[\[\]"]/, '').split(',').find { |e| /#{name}/ =~ e }.split('=')[1]
+		rescue 
+			nil
+		end
+	end
 end
-
 
 ## notes
 ## this will loop until either the retry is hit, or connection established - timeout error is : ShellCommander:Connect has timed out (RuntimeError)

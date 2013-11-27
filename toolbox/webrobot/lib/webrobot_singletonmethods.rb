@@ -319,17 +319,23 @@ module WebRobotSingletonMethods
 		wait_for_element_present(method, element, 10)
 		p "-- clicking element"
 		self.find_element(method, element).click
-		sleep 1
+		sleep 2
 
 		i = 0
 		elements = self.find_elements(:xpath, "//li[contains(@class, 'x-boundlist-item') and contains(text(),'"+contains_text_to_select+"')]")
 		while i < elements.length do
+			puts "inspecting element that was found: "
+			puts element.inspect
 			if elements[i].displayed?
-				elements[i].click
-			# rescue Selenium::WebDriver::Error::StaleElementReferenceError =>
-				# sleep 2
-				# elements[i].click
-			# end
+				begin
+					elements[i].click
+				rescue Selenium::WebDriver::Error::StaleElementReferenceError => e
+					puts "*******stale error, loading box:"
+					loadingbox = self.find_element(:xpath, "//div[contains(@class, 'x-mask-msg-text')]")
+					puts loadingbox.inspect
+					sleep 2
+					elements[i].click
+				end
 			else
 				i = i+1
 			end
