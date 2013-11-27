@@ -338,30 +338,30 @@ module WebRobotSingletonMethods
 	
 	# @name click_text_from_combobox
 	# @desc clicks the text from the combobox specified. (built in timer that will wait for the combobox dropdown to be populated before click is issued) 
-	def smartclick_text_from_combobox(method, element, contains_text_to_select)
-		p "-- waiting for element"
-		wait_for_element_present(method, element, 10)
+	# def smartclick_text_from_combobox(method, element, contains_text_to_select)
+		# p "-- waiting for element"
+		# wait_for_element_present(method, element, 10)
 		
-		if !!self.find_elements(
-		p "-- clicking element"
-		sleep 1
-		self.find_element(method, element).click
-		sleep 1
+		# if !!self.find_elements(
+		# p "-- clicking element"
+		# sleep 1
+		# self.find_element(method, element).click
+		# sleep 1
 
-		i = 0
-		elements = self.find_elements(:xpath, "//li[contains(@class, 'x-boundlist-item') and contains(text(),'"+contains_text_to_select+"')]")
-		while i < elements.length do
-			if elements[i].displayed?
-				elements[i].click
-			# rescue Selenium::WebDriver::Error::StaleElementReferenceError =>
-				# sleep 2
+		# i = 0
+		# elements = self.find_elements(:xpath, "//li[contains(@class, 'x-boundlist-item') and contains(text(),'"+contains_text_to_select+"')]")
+		# while i < elements.length do
+			# if elements[i].displayed?
 				# elements[i].click
+			# # rescue Selenium::WebDriver::Error::StaleElementReferenceError =>
+				# # sleep 2
+				# # elements[i].click
+			# # end
+			# else
+				# i = i+1
 			# end
-			else
-				i = i+1
-			end
-		end
-	end
+		# end
+	# end
 
 	# @name mouseover_and_click
 	# @desc sends an action to the elements to be clicked after it receives a mouseover event (needed for mouseover javascript validation)
