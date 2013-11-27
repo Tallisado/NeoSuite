@@ -172,7 +172,8 @@ class RubyTask < BaseTask
 			p to_s
 		ensure
 			#log_ruby_output(@output, @taskname)
-			log_output unless ENV['NC_DEBUG'].nil?
+			#log_output unless ENV['NC_DEBUG'].nil?
+			p @task_data['output_on'] == true ? @output : to_s 
 		end
 	end
 	
