@@ -24,8 +24,11 @@ class ShellCommander
 		begin
 			@ssh_session = Net::SSH.start(options[:host], options[:user], :password => options[:password], :paranoid => Net::SSH::Verifiers::Null.new)
 			@telnet_session = Net::SSH::Telnet.new("Session" => @ssh_session,"Prompt" => /(.*)(Neo>)/m,"Ors" => '',"Irs" => '') 	
+			puts "no error in open_telnet"
 		rescue Errno::EHOSTUNREACH => e
 			sleep 5
+			@telnet_session = nil
+			puts "telnet failed to connect"
 		end
 		
   end
@@ -35,6 +38,7 @@ class ShellCommander
 		@retry_timeout = options.fetch(:retry_timeout, DEFAULT_TELNET_WAITFOR_TIMEOUT) 
 		puts "-- Telnet retry connection : " + @retry_timeout.to_s
     begin
+			puts "trying to open a connection"
       open_telnet(options)
 			raise "ShellCommander:Connect has timed out" if (Time.now-start_time)>=@retry_timeout
     end while !is_open?
