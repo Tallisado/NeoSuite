@@ -8,13 +8,13 @@ reset_unit: {
   retry: no
 }
 
-check_unit: { 
-  toolbox: rubyfile,
-  file: "factorysshconnect_rubytask_nightly.rb",
-  failover: die,
-  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password],
-  retry: no
-}
+#check_unit: { 
+#  toolbox: rubyfile,
+#  file: "factorysshconnect_rubytask_nightly.rb",
+#  failover: die,
+#  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password],
+#  retry: no
+#}
 
 if_the_neo_ui_accessible: { 
   toolbox: webrobot, 
