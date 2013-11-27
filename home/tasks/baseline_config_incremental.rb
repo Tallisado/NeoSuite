@@ -24,4 +24,3 @@ sc.exec("config/neo_default.cfg")
 sc.exec_raw("reload")
 sc.exec("n")
 sc.exec("y")
-sleep 60
