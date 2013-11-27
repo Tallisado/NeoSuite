@@ -22,10 +22,8 @@ sc.exec("10.10.9.156")
 sc.exec("config/neo_default.cfg")
 #Reload unit
 sc.exec_raw("reload")
-sc.exec("n")
-sc.exec("y")
-sleep 5
-sc.open_telnet!(:host => "10.10.9.129", :user => "admin", :password => "password", :retry_timeout => 780)
+sleep 30
+sc.open_telnet!(:host => "10.10.9.129", :user => "admin", :password => "password", :retry_timeout => 315)
 
 
 ## notes

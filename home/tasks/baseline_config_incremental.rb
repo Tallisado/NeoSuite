@@ -1,7 +1,7 @@
 require_relative "../../toolbox/ssh_commander/lib_commander"
 
 sc = ShellCommander.new
-sc.open_telnet!(:host => "10.10.9.165", :user => "admin", :password => "password", :retry_timeout => 10)
+sc.open_telnet(:host => "10.10.9.165", :user => "admin", :password => "password", :retry_timeout => 10)
 puts "** Starting configuration reset **"
 #Enable
 sc.exec("en")
@@ -22,9 +22,8 @@ sc.exec("10.10.9.156")
 sc.exec("config/neo_default.cfg")
 #Reload unit
 sc.exec_raw("reload")
-sc.exec("n")
-sc.exec("y")
-
+sleep 30
+sc.open_telnet!(:host => "10.10.9.165", :user => "admin", :password => "password", :retry_timeout => 780)
 
 
 ## notes
