@@ -80,7 +80,10 @@ describe "Install Wizard - PBX Only", :local => true do
 		@selenium.type(:id, "last_name2", "User")
 		@selenium.switch_frame_default()
 		@selenium.click(:id, 'next')
+		sleep 5
+		@selenium.click(:xpath, "//*[@id='footer']/div/table/tbody/tr/td/div[2]/input")
 		sleep 30
-		# @selenium.click(:xpath, "//*[@id='apply']")
+		#@selenium.click(:xpath, "//*[@id='apply']")
+		sleep 10
 	end
 end

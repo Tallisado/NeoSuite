@@ -18,8 +18,15 @@ describe "Install Wizard - PBX and Router", :local => true do
 		@selenium.click(:xpath, '//*[@id="next"]')
 		driver.switch_to.alert.accept rescue Selenium::WebDriver::Error::NoAlertOpenError
 		sleep 5
-		@selenium.check(:xpath, '//*[@id="use_dhcp"]')
-		# @selenium.click(:xpath, '//*[@id="remoteAdminEnabled"]')
+		#@selenium.check(:xpath, '//*[@id="use_dhcp"]')
+		@selenium.type(:id, 'wan_ip', "10.10.9.129")
+		@selenium.type(:id, 'wan_subnet', "255.255.248.0")
+		@selenium.type(:id, 'defaultGateway', "10.10.8.1")
+		@selenium.type(:id, 'primaryDns', "10.10.8.2")
+		@selenium.type(:id, 'secondaryDns', "10.10.14.200")
+		@selenium.check(:xpath, '//*[@id="remoteAdminEnabled"]')
+		@selenium.clear(:id, 'voiceLanIpAddr')
+		@selenium.type(:id, 'voiceLanIpAddr', "10.10.80.1")
 		@selenium.click(:id, 'next')
 		driver.switch_to.alert.accept rescue Selenium::WebDriver::Error::NoAlertOpenError
 		sleep 5
@@ -72,7 +79,7 @@ describe "Install Wizard - PBX and Router", :local => true do
 		end
 		@selenium.click(:xpath, "//*[@id='bottom_area']/td")
 		@selenium.clear(:id, "extension2")
-		@selenium.type(:id, "extension2", "1001")
+		@selenium.type(:id, "extension2", "3011")
 		@selenium.select_by(:id, 'phoneModel2', :text, 'ADTRAN/Polycom IP 321') 
 		@selenium.clear(:id, "mac_address2")
 		@selenium.type(:id, "mac_address2", "0010395b9d33")
@@ -82,7 +89,10 @@ describe "Install Wizard - PBX and Router", :local => true do
 		@selenium.type(:id, "last_name2", "User")
 		@selenium.switch_frame_default()
 		@selenium.click(:id, 'next')
+		sleep 5
+		@selenium.click(:xpath, "//*[@id='footer']/div/table/tbody/tr/td/div[2]/input")
 		sleep 30
-		# @selenium.click(:xpath, "//*[@id='apply']")
+		@selenium.click(:xpath, "//*[@id='apply']")
+		sleep 10
 	end
 end
