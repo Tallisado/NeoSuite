@@ -4,8 +4,8 @@
 # rake PROFILE=dryrun.yml NC_DEBUG=t URL='http://10.10.9.129/Login/index.php'
 # rake wrsolo FILE=dryrun_webrobot.rb WR_DISPLAY=':7' URL='http://10.10.9.129/Login/index.php'
 # rake PROFILE=ui_incremental.yml URL='http://10.10.9.165/Login/index.php'
-
-
+# FILE=localadmin_createuser_webrobot.rb rake wrsolo URL='http://10.10.9.165/Login/index.php' WR_DISPLAY=:7
+# IRB: require "/mnt/wt/neosuite/toolbox/webrobot/lib/webrobot_core")
 require 'rake'
 require "timeout"
 require "fileutils"
@@ -192,6 +192,7 @@ task :email_p4_incremental do
 	
 	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
+	weblink_buildlog_byid = "http://10.10.9.157/teamcity/viewLog.html?tab=buildLog&buildTypeId=NeoSuiteIncremental_UIAccessiblility&buildId=#{ENV['NS_BUILDID']}"
 		
 	# -- wget buildresults and parse them for results
 	%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid}}		
@@ -226,6 +227,7 @@ task :email_p4_incremental do
 	text.gsub!('NAME', username_and_workspace)
 	text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
 	text.gsub!(/(DESCRIPTION)/, description_long)
+	text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
 	File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }
 		
 	# -- send the email to the p4 user

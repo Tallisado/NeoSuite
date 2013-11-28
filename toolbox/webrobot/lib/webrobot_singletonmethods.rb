@@ -277,32 +277,6 @@ module WebRobotSingletonMethods
 		end
 	end
 	
-	# def save_screenshot filepath=nil
-		# p "CAPTURE SCREENSHOT"
-		# begin
-			# screenshot_flag = true
-			# filepath = (filepath + '.png') unless filepath
-			# screenshot = self.selenium.capture_screenshot_to_string()
-			# tmp_file = File.open(filepath,'w')
-			# tmp_file.puts(Base64.decode64(screenshot))
-			# tmp_file.close()
-			# p "SCREENSHOT CAPTURED TO #{filepath}"
-			# screenshot_flag = false
-			# screenshot = self.capture_entire_page_screenshot_to_string()
-			# tmp_file = File.open(filepath,'w')
-			# tmp_file.puts(Base64.decode64(screenshot))
-			# tmp_file.close()
-			# p "ENTIRE SCREENSHOT CAPTURED TO #{filepath}"
-	 # rescue => e
-			# if screenshot_flag
-				 # p "FAILED TO CAPTURE SCREENSHOT: "
-				 # p e.inspect
-				 # p e.backtrace
-			# end
-		# end
-# end
-	
-	
 	# @name double_click
 	# @desc sends an action sequence to the target element to perform a double click
 	def double_click(method, element)

@@ -6,4 +6,6 @@ describe "NeoSuite DryRun", :local => true do
 		sc = ShellCommander.new(:host => "10.10.9.129", :user => "admin", :password => "password")
 		expect { sc.exec("en") }.to_not raise_error
 	end
+	
+	#it "RubyTask#arglist"
 end

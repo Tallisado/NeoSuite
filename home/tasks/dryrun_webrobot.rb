@@ -39,7 +39,7 @@ describe "NeoSuite DryRun", :local => true do
 
 	#it "::custom#login http://10.10.9.129/Login/index.php 3011 1234 settingsButton" do
 	it "selenium#login" do
-		@selenium.login(3011, 1234, 'settingsButton')
+		expect { @selenium.login('admin', 'password', 'helpButton')}.to_not raise_error
 		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
 	end
 	
