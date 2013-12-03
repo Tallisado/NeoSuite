@@ -12,10 +12,6 @@ sc.exec(ShellCommander.get_arg('enpassword'))
 #Erase config
 sc.exec("erase startup-config")
 sc.exec("y")
-#Factory default unit
-sc.exec("factory-default")
-#Confirm factory default
-sc.exec("y")
 #issue copy from tftp command to push our baseline config
 sc.exec("copy tftp startup-config")
 #Enter TFTP server to copy from
