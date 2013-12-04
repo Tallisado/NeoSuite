@@ -20,6 +20,8 @@ sc.exec(ShellCommander.get_arg('tftpserver'))
 sc.exec(ShellCommander.get_arg('config'))
 #Reload unit
 sc.exec_raw("reload")
+sc.exec("n")
+sc.exec("y")
 sleep 30
 sc.open_telnet!(:host => ShellCommander.get_arg('server'), :user => ShellCommander.get_arg('user'), :password => ShellCommander.get_arg('password'), :retry_timeout => 315)
 
