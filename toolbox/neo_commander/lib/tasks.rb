@@ -68,7 +68,7 @@ class WRTask < BaseTask
 						@task_data['test_exit_status_failed']
 					else
 						puts "*** RESCURE ERROR: " + e.inspect
-						@task_data['test_exit_status_error']
+						@task_data['test_exit_status_error']						
 					end
 					
 			else				
@@ -82,7 +82,7 @@ class WRTask < BaseTask
 				@output = retrieve_webrobot_log
 				@examples = parse_logs_for_examples
 				@output_short = "\n"+parse_logs_for_examples.join("\n")
-				@output_short += "\n"+@examples.join("\n")+"\n"+@output.match(/Failures:(.*)Finished in/m)[1] if @exit_status == @task_data['test_exit_status_failed']
+				@output_short += "\n"+@examples.join("\n")+"\n"+@output.match(/Failures:(.*)Finished in/m)[1] if @exit_status == @task_data['test_exit_status_failed'] && !@output.nil?
 				
 				@matrix = {:FireFox => @exit_status}
 				

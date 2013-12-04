@@ -77,13 +77,15 @@ module WebRobotSingletonMethods
 		wait_for_it.until { self.find_element(how, what) }
 	end
 	
-	def relaxed_wait_for_element_present( how, what, how_long=5)
+	def test_element_present( how, what, how_long=5)
 		begin
-			p("-- wait_for_element_present [ #{how.to_s}," + what + "," + how_long.to_s + " ]")
+			p("-- test_element_present [ #{how.to_s}," + what + "," + how_long.to_s + " ]")
 			wait_for_it = Selenium::WebDriver::Wait.new(:timeout => how_long )
 			wait_for_it.until { self.find_element(how, what) }
+			return true
 		rescue
 			puts "[relaxed_wait_for_element_present] element not found .. "
+			return false
 		end
 	end
 

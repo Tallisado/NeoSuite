@@ -6,6 +6,10 @@
 # rake PROFILE=ui_incremental.yml URL='http://10.10.9.165/Login/index.php'
 # FILE=localadmin_createuser_webrobot.rb rake wrsolo URL='http://10.10.9.165/Login/index.php' WR_DISPLAY=:7
 # IRB: require "/mnt/wt/neosuite/toolbox/webrobot/lib/webrobot_core")
+#
+# rake wrsolo WR_DISPLAY=':7' URL='http://10.10.9.129/Login/index.php' FILE='tallis_webrobot.rb'
+
+
 require 'rake'
 require "timeout"
 require "fileutils"
@@ -18,13 +22,24 @@ require 'selenium-webdriver'
 # STDOUT / STDERR / DEBUG
 ################################
 def p(s) puts "-- #{Time.now.strftime('[%H:%M:%S]')} #{s}" end
-def p_d(s)	puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if ENV["NC_DEBUG"] end
+def p_d(s) puts "-D #{Time.now.strftime('[%H:%M:%S]')} #{s}" if ENV["NC_DEBUG"] end
 
 # -- prepare reports_dir
 def prepare_workspace_dir
    FileUtils.mkdir_p ENV["LOGS"]
    FileUtils.mkdir_p ENV["REPORTS"]
 end
+
+def hook_at_exit
+    unless @at_exit_hook_installed
+      @at_exit_hook_installed = true
+      at_exit do
+				@taskchain.taskchain_array.each do |task|
+					exit 1 unless task.exit_status == @task_data['test_exit_status_passed']
+				end
+      end
+    end
+  end
 
 def prepare_taskchain
 	@taskchain = TaskChain.new()
@@ -105,6 +120,8 @@ task :run do
 
 	# -- check to see if the ake environment was correctly setup"	
 	#verify_environment
+	
+	hook_at_exit
 	
 	# -- first, let's setup/cleanup reports_dir
 	prepare_workspace_dir
