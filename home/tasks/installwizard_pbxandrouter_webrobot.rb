@@ -2,7 +2,6 @@ require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_c
 
 describe "Install Wizard - PBX and Router", :local => true do
 	it "should run through the install wizard as a PBX and Router configuration" do
-		#PPMAuthMacro.new(suite).navigate_wizard
 		@selenium.navigate.to "http://admin:password@10.10.9.129:81/main/wizard/startup/startup_welcome.html"
 		@selenium.wait_for_element_present(:id, "createNew", 15)
 		@selenium.click(:xpath, '//*[@id="createNew"]')

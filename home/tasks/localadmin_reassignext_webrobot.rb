@@ -1,6 +1,12 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "Local Admin - Reassign Extension", :local => true do
+
+	it "should login to Local Admin" do
+		@selenium.login('admin', 'password', 'helpButton-btnIconEl')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
+	end
+
 	it "should test reassigning an extension" do
 		@selenium.login('admin', 'password', 'helpButton-btnIconEl')
 		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error

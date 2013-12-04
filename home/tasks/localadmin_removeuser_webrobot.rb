@@ -1,6 +1,12 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "Local Admin - Remove User", :local => true do
+
+	it "should login to Local Admin" do
+		@selenium.login('admin', 'password', 'helpButton-btnIconEl')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
+	end
+
 	it "should remove the specified user" do
 		@selenium.login('admin', 'password', 'helpButton-btnIconEl')
 		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
