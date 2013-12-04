@@ -8,6 +8,14 @@
 # IRB: require "/mnt/wt/neosuite/toolbox/webrobot/lib/webrobot_core")
 #
 # rake wrsolo WR_DISPLAY=':7' URL='http://10.10.9.129/Login/index.php' FILE='tallis_webrobot.rb'
+# FAIL ->
+# rake run PROFILE=dryrun.yml NS_VCSID=109489 NS_BUILDID=675 TC_TRIGGER_CONF=NeoSuiteIncremental_UIAccessiblility
+# PASS ->
+# rake run PROFILE=dryrun.yml NS_VCSID=109489 NS_BUILDID=666 TC_TRIGGER_CONF=NeoSuiteIncremental_UIAccessiblility
+# FAIL ->
+# rake run PROFILE=dryrun.yml BIZFILE=BIZLE NS_BUILDID=675 TC_TRIGGER_CONF=NeoSuiteNightly_Dryrun
+# PASS ->
+# rake run PROFILE=dryrun.yml BIZFILE=BIZLE NS_BUILDID=666 TC_TRIGGER_CONF=NeoSuiteNightly_Dryrun
 
 
 require 'rake'
@@ -31,15 +39,21 @@ def prepare_workspace_dir
 end
 
 def hook_at_exit
-    unless @at_exit_hook_installed
-      @at_exit_hook_installed = true
-      at_exit do
-				@taskchain.taskchain_array.each do |task|
-					exit 1 unless task.exit_status == @task_data['test_exit_status_passed']
-				end
-      end
-    end
-  end
+	unless @at_exit_hook_installed
+		@at_exit_hook_installed = true
+		at_exit do
+			puts "*****FUCKING CAPTAIN HOOK"
+			send_mail unless @tc_trigger_conf.nil?
+			
+			exit 1 if $!.is_a?(SystemExit)
+			
+			@taskchain.taskchain_array.each do |task|
+				exit 1 if task.exit_status == @task_data['test_exit_status_failed']
+			end	
+			
+		end		 
+	end
+end
 
 def prepare_taskchain
 	@taskchain = TaskChain.new()
@@ -104,18 +118,27 @@ desc "-- run all tasks..."
 task :run do
 	# -- first global
 	@profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
+	
 	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
+	@neo_buildid            = ENV['NS_BUILDID'].nil? ? 'UNKNOWN' : ENV['NS_BUILDID']
+	@neo_vcsid		          = ENV['NS_VCSID'].nil? ? 'UNKNOWN' : ENV['NS_VCSID']
+	
+	@tc_trigger_conf  			= ENV['TC_TRIGGER_CONF'].nil? ? 'UNKNOWN' : ENV['TC_TRIGGER_CONF']
+	
 	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
 	
 	puts ""
 	puts "--- EXECUTING NEO COMMANDER ---"
-	puts "--- [biz]       : " + @neo_bizfile
 	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
 	puts "--- [profile]   : " + @profile
 	puts "--- [logs]      : " + ENV["LOGS"]
-	puts "--- [reports]   : " + ENV["REPORTS"]	
+	puts "--- [reports]   : " + ENV["REPORTS"]
 	puts "--- [rake url]  : " + (ENV["URL"].nil? ? "Task Based" : ENV["URL"])
 	puts "--- [Xvfb]      : " + (ENV["WR_DISPLAY"].nil? ? "DEFUALT DISPLAY :5" : ENV["WR_DISPLAY"])
+	puts "--- TC [BIZ]    : " + @neo_bizfile
+	puts "--- TC [BUILD]  : " + @neo_buildid
+	puts "--- TC [P4]     : " + @neo_vcsid
+	puts "--- TC [CONF]   : " + @tc_trigger_conf
 	puts "-------------------------------"
 
 	# -- check to see if the ake environment was correctly setup"	
@@ -184,76 +207,105 @@ end
 ##########################
 # RAKE: copy_template_to_teamcity
 ##########################
-desc "-- copies the template for the teamcity resulting notification email"
-task :copy_template_to_teamcity do
-	puts "Teamplate interval:" + ENV['TEMPLATE_INTERVAL']
-	Dir.chdir(@suite_root) do
-		%x{rm /root/.BuildServer/config/_notifications/email/build_successful.ftl}
-		%x{cp #{@suite_root}/toolbox/etc/TeamCity/CustomNotificationEmail/build_successful.ftl ~/.BuildServer/config/_notifications/email/build_successful.ftl}
-		sleep(ENV['TEMPLATE_INTERVAL'].to_i)
-	end
-end
+# desc "-- copies the template for the teamcity resulting notification email"
+# task :copy_template_to_teamcity do
+	# puts "Teamplate interval:" + ENV['TEMPLATE_INTERVAL']
+	# Dir.chdir(@suite_root) do
+		# %x{rm /root/.BuildServer/config/_notifications/email/build_successful.ftl}
+		# %x{cp #{@suite_root}/toolbox/etc/TeamCity/CustomNotificationEmail/build_successful.ftl ~/.BuildServer/config/_notifications/email/build_successful.ftl}
+		# sleep(ENV['TEMPLATE_INTERVAL'].to_i)
+	# end
+# end
 
-##########################
-# RAKE: email_p4_incremental
-##########################
-#neosuite\toolbox\etc\TeamCity\IncrementalAssets
-desc "-- sendmail : incremental"
-task :email_p4_incremental do
-	
-	# -- set p4 home for our p4cmdline tool
-	puts "@suite_root: " + @suite_root 
-	puts "VCS ID:" + ENV['NS_VCSID']
-	puts "BUILD ID:" + ENV['NS_BUILDID']
+
+def send_mail
+	puts "-- sendmail "
 	ENV['P4CONFIG']='/home/.p4config'
 	
-	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log"
+	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
-	weblink_buildlog_byid = "http://10.10.9.157/teamcity/viewLog.html?tab=buildLog&buildTypeId=NeoSuiteIncremental_UIAccessiblility&buildId=#{ENV['NS_BUILDID']}"
-		
+	
+	# NeoSuiteIncremental_UIAccessiblility
+	weblink_buildlog_byid = "http://10.10.9.157/teamcity/viewLog.html?tab=buildLog&buildTypeId=#{@tc_trigger_conf}&buildId=#{ENV['NS_BUILDID']}"
+	
 	# -- wget buildresults and parse them for results
 	%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid}}		
 	file = File.new("#{buildresults_fullpath}", "r")
 	match = ""
 	while (line = file.gets)
-			match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFU
+			match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFUL
 	end
 	pass = match.include?('SUCCESSFUL') ? true : false
 
-	# -- grab p4 data on user, parsing all required fields	
-	full_p4_changeinfo = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
-	description = full_p4_changeinfo.split('\'')[1]
-	description_long = %x{p4 changes -l -m 1 @#{ENV['NS_VCSID']}}
-	username_and_workspace = %x{p4 changes -m 1 @#{ENV['NS_VCSID']} | awk '{ print $6 }'}
-	username = username_and_workspace.split('@')[0]
-	email = %x{p4 users -m 1 #{username} | awk '{print $2}'}.gsub!(/[<>]/, '')
+	unless @neo_vcsid == "UNKNOWN"
+		# -- grab p4 data on user, parsing all required fields	
+		full_p4_changeinfo = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
+		description = full_p4_changeinfo.split('\'')[1]
+		description_long = %x{p4 changes -l -m 1 @#{ENV['NS_VCSID']}}
+		username_and_workspace = %x{p4 changes -m 1 @#{ENV['NS_VCSID']} | awk '{ print $6 }'}
+		username = username_and_workspace.split('@')[0]
+		email = %x{p4 users -m 1 #{username} | awk '{print $2}'}.gsub!(/[<>]/, '')
 		
-	# -- paths to the files we will use	
-	orig_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_original.html"
-	mod_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/incremental_audit_mod.html"
+		# -- paths to the files we will use	
+		orig_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/incremental_audit_original.html"
+		mod_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/incremental_audit_mod.html"
+		recipient_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/incremental_email_recipients.csv"
+		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
+		#recipient_list += ",#{email}"
 		
-	puts "PASS: " + pass.to_s
-	puts "EMAIL: " + email
-	puts "DESC: " + description
-	puts "DESCLONG: " + description_long		
-	puts "orig_audit_fullpath: " + orig_audit_fullpath
-	puts "mod_audit_fullpath: " + mod_audit_fullpath
+		p "-- Sending to Incremental: "
+		p "INC SUCCEEDED:    " + pass.to_s
+		p "P4 USER EMAIL:    " + email
+		p "SHORT DESC:       " + description
+		p "DESCLONG:         " + description_long + '\n'
+		p "ORIGINAL:         " + orig_audit_fullpath
+		p "MODIFIED:         " + mod_audit_fullpath
+		
+		# -- using the template, we modify it with the new results
+		text = File.read(orig_audit_fullpath)
+		text.gsub!('NAME', username_and_workspace)
+		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
+		text.gsub!(/(DESCRIPTION)/, description_long)
+		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
+		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }
+		
+		
+		
+		# -- send the email to the p4 user
+		%x{( echo 'Subject: <P4 Commit #{(pass == true ? "PASSED" : "FAILED")}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
+		#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat mod_audit_fullpath; ) | sendmail email}
+		
+		# -- delete the modified file and the build results we pulled
+		File.delete(mod_audit_fullpath)
+		#File.delete(buildresults_fullpath)	
+	else
 	
-	# -- using the template, we modify it with the new results
-	text = File.read(orig_audit_fullpath)
-	text.gsub!('NAME', username_and_workspace)
-	text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
-	text.gsub!(/(DESCRIPTION)/, description_long)
-	text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
-	File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }
+		# -- paths to the files we will use	
+		orig_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_audit_original.html"
+		mod_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_audit_mod.html"
+		recipient_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_email_recipients.csv"
+		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
 		
-	# -- send the email to the p4 user
-	%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail tallis.vanek@adtran.com}
-	#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat mod_audit_fullpath; ) | sendmail email}
-	
-	# -- delete the modified file and the build results we pulled
-	File.delete(mod_audit_fullpath)
-	#File.delete(buildresults_fullpath)
+		p "-- Sending to Nightly: "
+		p "INCREMENTAL     :" + (pass == true ? "PASSED" : "FAILED")
+		p "ORIGINAL        :" + orig_audit_fullpath
+		p "MODIFIED        :" + mod_audit_fullpath
+		
+		# -- using the template, we modify it with the new results
+		text = File.read(orig_audit_fullpath)
+		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
+		text.gsub!(/(BIZ)/, @neo_bizfile)
+		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
+		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }		
+			
+		# -- send the email to the p4 user
+		%x{( echo 'Subject: <Nightly #{(pass == true ? "PASSED" : "FAILED")}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
+		
+		# -- delete the modified file and the build results we pulled
+		File.delete(mod_audit_fullpath)
+		#File.delete(buildresults_fullpath)
+	end
+
 end
 
 desc "-- show usage of Neo Commander"

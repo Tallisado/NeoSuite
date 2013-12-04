@@ -3,8 +3,7 @@ toolbox/webrobot/ondemand.yml
 ondemand.yml
 sauce_connect.log
 Thumbs.db
-toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log
-toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html
+toolbox/etc/TeamCity/send_mail/buildresults.log
 home/profiles/mikesandbox.yml
 home/tasks/mikesandbox.rb
 home/tasks/mikesandbox_webrobot.rb
