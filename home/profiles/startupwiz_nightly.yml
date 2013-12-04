@@ -52,15 +52,6 @@ test_installwizard_pbxandrouter: {
   tries: 1
 }
 
-if_the_neo_ui_accessible_finalpass: { 
-  toolbox: webrobot, 
-  failover: die,
-  raketask: 'local:headless',
-  pattern: "uiaccessibility_webrobot.rb",
-  url: 'http://10.10.80.1',
-  tries: 1
-}
-
 reset_unit_postwizard: { 
   toolbox: rubyfile,
   file: "baseline_config.rb",
