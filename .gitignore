@@ -6,3 +6,5 @@ Thumbs.db
 toolbox/etc/TeamCity/IncrementalAssets/incremental_buildresults.log
 toolbox/etc/TeamCity/IncrementalAssets/incremental_audit.html
 home/profiles/mikesandbox.yml
+home/tasks/mikesandbox.rb
+home/tasks/mikesandbox_webrobot.rb
