@@ -1,8 +1,7 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "Install Wizard - PBX Only", :local => true do
-	it "should run through the install wizard as a PBX only configuration" do
-		#PPMAuthMacro.new(suite).navigate_wizard
+	it "should run through the install wizard as a PBX only configuration - UI test only" do
 		@selenium.navigate.to "http://admin:password@10.10.9.129:81/main/wizard/startup/startup_welcome.html"
 		@selenium.wait_for_element_present(:id, "createNew", 15) 
 		@selenium.click(:xpath, '//*[@id="createNew"]')
@@ -80,7 +79,10 @@ describe "Install Wizard - PBX Only", :local => true do
 		@selenium.type(:id, "last_name2", "User")
 		@selenium.switch_frame_default()
 		@selenium.click(:id, 'next')
+		sleep 5
+		@selenium.click(:xpath, "//*[@id='footer']/div/table/tbody/tr/td/div[2]/input")
 		sleep 30
-		# @selenium.click(:xpath, "//*[@id='apply']")
+		#@selenium.click(:xpath, "//*[@id='apply']")
+		sleep 10
 	end
 end

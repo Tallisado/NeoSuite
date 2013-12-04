@@ -1,6 +1,12 @@
 require File.join(File.dirname(__FILE__), "../../toolbox/webrobot/lib/webrobot_core")
 
 describe "PPM Tasks", :local => true do
+
+	it "should login to PPM" do
+		@selenium.login('3011', '1234', 'settingsButton')
+		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error
+	end
+	
 	it "should test the PPM page" do
 		@selenium.login('3011', '1234', 'settingsButton')
 		expect { @selenium.title.should eql("ADTRAN Neo") }.to_not raise_error

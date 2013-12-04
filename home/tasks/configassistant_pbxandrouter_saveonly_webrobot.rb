@@ -17,12 +17,7 @@ describe "Install Wizard - PBX and Router", :local => true do
 		@selenium.click(:xpath, '//*[@id="next"]')
 		driver.switch_to.alert.accept rescue Selenium::WebDriver::Error::NoAlertOpenError
 		sleep 5
-		#@selenium.check(:xpath, '//*[@id="use_dhcp"]')
-		@selenium.type(:id, 'wan_ip', "10.10.9.129")
-		@selenium.type(:id, 'wan_subnet', "255.255.248.0")
-		@selenium.type(:id, 'defaultGateway', "10.10.8.1")
-		@selenium.type(:id, 'primaryDns', "10.10.8.2")
-		@selenium.type(:id, 'secondaryDns', "10.10.14.200")
+		@selenium.check(:xpath, '//*[@id="use_dhcp"]')
 		@selenium.check(:xpath, '//*[@id="remoteAdminEnabled"]')
 		@selenium.clear(:id, 'voiceLanIpAddr')
 		@selenium.type(:id, 'voiceLanIpAddr', "10.10.80.1")
@@ -91,7 +86,7 @@ describe "Install Wizard - PBX and Router", :local => true do
 		sleep 5
 		@selenium.click(:xpath, "//*[@id='footer']/div/table/tbody/tr/td/div[2]/input")
 		sleep 30
-		@selenium.click(:xpath, "//*[@id='apply']")
+		#@selenium.click(:xpath, "//*[@id='apply']")
 		sleep 10
 	end
 end

@@ -1,0 +1,63 @@
+commander: startupwiz_nightly_test
+
+reset_unit: { 
+  toolbox: rubyfile,
+  file: "baseline_config.rb",
+  failover: die,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password,tftpserver=10.10.9.156,config=config/neo_default.cfg],
+  retry: no
+}
+
+if_the_neo_ui_accessible_firstpass: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "uiaccessibility_webrobot.rb",
+  url: 'http://10.10.9.129',
+  tries: 1
+}
+
+test_installwizard_pbxonly_ui: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "installwizard_pbxonly_webrobot.rb",
+  url: "http://admin:password@10.10.9.129:81/main/wizard/startup/startup_welcome.html",
+  tries: 1
+}
+
+# reset_unit_secondpass: { 
+  # toolbox: rubyfile,
+  # file: "baseline_config_nightly.rb",
+  # failover: die,
+  # paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password],
+  # retry: no
+# }
+
+# if_the_neo_ui_accessible_secondpass: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "uiaccessibility_webrobot.rb",
+  # url: 'http://10.10.9.129',
+  # tries: 1
+# }
+
+test_installwizard_pbxandrouter: { 
+  toolbox: webrobot, 
+  failover: die,
+  raketask: 'local:headless',
+  pattern: "installwizard_pbxandrouter_webrobot.rb",
+  url: "http://admin:password@10.10.9.129:81/main/wizard/startup/startup_welcome.html",
+  tries: 1
+}
+
+reset_unit_postwizard: { 
+  toolbox: rubyfile,
+  file: "baseline_config.rb",
+  failover: die,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password,tftpserver=10.10.9.156,config=config/neo_default_postwizard.cfg],
+  retry: no
+}
+
+# pattern: "**/*_webrobot.rb", 
