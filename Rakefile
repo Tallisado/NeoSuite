@@ -224,7 +224,7 @@ def send_mail
 	
 	#buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
-	puts "-- restcall :" + rest_buildlog_byid
+	p "-REST BUILDLOG   : " + rest_buildlog_byid
 	
 	# NeoSuiteIncremental_UIAccessiblility
 	weblink_buildlog_byid = "http://10.10.9.157/teamcity/viewLog.html?tab=buildLog&buildTypeId=#{@tc_trigger_conf}&buildId=#{ENV['NS_BUILDID']}"
@@ -242,8 +242,8 @@ def send_mail
 	# while (line = file.gets)
 			# match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFUL
 	# end
-	
-	unless @teamcity_result.include?('SUCCESSFUL') || @teamcity_result.include?('UNSUCCESSFUL')
+	!!(@teamcity_result =~ /^(\[TCRESULT\]\=UNSUCCESSFUL)/)
+	unless !!(@teamcity_result =~ /^(\[TCRESULT\]\=UNSUCCESSFUL)/) || !!(@teamcity_result =~ /^(\[TCRESULT\]\=SUCCESSFUL)/)
 		pass = "UNKNOWN"
 	else	
 		pass = @teamcity_result.include?('SUCCESSFUL') ? "PASSED" : "FAILED"
