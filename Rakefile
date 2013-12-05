@@ -134,7 +134,7 @@ task :run do
 	puts "--- [logs]      : " + ENV["LOGS"]
 	puts "--- [reports]   : " + ENV["REPORTS"]
 	puts "--- [rake url]  : " + (ENV["URL"].nil? ? "Task Based" : ENV["URL"])
-	puts "--- [Xvfb]      : " + (ENV["WR_DISPLAY"].nil? ? "DEFUALT DISPLAY :5" : ENV["WR_DISPLAY"])
+	puts "--- [Xvfb]      : " + (ENV["WR_DISPLAY"].nil? ? "DEFAULT DISPLAY :5" : ENV["WR_DISPLAY"])
 	puts "--- TC [BIZ]    : " + @neo_bizfile
 	puts "--- TC [BUILD]  : " + @neo_buildid
 	puts "--- TC [P4]     : " + @neo_vcsid
@@ -217,10 +217,11 @@ end
 	# end
 # end
 
-
 def send_mail
-	puts "-- sendmail "
 	ENV['P4CONFIG']='/home/.p4config'
+	email_type = @tc_trigger_conf.split('_')[0]
+	puts "-- sendmail: " + email_type
+	
 	
 	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
@@ -237,7 +238,7 @@ def send_mail
 	end
 	pass = match.include?('SUCCESSFUL') ? true : false
 
-	unless @neo_vcsid == "UNKNOWN"
+	if email_type == "NeoSuiteIncremental"
 		# -- grab p4 data on user, parsing all required fields	
 		full_p4_changeinfo = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
 		description = full_p4_changeinfo.split('\'')[1]
@@ -253,13 +254,12 @@ def send_mail
 		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
 		#recipient_list += ",#{email}"
 		
-		p "-- Sending to Incremental: "
-		p "INC SUCCEEDED:    " + pass.to_s
-		p "P4 USER EMAIL:    " + email
-		p "SHORT DESC:       " + description
-		p "DESCLONG:         " + description_long + '\n'
-		p "ORIGINAL:         " + orig_audit_fullpath
-		p "MODIFIED:         " + mod_audit_fullpath
+		p "-INC SUCCEEDED:    " + pass.to_s
+		p "-P4 USER EMAIL:    " + email
+		p "-SHORT DESC:       " + description
+		p "-DESCLONG:         " + description_long + '\n'
+		p "-ORIGINAL:         " + orig_audit_fullpath
+		p "-MODIFIED:         " + mod_audit_fullpath
 		
 		# -- using the template, we modify it with the new results
 		text = File.read(orig_audit_fullpath)
@@ -268,9 +268,7 @@ def send_mail
 		text.gsub!(/(DESCRIPTION)/, description_long)
 		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
 		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }
-		
-		
-		
+				
 		# -- send the email to the p4 user
 		%x{( echo 'Subject: <P4 Commit #{(pass == true ? "PASSED" : "FAILED")}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
 		#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat mod_audit_fullpath; ) | sendmail email}
@@ -278,18 +276,17 @@ def send_mail
 		# -- delete the modified file and the build results we pulled
 		File.delete(mod_audit_fullpath)
 		#File.delete(buildresults_fullpath)	
-	else
-	
+		
+	elsif email_type == "NeoSuiteNightly"	
 		# -- paths to the files we will use	
 		orig_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_audit_original.html"
 		mod_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_audit_mod.html"
 		recipient_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_email_recipients.csv"
 		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
 		
-		p "-- Sending to Nightly: "
-		p "INCREMENTAL     :" + (pass == true ? "PASSED" : "FAILED")
-		p "ORIGINAL        :" + orig_audit_fullpath
-		p "MODIFIED        :" + mod_audit_fullpath
+		p "-INCREMENTAL     :" + (pass == true ? "PASSED" : "FAILED")
+		p "-ORIGINAL        :" + orig_audit_fullpath
+		p "-MODIFIED        :" + mod_audit_fullpath
 		
 		# -- using the template, we modify it with the new results
 		text = File.read(orig_audit_fullpath)
