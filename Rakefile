@@ -42,7 +42,6 @@ def hook_at_exit
 	unless @at_exit_hook_installed
 		@at_exit_hook_installed = true
 		at_exit do
-			puts "*****FUCKING CAPTAIN HOOK"
 			send_mail unless @tc_trigger_conf.nil?
 			
 			exit 1 if $!.is_a?(SystemExit)
@@ -79,6 +78,7 @@ end
 @taskchain              = []
 @tasks_retried_counter 	= 0
 @current_task 				 	= 0
+@teamcity_result				= ''
 
 @definition_yaml_hash		= read_yaml_file(toolpath("neo_commander")+"/lib/definitions.yml")
 
@@ -222,7 +222,7 @@ def send_mail
 	email_type = @tc_trigger_conf.split('_')[0]
 	puts "-- sendmail :" + email_type	
 	
-	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
+	#buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
 	puts "-- restcall :" + rest_buildlog_byid
 	
@@ -230,24 +230,24 @@ def send_mail
 	weblink_buildlog_byid = "http://10.10.9.157/teamcity/viewLog.html?tab=buildLog&buildTypeId=#{@tc_trigger_conf}&buildId=#{ENV['NS_BUILDID']}"
 	
 	# -- wget buildresults and parse them for results
-	%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid} 2>&1}		
+	#%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid} 2>&1}		
 	
-	file = File.new("#{buildresults_fullpath}", "r")
+	# file = File.new("#{buildresults_fullpath}", "r")
 		
-	puts "BUILD LOG CONTENTS------------"
-	puts file
-	puts "BUILD LOG CONTENTS------------"
+	# puts "BUILD LOG CONTENTS------------"
+	# puts file
+	# puts "BUILD LOG CONTENTS------------"
 	
-	match = ""
-	while (line = file.gets)
-			match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFUL
-	end
+	# match = ""
+	# while (line = file.gets)
+			# match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFUL
+	# end
 	
-	unless match.include?('SUCCESSFUL') || match.include?('UNSUCCESSFUL')
+	unless @teamcity_result.include?('SUCCESSFUL') || @teamcity_result.include?('UNSUCCESSFUL')
 		pass = "UNKNOWN"
 	else	
-		pass = match.include?('SUCCESSFUL') ? "PASSED" : "FAILED"
-	end
+		pass = @teamcity_result.include?('SUCCESSFUL') ? "PASSED" : "FAILED"
+	end	
 
 	if email_type == "NeoSuiteIncremental"
 		# -- grab p4 data on user, parsing all required fields	
@@ -383,8 +383,8 @@ def clean_exit
   puts("[  :: [SESSION]\n")
 	puts("[  ::\n")
 	# Team City Result
-  teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 && noelement_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
-	puts teamcity_result
+  @teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 && noelement_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
+	puts @teamcity_result
 	puts("[  ::\n")
 	
 	puts("[TC] Target BIZ File : [#{@neo_bizfile}]")
