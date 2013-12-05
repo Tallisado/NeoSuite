@@ -21,14 +21,15 @@ describe "Local Admin - Create User", :local => true do
 		@selenium.type(:id, 'createUsersWizardCellPhoneField_txtinput-inputEl', '6135550134')
 		
 		# the next button should be clickable
-		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)						
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn' and contains(@class='x-btn-disabled')]").should eq(false)		
+		
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
 		
 		sleep 3
 		@selenium.click(:xpath, '//*[@id="default_radio-inputEl"]')
 		
 		# the next button should be clickable
-		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)		
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn' and contains(@class='x-btn-disabled')]").should eq(false)		
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
 		
 		#@selenium.click_text_from_combobox(:id, 'createUserWizardAddPhoneModel_comboBox-inputEl', "ADTRAN VVX 300")
@@ -53,14 +54,14 @@ describe "Local Admin - Create User", :local => true do
 		@selenium.type(:id, 'createUsersWizardExtensionNumberField_txtinput-inputEl', '101')
     
 		# the next button should not be clickable
-		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn' and contains(@class='x-btn-disabled')]").should eq(false)
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
 		
 		sleep 3
 		@selenium.click(:xpath, '//*[@id="default_radio-inputEl"]')
     
 		# the next button should be clickable
-		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn' and contains(@class='x-btn-disabled')]").should eq(false)
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
 		
 		#@selenium.click_text_from_combobox(:id, 'createUserWizardAddPhoneModel_comboBox-inputEl', "ADTRAN VVX 300")
