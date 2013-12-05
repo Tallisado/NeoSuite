@@ -220,8 +220,8 @@ end
 def send_mail
 	ENV['P4CONFIG']='/home/.p4config'
 	email_type = @tc_trigger_conf.split('_')[0]
-	puts "-- sendmail :" + email_type	
-	
+	p "-- sendmail :" + email_type	
+	p "-TC VALUE        : " + @teamcity_result
 	#buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
 	p "-REST BUILDLOG   : " + rest_buildlog_byid
@@ -248,7 +248,7 @@ def send_mail
 	else	
 		pass = !!(@teamcity_result =~ /^(\[TCRESULT\]\=SUCCESSFUL)/) ? "PASSED" : "FAILED"
 	end	
-
+	
 	if email_type == "NeoSuiteIncremental"
 		# -- grab p4 data on user, parsing all required fields	
 		full_p4_changeinfo = %x{p4 changes -m 1 @#{ENV['NS_VCSID']}}
