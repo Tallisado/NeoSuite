@@ -2,7 +2,7 @@
 # curl 'http://root:Password1@10.10.9.157/teamcity/httpAuth/action.html?add2Queue=NEOSuiteNightly_Event&env.name=BIZ&env.value=amb_abc.biz'
 # NS_VCSID=109489 NS_BUILDID=444 rake email_p4_incremental
 # rake PROFILE=dryrun.yml NC_DEBUG=t URL='http://10.10.9.129/Login/index.php'
-# rake wrsolo FILE=dryrun_webrobot.rb WR_DISPLAY=':7' URL='http://10.10.9.129/Login/index.php'
+# rake wrsolo WR_DISPLAY=':7' URL='http://10.10.9.129/Login/index.php FILE=dryrun_webrobot.rb'
 # rake PROFILE=ui_incremental.yml URL='http://10.10.9.165/Login/index.php'
 # FILE=localadmin_createuser_webrobot.rb rake wrsolo URL='http://10.10.9.165/Login/index.php' WR_DISPLAY=:7
 # IRB: require "/mnt/wt/neosuite/toolbox/webrobot/lib/webrobot_core")
@@ -177,7 +177,7 @@ task :wrsolo do
 	clean_exit
 end
 
-desc :wrsolo_fixtures do
+task :wrsolo_fixtures do
 	@app = Rake.application
 	@app.init
 	@app.add_import toolpath("webrobot", @task_data['toolbox_tools'], @task_data['tool_path_lookup'])+"/webrobot.rake"
@@ -222,7 +222,7 @@ def send_mail
 	puts "-- sendmail "
 	ENV['P4CONFIG']='/home/.p4config'
 	
-	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/IncrementalAssets/buildresults.log"
+	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
 	
 	# NeoSuiteIncremental_UIAccessiblility

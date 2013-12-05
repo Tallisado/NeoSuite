@@ -1,0 +1,11 @@
+commander: startupwiz_test
+
+reset_unit: { 
+  toolbox: rubyfile,
+  file: "test_sshcomarg.rb",
+  failover: die,
+  retry: no,
+  paramlist: [server=10.10.9.129,user=admin,password=password,enpassword=password]
+}
+
+# pattern: "**/*_webrobot.rb", 

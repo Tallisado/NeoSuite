@@ -84,7 +84,7 @@ module WebRobotSingletonMethods
 			wait_for_it.until { self.find_element(how, what) }
 			return true
 		rescue
-			puts "[relaxed_wait_for_element_present] element not found .. "
+			puts "[test_element_present] false .. "
 			return false
 		end
 	end

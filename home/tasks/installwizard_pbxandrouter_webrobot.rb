@@ -29,7 +29,9 @@ describe "Install Wizard - PBX and Router", :local => true do
 		@selenium.click(:id, 'next')
 		driver.switch_to.alert.accept rescue Selenium::WebDriver::Error::NoAlertOpenError
 		sleep 5
-		@selenium.click(:xpath, "(//input[@id='next'])[2]")
+		#@selenium.click(:xpath, "(//input[@id='next'])[2]")
+		###@selenium.click(:xpath, "//input[@id='next' and @value='Display Printable Summary']")
+		@selenium.click(:xpath, "//input[@id='next' and @value='Next']")
 		sleep 3
 		driver.switch_to.alert.accept rescue Selenium::WebDriver::Error::NoAlertOpenError
 		sleep 5

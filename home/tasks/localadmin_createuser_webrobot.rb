@@ -19,14 +19,18 @@ describe "Local Admin - Create User", :local => true do
 		@selenium.clear(:id, 'createUsersWizardExtensionNumberField_txtinput-inputEl')
 		@selenium.type(:id, 'createUsersWizardExtensionNumberField_txtinput-inputEl', '100')
 		@selenium.type(:id, 'createUsersWizardCellPhoneField_txtinput-inputEl', '6135550134')
-              next_unavailable = @selenium.relaxed_wait_for_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]")
-              expect { next_unavailable }.to_not eq(nil)
+		
+		# the next button should be clickable
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)						
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
+		
 		sleep 3
 		@selenium.click(:xpath, '//*[@id="default_radio-inputEl"]')
-		next_unavailable = @selenium.relaxed_wait_for_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]")
-              expect { next_unavailable }.to_not eq(nil)
+		
+		# the next button should be clickable
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)		
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
+		
 		#@selenium.click_text_from_combobox(:id, 'createUserWizardAddPhoneModel_comboBox-inputEl', "ADTRAN VVX 300")
 		#@selenium.type(:id, 'createUserWizardAddPhoneMACAddress_textBox-inputEl', "111111111111")
 		#@selenium.click(:id, 'createUserWizardUnassignedPhone_gridconfig-record-11:11:11:11:11:11')
@@ -47,14 +51,18 @@ describe "Local Admin - Create User", :local => true do
 		@selenium.type(:id, 'createUsersWizardDescriptionField_txtinput-inputEl', 'Creating user for automated test')
 		@selenium.clear(:id, 'createUsersWizardExtensionNumberField_txtinput-inputEl')
 		@selenium.type(:id, 'createUsersWizardExtensionNumberField_txtinput-inputEl', '101')
-              next_unavailable = @selenium.relaxed_wait_for_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]")
-              expect { next_unavailable }.to_not eq(nil)
+    
+		# the next button should not be clickable
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
+		
 		sleep 3
 		@selenium.click(:xpath, '//*[@id="default_radio-inputEl"]')
-              next_unavailable = @selenium.relaxed_wait_for_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]")
-              expect { next_unavailable }.to_not eq(nil)
+    
+		# the next button should be clickable
+		@selenium.test_element_present(:xpath, "//*[@id='createUserWiz_next_btn-btnIconEl' and contains(@class='x-btn-disabled')]").should eq(false)
 		@selenium.click(:xpath, '//*[@id="createUserWiz_next_btn-btnWrap"]')
+		
 		#@selenium.click_text_from_combobox(:id, 'createUserWizardAddPhoneModel_comboBox-inputEl', "ADTRAN VVX 300")
 		#@selenium.type(:id, 'createUserWizardAddPhoneMACAddress_textBox-inputEl', "111111111111")
 		#@selenium.click(:id, 'createUserWizardUnassignedPhone_gridconfig-record-11:11:11:11:11:11')

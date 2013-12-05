@@ -1,13 +1,13 @@
 commander: nightly
 
-neosuite_internal_sanity_multiple: { 
-  toolbox: webrobot, 
-  failover: die,
-  raketask: 'local:headless',
-  pattern: "dryrun_webrobot.rb",
-  url: 'http://10.10.9.129/Login/index.php',
-  tries: 1
-}
+# neosuite_internal_sanity_multiple: { 
+  # toolbox: webrobot, 
+  # failover: die,
+  # raketask: 'local:headless',
+  # pattern: "dryrun_webrobot.rb",
+  # url: 'http://10.10.9.129/Login/index.php',
+  # tries: 1
+# }
 neosuite_internal_sanity_single: { 
   toolbox: webrobot, 
   failover: die,
