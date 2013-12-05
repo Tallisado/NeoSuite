@@ -220,23 +220,34 @@ end
 def send_mail
 	ENV['P4CONFIG']='/home/.p4config'
 	email_type = @tc_trigger_conf.split('_')[0]
-	puts "-- sendmail: " + email_type
-	
+	puts "-- sendmail :" + email_type	
 	
 	buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
+	puts "-- restcall :" + rest_buildlog_byid
 	
 	# NeoSuiteIncremental_UIAccessiblility
 	weblink_buildlog_byid = "http://10.10.9.157/teamcity/viewLog.html?tab=buildLog&buildTypeId=#{@tc_trigger_conf}&buildId=#{ENV['NS_BUILDID']}"
 	
 	# -- wget buildresults and parse them for results
-	%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid}}		
+	%x{wget -O #{buildresults_fullpath} #{rest_buildlog_byid} 2>&1}		
+	
 	file = File.new("#{buildresults_fullpath}", "r")
+		
+	puts "BUILD LOG CONTENTS------------"
+	puts file
+	puts "BUILD LOG CONTENTS------------"
+	
 	match = ""
 	while (line = file.gets)
 			match = line if line.include? '[TCRESULT]' #[TCRESULT]=SUCCESSFUL
 	end
-	pass = match.include?('SUCCESSFUL') ? true : false
+	
+	unless match.include?('SUCCESSFUL') || match.include?('UNSUCCESSFUL')
+		pass = "UNKNOWN"
+	else	
+		pass = match.include?('SUCCESSFUL') ? "PASSED" : "FAILED"
+	end
 
 	if email_type == "NeoSuiteIncremental"
 		# -- grab p4 data on user, parsing all required fields	
@@ -254,23 +265,23 @@ def send_mail
 		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
 		#recipient_list += ",#{email}"
 		
-		p "-INC SUCCEEDED:    " + pass.to_s
-		p "-P4 USER EMAIL:    " + email
-		p "-SHORT DESC:       " + description
-		p "-DESCLONG:         " + description_long + '\n'
-		p "-ORIGINAL:         " + orig_audit_fullpath
-		p "-MODIFIED:         " + mod_audit_fullpath
+		p "-INC RESULT      : " + pass
+		p "-P4 USER EMAIL:  : " + email
+		p "-SHORT DESC      : " + description
+		p "-DESCLONG        : " + description_long + '\n'
+		p "-ORIGINAL        : " + orig_audit_fullpath
+		p "-MODIFIED        : " + mod_audit_fullpath
 		
 		# -- using the template, we modify it with the new results
 		text = File.read(orig_audit_fullpath)
 		text.gsub!('NAME', username_and_workspace)
-		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
+		text.gsub!(/(RESULT)/, pass)
 		text.gsub!(/(DESCRIPTION)/, description_long)
 		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
 		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }
 				
 		# -- send the email to the p4 user
-		%x{( echo 'Subject: <P4 Commit #{(pass == true ? "PASSED" : "FAILED")}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
+		%x{( echo 'Subject: <P4 Commit #{pass}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
 		#%x{( echo 'Subject: <P4 Commit>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat mod_audit_fullpath; ) | sendmail email}
 		
 		# -- delete the modified file and the build results we pulled
@@ -284,19 +295,19 @@ def send_mail
 		recipient_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_email_recipients.csv"
 		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
 		
-		p "-INCREMENTAL     :" + (pass == true ? "PASSED" : "FAILED")
-		p "-ORIGINAL        :" + orig_audit_fullpath
-		p "-MODIFIED        :" + mod_audit_fullpath
+		p "-NIGHTLY         : " + pass
+		p "-ORIGINAL        : " + orig_audit_fullpath
+		p "-MODIFIED        : " + mod_audit_fullpath
 		
 		# -- using the template, we modify it with the new results
 		text = File.read(orig_audit_fullpath)
-		text.gsub!(/(RESULT)/, pass == true ? "PASSED" : "FAILED")
+		text.gsub!(/(RESULT)/, pass)
 		text.gsub!(/(BIZ)/, @neo_bizfile)
 		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
 		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }		
 			
 		# -- send the email to the p4 user
-		%x{( echo 'Subject: <Nightly #{(pass == true ? "PASSED" : "FAILED")}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
+		%x{( echo 'Subject: <Nightly #{pass}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
 		
 		# -- delete the modified file and the build results we pulled
 		File.delete(mod_audit_fullpath)
