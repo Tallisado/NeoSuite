@@ -246,7 +246,7 @@ def send_mail
 	unless !!(@teamcity_result =~ /^(\[TCRESULT\]\=UNSUCCESSFUL)/) || !!(@teamcity_result =~ /^(\[TCRESULT\]\=SUCCESSFUL)/)
 		pass = "UNKNOWN"
 	else	
-		pass = @teamcity_result.include?('SUCCESSFUL') ? "PASSED" : "FAILED"
+		pass = !!(@teamcity_result =~ /^(\[TCRESULT\]\=SUCCESSFUL)/) ? "PASSED" : "FAILED"
 	end	
 
 	if email_type == "NeoSuiteIncremental"
