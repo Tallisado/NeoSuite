@@ -8,7 +8,7 @@ describe "NeoSuite DryRun", :local => true do
 	it "should have access to custom WebRobot API" do
 		expect { @selenium.navigate.to "http://www.google.ca" }.to_not raise_error
 		expect { @selenium.clear_cookies }.to_not raise_error
-		expect { @selenium.clear_cookies_disabled }.to_not raise_error
+		expect { @selenium.clear_cookies_disabled }.to raise_error
 	end
 	
 	it "should navigate the a url" do
