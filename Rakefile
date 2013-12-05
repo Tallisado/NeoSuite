@@ -383,7 +383,7 @@ def clean_exit
   puts("[  :: [SESSION]\n")
 	puts("[  ::\n")
 	# Team City Result
-  @teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 && noelement_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSUL\n"
+  @teamcity_result = tasks_failed.length == 0 && tasks_error.length == 0 && noelement_error.length == 0 ? "[TCRESULT]=SUCCESSFUL\n" : "[TCRESULT]=UNSUCCESSFUL\n"
 	puts @teamcity_result
 	puts("[  ::\n")
 	
