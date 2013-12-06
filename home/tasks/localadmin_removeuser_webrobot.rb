@@ -14,15 +14,15 @@ describe "Local Admin - Remove User", :local => true do
 		@selenium.click(:xpath, '//*[@id="removeUser_wiz"]')
 		@selenium.click_text_from_combobox(:name, 'removeUserWizard_window_removeUser_wizard_user_combobox-inputEl', "Automated User")	
 		sleep 5
-		@selenium.click(:xpath, '//*[@id="removeUserWizard_next_btn"]')
-		@selenium.click(:xpath, '//*[@id="removeUserWizard_save_btn"]')
+		@selenium.click(:xpath, '//*[@id="removeUserWizard_window_removeUser_wizard_next_btn"]')
+		@selenium.click(:xpath, '//*[@id="removeUserWizard_window_removeUser_wizard_save_btn"]')
 		sleep 5
 
 		@selenium.click(:xpath, '//*[@id="removeUser_wiz"]')
 		@selenium.click_text_from_combobox(:name, 'removeUserWizard_window_removeUser_wizard_user_combobox-inputEl', "Reassign Test")	
 		sleep 5
-		@selenium.click(:xpath, '//*[@id="removeUserWizard_next_btn"]')
-		@selenium.click(:xpath, '//*[@id="removeUserWizard_save_btn"]')
+		@selenium.click(:xpath, '//*[@id="removeUserWizard_window_removeUser_wizard_next_btn"]')
+		@selenium.click(:xpath, '//*[@id="removeUserWizard_window_removeUser_wizard_save_btn"]')
 		sleep 5
     end
 end
