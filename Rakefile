@@ -291,7 +291,7 @@ def send_mail
 		mod_audit_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/incremental_audit_mod.html"
 		recipient_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/incremental_email_recipients.csv"
 		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
-		#recipient_list += ",#{email}"
+		recipient_list += ",#{email}"
 		
 		p "-INC RESULT      : " + pass
 		p "-P4 USER EMAIL:  : " + email
@@ -299,6 +299,7 @@ def send_mail
 		p "-DESCLONG        : " + description_long + '\n'
 		p "-ORIGINAL        : " + orig_audit_fullpath
 		p "-MODIFIED        : " + mod_audit_fullpath
+		p "-RECIPIENTS      : " + recipient_list
 		
 		# -- using the template, we modify it with the new results
 		text = File.read(orig_audit_fullpath)
@@ -323,9 +324,14 @@ def send_mail
 		recipient_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/nightly_email_recipients.csv"
 		recipient_list = File.open(recipient_fullpath, 'rb') {|f| f.read }
 		
+		unless @tc_trigger_conf == 'NeoSuiteNightly_UiPPM' || !pass
+			recipient_list = 'tallis.vanek@adtran.com,michael.lerner@adtran.com'
+		end
+		
 		p "-NIGHTLY         : " + pass
 		p "-ORIGINAL        : " + orig_audit_fullpath
 		p "-MODIFIED        : " + mod_audit_fullpath
+		p "-RECIPIENTS      : " + recipient_list
 		
 		# -- using the template, we modify it with the new results
 		text = File.read(orig_audit_fullpath)
@@ -334,9 +340,7 @@ def send_mail
 		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
 		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }		
 		
-		unless @tc_trigger_conf == 'NeoSuiteNightly_UiPPM' || !pass
-			recipient_list = 'tallis.vanek@adtran.com,michael.lerner@adtran.com'
-		end
+
 		
 		# -- send the email to the p4 user
 		%x{( echo 'Subject: <Nightly #{pass}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
