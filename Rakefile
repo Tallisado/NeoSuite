@@ -157,6 +157,34 @@ task :run do
 	clean_exit
 end
 
+task :run do
+	# -- first global
+	@profile 								= ENV['PROFILE'].nil? ? "tasklist.default" : ENV['PROFILE']
+	
+	@neo_bizfile            = ENV['BIZFILE'].nil? ? 'UNKNOWN' : ENV['BIZFILE']
+	@neo_buildid            = ENV['NS_BUILDID'].nil? ? 'UNKNOWN' : ENV['NS_BUILDID']
+	@neo_vcsid		          = ENV['NS_VCSID'].nil? ? 'UNKNOWN' : ENV['NS_VCSID']
+	
+	@tc_trigger_conf  			= ENV['TC_TRIGGER_CONF'].nil? ? 'UNKNOWN' : ENV['TC_TRIGGER_CONF']
+	
+	@task_hash							= read_yaml_file(@suite_root+"/home/profiles/#{@profile}")
+	
+	puts ""
+	puts "--- EXECUTING NEO COMMANDER ---"
+	puts "--- [debug]     : " + ((@neo_debug == false) ? "OFF" : "ON")
+	puts "--- [profile]   : " + @profile
+	puts "--- [logs]      : " + ENV["LOGS"]
+	puts "--- [reports]   : " + ENV["REPORTS"]
+	puts "--- [rake url]  : " + (ENV["URL"].nil? ? "Task Based" : ENV["URL"])
+	puts "--- [Xvfb]      : " + (ENV["WR_DISPLAY"].nil? ? "DEFAULT DISPLAY :5" : ENV["WR_DISPLAY"])
+	puts "--- TC [BIZ]    : " + @neo_bizfile
+	puts "--- TC [BUILD]  : " + @neo_buildid
+	puts "--- TC [P4]     : " + @neo_vcsid
+	puts "--- TC [CONF]   : " + @tc_trigger_conf
+	puts "-------------------------------"
+	hook_at_exit
+end
+
 ##########################
 # RAKE: wrsolo
 # -- run target webrobot file
@@ -220,7 +248,7 @@ end
 def send_mail
 	ENV['P4CONFIG']='/home/.p4config'
 	email_type = @tc_trigger_conf.split('_')[0]
-	p "-- sendmail :" + email_type	
+	p "-- sendmail      :" + email_type	
 	p "-TC VALUE        : " + @teamcity_result
 	#buildresults_fullpath = "#{@suite_root}/toolbox/etc/TeamCity/send_mail/buildresults.log"
 	rest_buildlog_byid = "http://root:Password1@10.10.9.157/teamcity/httpAuth/downloadBuildLog.html?buildId=#{ENV['NS_BUILDID']}"
@@ -305,7 +333,11 @@ def send_mail
 		text.gsub!(/(BIZ)/, @neo_bizfile)
 		text.gsub!(/(WEBLINK)/, weblink_buildlog_byid)
 		File.open(mod_audit_fullpath, 'w+') {|f| f.write(text) }		
-			
+		
+		unless @tc_trigger_conf == 'NeoSuiteNightly_UiPPM' || !pass
+			recipient_list = 'tallis.vanek@adtran.com,michael.lerner@adtran.com'
+		end
+		
 		# -- send the email to the p4 user
 		%x{( echo 'Subject: <Nightly #{pass}>'; echo 'From: dvt-automation@adtran.com'; echo "MIME-Version: 1.0"; echo "Content-Type: text/html"; echo "Content-Disposition: inline"; cat #{mod_audit_fullpath}; ) | sendmail "#{recipient_list}" }
 		
